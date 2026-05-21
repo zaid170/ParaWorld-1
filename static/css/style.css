@@ -17,6 +17,25 @@
     --shadow-hover: 0px 20px 40px rgba(10, 54, 99, 0.12);
 }
 
+/* --- BASIC RESET & GLOBAL BEHAVIORS --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
 /* Custom Scrollbar for a Premium Look */
 ::-webkit-scrollbar {
     width: 10px;
@@ -103,11 +122,6 @@ nav.scrolled {
 
 .nav-links a:hover::after {
     width: 100%;
-}
-
-.nav-highlight {
-    color: var(--accent-gold) !important;
-    font-weight: 700 !important;
 }
 
 .nav-cta {
@@ -203,7 +217,7 @@ nav.scrolled {
 .logo-inner-circle {
     width: 100%;
     height: 100%;
-    background-color: #000000;   /* Black background to hide the white gaps */
+    background-color: #000000;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -240,26 +254,6 @@ nav.scrolled {
     font-weight: 400;
 }
 
-.btn-primary {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--accent-gold) 0%, #FF9100 100%);
-    color: var(--primary-navy);
-    padding: 18px 48px;
-    text-decoration: none;
-    font-weight: 800;
-    font-size: 1.25rem;
-    border-radius: 50px;
-    box-shadow: 0 10px 25px rgba(255, 179, 0, 0.35);
-    transition: var(--transition-smooth);
-    border: none;
-    cursor: pointer;
-}
-
-.btn-primary:hover {
-    transform: scale(1.05) translateY(-3px);
-    box-shadow: 0 15px 35px rgba(255, 179, 0, 0.55);
-}
-
 /* --- STATS STRIP --- */
 .stats-strip {
     background-color: var(--card-bg);
@@ -289,7 +283,7 @@ nav.scrolled {
     color: var(--secondary-blue);
 }
 
-.stat-box .stat-label {
+.stat-label {
     font-size: 1rem;
     color: var(--text-muted);
     font-weight: 600;
@@ -338,7 +332,7 @@ section {
     margin-top: 25px;
 }
 
-/* --- INFRASTRUCTURE INTERACTIVE FEATURE --- */
+/* --- CLASSROOMS / INFRASTRUCTURE --- */
 .infrastructure-container {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
@@ -454,14 +448,10 @@ section {
     line-height: 1.6;
 }
 
-/* --- INTERACTIVE SCHOLARSHIP SECTION --- */
+/* --- HIGH-CONTRAST SCHOLARSHIP SECTION --- */
 .scholarship-section {
     background: radial-gradient(circle at 10% 90%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
                 linear-gradient(135deg, #041226 0%, var(--primary-navy) 100%);
-    color: white;
-}
-
-.scholarship-section .section-header h2 {
     color: white;
 }
 
@@ -471,12 +461,11 @@ section {
 }
 
 .scholarship-form-card {
-    background-color: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(10px);
+    background-color: rgba(8, 28, 54, 0.85);
     border-radius: var(--radius-lg);
     padding: 45px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    border: 2px solid rgba(0, 229, 255, 0.25);
 }
 
 .scholarship-form-card h3 {
@@ -505,42 +494,38 @@ section {
     font-size: 0.95rem;
 }
 
+/* 100% EXTREME HIGH CONTRAST INPUT FIELDS (LEGIBILITY PAIN-POINT FIXED) */
 .scholarship-form-card .form-field {
     width: 100%;
     padding: 15px 22px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: var(--radius-md);
+    border: 2px solid #CBD5E1 !important;
+    border-radius: var(--radius-md) !important;
     outline: none;
-    font-size: 1rem;
+    font-size: 1rem !important;
+    font-weight: 700 !important;           /* Bold entered text */
+    background-color: #FFFFFF !important;  /* Pure Solid White Background */
+    color: #081C36 !important;             /* Deepest Dark Navy text */
     transition: var(--transition-smooth);
-    background-color: rgba(255, 255, 255, 0.06);
-    color: white;
+    box-sizing: border-box;
+}
+
+.scholarship-form-card .form-field::placeholder {
+    color: #64748B !important;             /* Clear, easily visible placeholder gray */
+    font-weight: 500;
 }
 
 .scholarship-form-card .form-field:focus {
-    border-color: var(--accent-cyan);
-    background-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.2);
+    border-color: var(--accent-cyan) !important;
+    box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.3) !important;
 }
 
 .scholarship-form-card option {
-    background-color: var(--primary-navy);
-    color: white;
+    background-color: #FFFFFF !important;
+    color: #081C36 !important;
+    font-weight: 600;
 }
 
-@media (max-width: 768px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-    .form-grid .full-width {
-        grid-column: span 1;
-    }
-    .scholarship-form-card {
-        padding: 30px 20px;
-    }
-}
-
-/* --- OFFICIAL ROLL NUMBER ADMIT SLIP STYLING --- */
+/* --- DYNAMIC ROLL NUMBER ADMIT SLIP --- */
 .scholarship-slip-card {
     max-width: 600px !important;
 }
@@ -618,7 +603,7 @@ section {
     text-align: center;
 }
 
-/* --- FACULTY SECTION --- */
+/* --- FACULTY FILTER BOARD --- */
 .faculty-section {
     background-color: #F1F5F9;
 }
@@ -747,7 +732,7 @@ section {
     line-height: 1.6;
 }
 
-/* --- FAQ SECTION --- */
+/* --- FAQ BOARD --- */
 .faq-section {
     background-color: var(--card-bg);
 }
@@ -811,7 +796,7 @@ section {
     color: var(--accent-cyan);
 }
 
-/* --- CONTACT & ADMISSION ENQUIRY --- */
+/* --- ENQUIRY CONTACT HUB --- */
 .contact-section {
     background-color: #F8FAFC;
 }
@@ -935,7 +920,7 @@ section {
     background: linear-gradient(135deg, var(--primary-navy) 0%, #030d1a 100%);
 }
 
-/* --- SUCCESS CONFIRMATION MODAL --- */
+/* --- SUCCESS CONFIRMATION MODALS --- */
 .modal-background {
     position: fixed;
     top: 0;
@@ -1019,7 +1004,7 @@ section {
     transform: scale(1.05);
 }
 
-/* --- DYNAMIC FAQ CHATBOT "PARA" STYLING --- */
+/* --- DYNAMIC CHATBOT "PARA" WIDGET --- */
 .para-bot-widget {
     position: fixed;
     bottom: 30px;
@@ -1030,14 +1015,13 @@ section {
     align-items: flex-end;
 }
 
-/* Launcher matches central logo: circle shape, deep black background, gold border */
 .para-bot-launcher {
     width: 65px;
     height: 65px;
     border-radius: 50%;
-    background-color: #000000;   /* Black background */
-    border: 3px solid var(--accent-gold); /* Gold border matching logo frame */
-    box-shadow: 0 10px 25px rgba(0, 229, 255, 0.35); /* Glow shadow */
+    background-color: #000000;
+    border: 3px solid var(--accent-gold);
+    box-shadow: 0 10px 25px rgba(0, 229, 255, 0.35);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1047,7 +1031,6 @@ section {
     position: relative;
 }
 
-/* Rotating outer dashed ring matching the main website logo */
 .para-bot-launcher::after {
     content: '';
     position: absolute;
@@ -1086,7 +1069,7 @@ section {
     border-radius: var(--radius-lg);
     box-shadow: 0 15px 40px rgba(8, 28, 54, 0.18);
     border: 1px solid #E2E8F0;
-    display: none; /* Managed dynamically via JS */
+    display: none;
     flex-direction: column;
     overflow: hidden;
     margin-bottom: 15px;
@@ -1117,7 +1100,6 @@ section {
     gap: 12px;
 }
 
-/* Header Avatar matching central logo colors */
 .para-bot-avatar {
     width: 40px;
     height: 40px;
@@ -1174,7 +1156,6 @@ section {
     background-color: #F8FAFC;
 }
 
-/* Chat bubble styling */
 .para-msg {
     max-width: 80%;
     padding: 12px 16px;
@@ -1200,7 +1181,6 @@ section {
     border-bottom-right-radius: 4px;
 }
 
-/* Auto suggestion chips */
 .para-chips {
     display: flex;
     flex-wrap: wrap;
@@ -1270,7 +1250,6 @@ section {
     transform: scale(1.05);
 }
 
-/* Typing loading indicator styling */
 .typing-dots {
     display: flex;
     gap: 4px;
@@ -1289,12 +1268,13 @@ section {
 .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
 .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
 
-/* --- FOOTER --- */
+/* --- THE PRESTIGIOUS FOOTER --- */
 footer {
     background-color: var(--primary-navy);
     color: var(--text-light);
     padding: 90px 8% 40px 8%;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
+    position: relative;
 }
 
 .footer-grid {
@@ -1359,7 +1339,151 @@ footer {
     font-size: 0.95rem;
 }
 
-/* --- ADVANCED PRINT SYSTEM ENHANCEMENT --- */
+/* --- HIGH-END INVISO CREATOR EMBLEM SIGNATURE FOOTER --- */
+.inviso-developer-footer {
+    width: 100%;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inviso-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.inviso-emblem-box {
+    width: 60px;
+    height: 60px;
+    background: #000000;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.inviso-mask-svg {
+    width: 82%;
+    height: 82%;
+}
+
+/* Inline SVG Mask details styling - matches custom user emblem files! */
+.outer-ring {
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 2;
+    stroke-dasharray: 4 2;
+    transform-origin: center;
+    animation: spinCircle 20s linear infinite;
+}
+
+.inner-ring {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.4);
+    stroke-width: 1.5;
+}
+
+.mask-base {
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 3.5;
+}
+
+.mask-details {
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+/* Hover States for Inviso Creative Module */
+.inviso-wrapper:hover .inviso-emblem-box {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.45);
+    transform: scale(1.08) rotate(-5deg);
+}
+
+.inviso-wrapper:hover .outer-ring {
+    stroke: var(--accent-cyan);
+    animation-duration: 6s; /* Spins faster on hover */
+}
+
+.inviso-wrapper:hover .mask-base,
+.inviso-wrapper:hover .mask-details {
+    stroke: var(--accent-cyan);
+}
+
+.inviso-text-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.credit-tag {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    transition: var(--transition-smooth);
+}
+
+.inviso-logo-text {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    letter-spacing: 3px;
+    font-style: italic;
+    transition: var(--transition-smooth);
+    transform: skewX(-8deg); /* Slants the text for tech-aesthetic */
+}
+
+.inviso-wrapper:hover .credit-tag {
+    color: var(--accent-cyan);
+}
+
+.inviso-wrapper:hover .inviso-logo-text {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
+
+/* --- KEYFRAME ANIMATIONS --- */
+@keyframes floatLogo {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-16px) rotate(1.5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes spinCircle {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes bounceIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes bubbleSlideIn {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bounceDots {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* --- MEDIA PRINT ADMIT SLIP ENHANCEMENT --- */
 @media print {
     body * {
         visibility: hidden;
@@ -1394,34 +1518,7 @@ footer {
     }
 }
 
-/* --- ANIMATION KEYFRAMES --- */
-@keyframes floatLogo {
-    0% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-16px) rotate(1.5deg); }
-    100% { transform: translateY(0px) rotate(0deg); }
-}
-
-@keyframes spinCircle {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes bounceIcon {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-@keyframes bubbleSlideIn {
-    from { transform: translateY(10px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes bounceDots {
-    0%, 80%, 100% { transform: scale(0); }
-    40% { transform: scale(1); }
-}
-
-/* --- RESPONSIVE STYLE BREAKPOINTS --- */
+/* --- RESPONSIVE Breakpoints --- */
 @media (max-width: 992px) {
     .infrastructure-container, .contact-wrapper {
         grid-template-columns: 1fr;
