@@ -10,6 +10,7 @@ app.secret_key = 'paraworld_cosmic_secure_key_2026'
 # Local databases
 SCHOLARSHIP_FILE = 'scholarship_students.json'
 ENQUIRY_FILE = 'general_enquiries.json'
+SETTINGS_FILE = 'settings.json'
 
 # --- YOUR PERSONAL SECURED LOGINS ---
 AUTHORIZED_EMAILS = ['zaidbinxubair@gmail.com', 'admin@paraworld.com', 'mansaumer@paraworld.com']
@@ -23,12 +24,25 @@ def load_data(filepath):
     try:
         with open(filepath, 'r', encoding='utf-8') as file:
             content = file.read().strip()
-            if not content:  # If file is empty, return empty list instead of crashing
+            if not content:
                 return []
             return json.loads(content)
     except Exception as e:
         print(f"Error loading {filepath}, returning empty database: {e}")
         return []
+
+def load_settings():
+    """Safely loads global portal settings. Defaults to Scholarship ON."""
+    if not os.path.exists(SETTINGS_FILE):
+        return {"show_scholarship": True}
+    try:
+        with open(SETTINGS_FILE, 'r', encoding='utf-8') as file:
+            content = file.read().strip()
+            if not content:
+                return {"show_scholarship": True}
+            return json.loads(content)
+    except Exception:
+        return {"show_scholarship": True}
 
 def save_data(filepath, data):
     """Safely writes structured database lists back to a JSON file."""
@@ -42,15 +56,13 @@ def save_data(filepath, data):
 
 @app.route('/')
 def home():
-    """Renders the main landing homepage."""
-    return render_template('index.html')
+    """Renders the main landing homepage, checking if Scholarship is ON."""
+    settings = load_settings()
+    return render_template('index.html', show_scholarship=settings.get('show_scholarship', True))
 
 @app.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
-    """
-    Renders the secure admin login gateway.
-    Validates credentials securely to establish active sessions.
-    """
+    """Renders the secure admin login gateway."""
     if session.get('logged_in'):
         return redirect(url_for('admin_dashboard'))
 
@@ -80,25 +92,21 @@ def admin_logout():
 
 @app.route('/admin-dashboard')
 def admin_dashboard():
-    """
-    Renders the premium admin control dashboard.
-    Kicks unauthorized users back to verification gate.
-    """
+    """Renders the premium admin control dashboard."""
     if not session.get('logged_in'):
         return redirect(url_for('admin_login'))
 
     students = load_data(SCHOLARSHIP_FILE)
     enquiries = load_data(ENQUIRY_FILE)
+    settings = load_settings()
     
-    return render_template('admin.html', students=students, enquiries=enquiries)
+    return render_template('admin.html', students=students, enquiries=enquiries, settings=settings)
 
 # --- CLIENT SUBMISSION API ENDPOINTS ---
 
 @app.route('/submit-enquiry', methods=['POST'])
 def submit_enquiry():
-    """
-    Receives and registers raw program inquiries from the website's contact form.
-    """
+    """Receives and registers raw program inquiries."""
     try:
         data = request.get_json()
         student_name = data.get('name')
@@ -110,7 +118,6 @@ def submit_enquiry():
             
         enquiries = load_data(ENQUIRY_FILE)
         
-        # Structure the enquiry entry
         new_enquiry = {
             "id": len(enquiries) + 1,
             "name": student_name,
@@ -127,9 +134,11 @@ def submit_enquiry():
 
 @app.route('/register-scholarship', methods=['POST'])
 def register_scholarship():
-    """
-    Accepts student profiles, logs them, and automatically constructs unique PW roll cards.
-    """
+    """Accepts student profiles for the scholarship."""
+    settings = load_settings()
+    if not settings.get('show_scholarship', True):
+        return jsonify({"status": "error", "message": "Scholarship registrations are currently closed."}), 403
+
     try:
         data = request.get_json()
         name = data.get('name')
@@ -172,41 +181,45 @@ def register_scholarship():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-# --- SECURE ADMINISTRATIVE DATA TRUNCATION ENDPOINTS ---
+# --- SECURE ADMINISTRATIVE TOGGLES & ENDPOINTS ---
+
+@app.route('/toggle-scholarship', methods=['POST'])
+def toggle_scholarship():
+    """Allows Admin to turn the scholarship page ON or OFF."""
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "Unauthorized"}), 403
+    
+    try:
+        data = request.get_json()
+        settings = load_settings()
+        settings['show_scholarship'] = data.get('show_scholarship', True)
+        save_data(SETTINGS_FILE, settings)
+        
+        return jsonify({"status": "success", "show_scholarship": settings['show_scholarship']}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/delete-student/<roll_number>', methods=['DELETE'])
 def delete_student(roll_number):
-    """Securely deletes a scholarship nominee from the JSON database file."""
     if not session.get('logged_in'):
-        return jsonify({"status": "error", "message": "Access Denied: Session Unauthorized."}), 403
-        
+        return jsonify({"status": "error", "message": "Access Denied."}), 403
     try:
         students = load_data(SCHOLARSHIP_FILE)
         updated_students = [s for s in students if s['roll_number'] != roll_number]
-        
-        if len(students) == len(updated_students):
-            return jsonify({"status": "error", "message": "Candidate not found!"}), 404
-            
         save_data(SCHOLARSHIP_FILE, updated_students)
-        return jsonify({"status": "success", "message": "Student record deleted successfully!"}), 200
+        return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/delete-enquiry/<int:enquiry_id>', methods=['DELETE'])
 def delete_enquiry(enquiry_id):
-    """Securely deletes an admission inquiry from the JSON database file."""
     if not session.get('logged_in'):
-        return jsonify({"status": "error", "message": "Access Denied: Session Unauthorized."}), 403
-        
+        return jsonify({"status": "error", "message": "Access Denied."}), 403
     try:
         enquiries = load_data(ENQUIRY_FILE)
         updated_enquiries = [e for e in enquiries if e['id'] != enquiry_id]
-        
-        if len(enquiries) == len(updated_enquiries):
-            return jsonify({"status": "error", "message": "Enquiry record not found!"}), 404
-            
         save_data(ENQUIRY_FILE, updated_enquiries)
-        return jsonify({"status": "success", "message": "Enquiry record deleted successfully!"}), 200
+        return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
