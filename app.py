@@ -15,6 +15,7 @@ SETTINGS_FILE = 'settings.json'
 # --- YOUR PERSONAL SECURED LOGINS ---
 AUTHORIZED_EMAILS = ['zaidbinxubair@gmail.com', 'admin@paraworld.com', 'mansaumer@paraworld.com']
 ADMIN_PASSWORD = 'Para World -- @mansa'
+ADMIN_PASSWORD = 'mansa Umer @ pw101'
 
 # --- BULLETPROOF DATABASE METHODS ---
 def load_data(filepath):
