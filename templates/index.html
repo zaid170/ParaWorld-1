@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,34 +99,160 @@
         .display-content h3 { font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; color: var(--accent-gold); }
         .display-content p { color: #E2E8F0; font-size: 1.15rem; line-height: 1.6; }
 
+        /* =========================================================
+           NEW OFFICIAL DOCUMENT DESIGN FOR SCHOLARSHIP CARD
+           ========================================================= */
         .scholarship-section { background: radial-gradient(circle at 10% 90%, rgba(0, 229, 255, 0.05) 0%, transparent 50%), linear-gradient(135deg, #041226 0%, var(--primary-navy) 100%); color: white; }
         .scholarship-section .section-header h2 { color: #FFFFFF !important; }
         .scholarship-section .section-header p { color: #E2E8F0 !important; }
         
-        .scholarship-container { max-width: 900px; margin: 0 auto; }
-        .scholarship-form-card { background-color: rgba(8, 28, 54, 0.85); border-radius: var(--radius-lg); padding: 45px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45); border: 2px solid rgba(0, 229, 255, 0.25); }
-        .scholarship-form-card h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: var(--accent-cyan); }
+        .scholarship-container { max-width: 750px; margin: 0 auto; }
+        
+        /* The main "Document" Card */
+        .scholarship-form-card { 
+            background-color: var(--bg-light); /* Off-white document color */
+            border-radius: var(--radius-md); 
+            padding: 0; /* Removing padding to allow full-width header */
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            color: var(--text-main);
+        }
+
+        /* The Official Document Header */
+        .official-doc-header {
+            background-color: var(--card-bg);
+            border-bottom: 3px solid var(--secondary-blue);
+            padding: 30px 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .official-doc-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid var(--accent-cyan);
+        }
+
+        .official-doc-logo img {
+            width: 85%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .official-doc-header h3 { 
+            font-size: 1.6rem; 
+            font-weight: 900; 
+            margin: 0; 
+            color: var(--primary-navy); 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .official-doc-header p {
+            margin: 0;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* The Form Container inside the document */
+        .doc-form-body {
+            padding: 40px;
+        }
         
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
         .form-grid .full-width { grid-column: span 2; }
-        .scholarship-form-card .form-row label { display: block; font-weight: 700; margin-bottom: 8px; color: #FFFFFF !important; font-size: 0.95rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .scholarship-form-card .form-field { width: 100%; padding: 15px 22px; border: 2px solid #CBD5E1 !important; border-radius: var(--radius-md) !important; outline: none; font-size: 1rem !important; font-weight: 700 !important; background-color: #FFFFFF !important; color: #081C36 !important; transition: var(--transition-smooth); box-sizing: border-box; }
-        .scholarship-form-card .form-field::placeholder { color: #64748B !important; font-weight: 500; }
-        .scholarship-form-card .form-field:focus { border-color: var(--accent-cyan) !important; box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.3) !important; }
-        .scholarship-form-card option { background-color: #FFFFFF !important; color: #081C36 !important; font-weight: 600; }
+        
+        .doc-form-body .form-row label { 
+            display: block; 
+            font-weight: 800; 
+            margin-bottom: 8px; 
+            color: var(--secondary-blue) !important; 
+            font-size: 0.85rem; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .doc-form-body .form-field { 
+            width: 100%; 
+            padding: 14px 20px; 
+            border: 1px solid #CBD5E1 !important; 
+            border-bottom: 2px solid #CBD5E1 !important;
+            border-radius: 8px !important; 
+            outline: none; 
+            font-size: 1rem !important; 
+            font-weight: 700 !important; 
+            background-color: var(--card-bg) !important; 
+            color: var(--primary-navy) !important; 
+            transition: var(--transition-smooth); 
+            box-sizing: border-box; 
+        }
+        
+        .doc-form-body .form-field::placeholder { color: #94A3B8 !important; font-weight: 500; }
+        .doc-form-body .form-field:focus { border-color: var(--accent-cyan) !important; border-bottom-color: var(--secondary-blue) !important; box-shadow: 0 4px 10px rgba(10, 54, 99, 0.05) !important; }
+        
+        .btn-register-doc {
+            width: 100%;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%);
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
 
-        .scholarship-slip-card { max-width: 600px !important; }
-        .admit-slip-printable { background-color: white; color: #1E293B; border: 2px solid var(--primary-navy); border-radius: 12px; padding: 30px; text-align: left; box-shadow: var(--shadow-subtle); }
-        .slip-header { border-bottom: 2px solid var(--primary-navy); padding-bottom: 15px; margin-bottom: 20px; text-align: center; }
-        .slip-header h4 { color: var(--primary-navy); font-size: 1.4rem; font-weight: 800; margin: 0; }
-        .slip-header h5 { color: var(--text-muted); font-size: 0.95rem; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 1px; }
-        .slip-body { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-        .slip-row { display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px dashed #E2E8F0; }
-        .slip-label { font-weight: 700; color: var(--text-muted); }
-        .slip-value { font-weight: 600; color: var(--text-dark); }
-        .slip-value.highlight-blue { color: var(--secondary-blue); font-size: 1.15rem; font-weight: 800; }
-        .slip-footer { background-color: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 8px; padding: 10px 15px; font-size: 0.85rem; color: #991B1B; font-weight: 600; text-align: center; }
+        .btn-register-doc:hover { background: linear-gradient(135deg, var(--primary-navy) 0%, #030d1a 100%); }
 
+        /* --- THE GENERATED ROLL NUMBER SLIP CARD --- */
+        .scholarship-slip-card { max-width: 600px !important; padding: 0 !important; overflow: hidden; border-radius: var(--radius-md); }
+        
+        .admit-slip-printable { background-color: white; color: #1E293B; border: none; padding: 0; text-align: left; }
+        
+        .slip-official-header {
+            background-color: var(--primary-navy);
+            color: white;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 4px solid var(--accent-gold);
+        }
+
+        .slip-official-header .slip-logo {
+            width: 60px; height: 60px; border-radius: 50%; background: #000; padding: 4px; border: 2px solid white; display: flex; justify-content: center; align-items: center; overflow: hidden;
+        }
+        .slip-official-header .slip-logo img { width: 90%; height: auto; object-fit: contain;}
+        
+        .slip-header-text h4 { font-size: 1.4rem; font-weight: 900; margin: 0; letter-spacing: 0.5px; }
+        .slip-header-text h5 { color: var(--accent-cyan); font-size: 0.85rem; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+
+        .slip-body { display: flex; flex-direction: column; gap: 12px; padding: 30px; background-image: radial-gradient(rgba(10, 54, 99, 0.03) 1px, transparent 1px); background-size: 20px 20px;}
+        .slip-row { display: flex; justify-content: space-between; padding-bottom: 8px; border-bottom: 1px dashed #CBD5E1; align-items: flex-end;}
+        .slip-label { font-weight: 800; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;}
+        .slip-value { font-weight: 700; color: var(--primary-navy); font-size: 1.05rem; text-align: right;}
+        .slip-value.highlight-blue { color: var(--secondary-blue); font-size: 1.3rem; font-weight: 900; background: #DBEAFE; padding: 4px 12px; border-radius: 6px;}
+        
+        .slip-footer { background-color: #FEF2F2; border-top: 1px solid #FCA5A5; padding: 15px; font-size: 0.85rem; color: #991B1B; font-weight: 700; text-align: center; }
+
+        /* --- EXPERT FACULTY SECTION --- */
         .faculty-section { background-color: #F1F5F9; }
         .filter-container { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 60px; }
         .filter-btn { background-color: var(--card-bg); border: 1px solid #E2E8F0; color: var(--text-dark); padding: 12px 28px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.95rem; transition: var(--transition-smooth); box-shadow: var(--shadow-subtle); }
@@ -236,7 +363,6 @@
         .footer-links a:hover { color: var(--accent-cyan); padding-left: 6px; }
         .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 35px; border-top: 1px solid rgba(148, 163, 184, 0.1); text-align: center; color: #64748B; font-size: 0.95rem; }
 
-        /* --- HIGH-END INVISO CREATOR EMBLEM SIGNATURE FOOTER --- */
         .inviso-developer-footer { width: 100%; margin-top: 40px; padding-top: 30px; border-top: 1px dashed rgba(255, 255, 255, 0.08); display: flex; justify-content: center; align-items: center; }
         .inviso-wrapper { display: flex; align-items: center; gap: 15px; cursor: pointer; transition: var(--transition-smooth); }
         .inviso-emblem-box { width: 60px; height: 60px; background: #000000; border: 2px solid #FFFFFF; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); transition: var(--transition-smooth); position: relative; }
@@ -261,6 +387,10 @@
             .scholarship-slip-card { border: none !important; box-shadow: none !important; background: transparent !important; padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; }
             .admit-slip-printable { border: 2px solid #000 !important; padding: 20px !important; }
             .no-print { display: none !important; }
+            .slip-official-header { background-color: white !important; color: black !important; border-bottom: 2px solid black !important;}
+            .slip-official-header .slip-logo { background-color: white !important; border: 1px solid black !important;}
+            .slip-header-text h5 { color: #555 !important; }
+            .slip-value.highlight-blue { color: black !important; background: transparent !important; padding: 0 !important; }
         }
 
         @media (max-width: 992px) {
@@ -275,6 +405,10 @@
             .nav-links.active { left: 0; }
             .footer-grid { grid-template-columns: 1fr; gap: 40px; }
             .para-bot-window { width: calc(100vw - 40px); right: 20px; bottom: 85px; }
+            .official-doc-header { padding: 20px; flex-direction: column; text-align: center; }
+            .doc-form-body { padding: 25px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-grid .full-width { grid-column: span 1; }
         }
     </style>
 </head>
@@ -370,81 +504,94 @@
     <section id="scholarship" class="scholarship-section">
         <div class="section-header">
             <h2>Paraworld Scholarship Test 2026</h2>
-            <p>Showcase your talent and secure up to a **100% Fee Waiver** on academic courses. Complete the secure form below to generate your printable Roll Number Slip instantly.</p>
+            <p>Showcase your talent and secure up to a **100% Fee Waiver** on academic courses. Complete the official registration card below to instantly generate your Roll Number Slip.</p>
         </div>
 
         <div class="scholarship-container">
             <div class="scholarship-form-card">
-                <h3>Scholarship Entry Form</h3>
-                <form id="scholarshipForm">
-                    <div class="form-grid">
-                        <div class="form-row">
-                            <label for="scholName">Full Name</label>
-                            <input type="text" id="scholName" class="form-field" placeholder="Enter your full name" required>
-                        </div>
-                        <div class="form-row">
-                            <label for="scholEmail">Email Address</label>
-                            <input type="email" id="scholEmail" class="form-field" placeholder="student@example.com" required>
-                        </div>
-                        <div class="form-row">
-                            <label for="scholPhone">Contact Number</label>
-                            <input type="tel" id="scholPhone" class="form-field" placeholder="Enter mobile number" required>
-                        </div>
-                        <div class="form-row">
-                            <label for="scholResidence">Residence (Town / Village)</label>
-                            <input type="text" id="scholResidence" class="form-field" placeholder="e.g. Shopian Town, Therian, Pinjura" required>
-                        </div>
-                        <div class="form-row full-width">
-                            <label for="scholSchool">Current School Name</label>
-                            <input type="text" id="scholSchool" class="form-field" placeholder="e.g. Govt Boys HSS Shopian" required>
-                        </div>
-                        
-                        <div class="form-row">
-                            <label for="scholCurrentClass">Current Class</label>
-                            <select id="scholCurrentClass" class="form-field" required>
-                                <option value="" disabled selected>Select current class...</option>
-                                <option value="Class 8th">Class 8th</option>
-                                <option value="Class 9th">Class 9th</option>
-                                <option value="Class 10th">Class 10th</option>
-                                <option value="Class 11th">Class 11th</option>
-                                <option value="Class 12th">Class 12th</option>
-                            </select>
-                        </div>
-                        <div class="form-row">
-                            <label for="scholPromotingClass">Promoting Class (Stream)</label>
-                            <select id="scholPromotingClass" class="form-field" required>
-                                <option value="" disabled selected>Seeking admission into...</option>
-                                <option value="Class 9th (General)">Class 9th (General)</option>
-                                <option value="Class 10th (General)">Class 10th (General)</option>
-                                <option value="Class 11th (Medical)">Class 11th (Medical Stream)</option>
-                                <option value="Class 11th (Non-Medical)">Class 11th (Non-Medical Stream)</option>
-                                <option value="Class 11th (Arts/Humanities)">Class 11th (Arts / Humanities)</option>
-                                <option value="Class 11th (Commerce)">Class 11th (Commerce)</option>
-                                <option value="Class 12th (Medical)">Class 12th (Medical Stream)</option>
-                                <option value="Class 12th (Non-Medical)">Class 12th (Non-Medical Stream)</option>
-                                <option value="Class 12th (Arts/Humanities)">Class 12th (Arts / Humanities)</option>
-                                <option value="NEET Target Batch">NEET Target Batch</option>
-                                <option value="JEE Target Batch">JEE Target Batch</option>
-                                <option value="Crash Course">Fast-Track Crash Course</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-row full-width">
-                            <label for="scholHeard">Where did you hear about us?</label>
-                            <select id="scholHeard" class="form-field" required>
-                                <option value="" disabled selected>Please select...</option>
-                                <option value="Friends / Classmates">Friends / Classmates</option>
-                                <option value="School Teacher Reference">School Teacher Reference</option>
-                                <option value="Banners / Posters">Banners / Posters</option>
-                                <option value="Social Media">Social Media</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
+                
+                <div class="official-doc-header">
+                    <div class="official-doc-logo">
+                        <img src="/static/images/images.jpg" alt="Paraworld Official Logo" onerror="this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=150';">
                     </div>
-                    <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--secondary-blue) 100%);">
-                        Register & Generate Roll No Slip
-                    </button>
-                </form>
+                    <div class="doc-title-stack">
+                        <h3>Paraworld Educations</h3>
+                        <p>Official Scholarship Entry Form</p>
+                    </div>
+                </div>
+
+                <div class="doc-form-body">
+                    <form id="scholarshipForm">
+                        <div class="form-grid">
+                            <div class="form-row">
+                                <label for="scholName">Full Name</label>
+                                <input type="text" id="scholName" class="form-field" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="form-row">
+                                <label for="scholEmail">Email Address</label>
+                                <input type="email" id="scholEmail" class="form-field" placeholder="student@example.com" required>
+                            </div>
+                            <div class="form-row">
+                                <label for="scholPhone">Contact Number</label>
+                                <input type="tel" id="scholPhone" class="form-field" placeholder="Enter mobile number" required>
+                            </div>
+                            <div class="form-row">
+                                <label for="scholResidence">Residence (Town / Village)</label>
+                                <input type="text" id="scholResidence" class="form-field" placeholder="e.g. Shopian Town, Therian" required>
+                            </div>
+                            <div class="form-row full-width">
+                                <label for="scholSchool">Current School Name</label>
+                                <input type="text" id="scholSchool" class="form-field" placeholder="e.g. Govt Boys HSS Shopian" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <label for="scholCurrentClass">Current Class</label>
+                                <select id="scholCurrentClass" class="form-field" required>
+                                    <option value="" disabled selected>Select current class...</option>
+                                    <option value="Class 8th">Class 8th</option>
+                                    <option value="Class 9th">Class 9th</option>
+                                    <option value="Class 10th">Class 10th</option>
+                                    <option value="Class 11th">Class 11th</option>
+                                    <option value="Class 12th">Class 12th</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label for="scholPromotingClass">Promoting Stream</label>
+                                <select id="scholPromotingClass" class="form-field" required>
+                                    <option value="" disabled selected>Seeking admission into...</option>
+                                    <option value="Class 9th (General)">Class 9th (General)</option>
+                                    <option value="Class 10th (General)">Class 10th (General)</option>
+                                    <option value="Class 11th (Medical)">Class 11th (Medical Stream)</option>
+                                    <option value="Class 11th (Non-Medical)">Class 11th (Non-Medical Stream)</option>
+                                    <option value="Class 11th (Arts/Humanities)">Class 11th (Arts / Humanities)</option>
+                                    <option value="Class 11th (Commerce)">Class 11th (Commerce)</option>
+                                    <option value="Class 12th (Medical)">Class 12th (Medical Stream)</option>
+                                    <option value="Class 12th (Non-Medical)">Class 12th (Non-Medical Stream)</option>
+                                    <option value="Class 12th (Arts/Humanities)">Class 12th (Arts / Humanities)</option>
+                                    <option value="NEET Target Batch">NEET Target Batch</option>
+                                    <option value="JEE Target Batch">JEE Target Batch</option>
+                                    <option value="Crash Course">Fast-Track Crash Course</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-row full-width">
+                                <label for="scholHeard">Referral Source</label>
+                                <select id="scholHeard" class="form-field" required>
+                                    <option value="" disabled selected>Where did you hear about us?</option>
+                                    <option value="Friends / Classmates">Friends / Classmates</option>
+                                    <option value="School Teacher Reference">School Teacher Reference</option>
+                                    <option value="Banners / Posters">Banners / Posters</option>
+                                    <option value="Social Media">Social Media</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-register-doc">
+                            Confirm Registration & Generate Slip
+                        </button>
+                    </form>
+                </div>
+
             </div>
         </div>
     </section>
@@ -647,20 +794,21 @@
 
     <div class="modal-background" id="scholarshipSlipModal">
         <div class="modal-card scholarship-slip-card">
-            <div class="no-print">
-                <div class="success-icon" style="background-color: #E0F2FE; color: #0369A1;">🎉</div>
-                <h3 style="margin-bottom: 5px;">Congratulations!</h3>
-                <p style="margin-bottom: 25px; color: var(--text-muted);">Your scholarship test registration is successful. Below is your official admittance card.</p>
-            </div>
             
             <div class="admit-slip-printable" id="printableSlipArea">
-                <div class="slip-header">
-                    <h4>PARAWORLD EDUCATIONS SHOPIAN</h4>
-                    <h5>Scholarship Entrance Test - Admittance Card</h5>
+                <div class="slip-official-header">
+                    <div class="slip-logo">
+                        <img src="/static/images/images.jpg" alt="Logo" onerror="this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=150';">
+                    </div>
+                    <div class="slip-header-text">
+                        <h4>PARAWORLD EDUCATIONS SHOPIAN</h4>
+                        <h5>Official Admittance Card - Scholarship Test</h5>
+                    </div>
                 </div>
+                
                 <div class="slip-body">
                     <div class="slip-row">
-                        <span class="slip-label">Roll Number:</span>
+                        <span class="slip-label">Roll Number Token:</span>
                         <span class="slip-value highlight-blue" id="slipRollNo">PW-2026-101</span>
                     </div>
                     <div class="slip-row">
@@ -676,15 +824,15 @@
                         <span class="slip-value" id="slipCurrentClass">-</span>
                     </div>
                     <div class="slip-row">
-                        <span class="slip-label">Promoting Class:</span>
+                        <span class="slip-label">Promoting Stream:</span>
                         <span class="slip-value" id="slipPromotingClass">-</span>
                     </div>
                     <div class="slip-row">
-                        <span class="slip-label">School Name:</span>
+                        <span class="slip-label">Prior School:</span>
                         <span class="slip-value" id="slipSchool">-</span>
                     </div>
                     <div class="slip-row">
-                        <span class="slip-label">Residence:</span>
+                        <span class="slip-label">Residence Location:</span>
                         <span class="slip-value" id="slipResidence">-</span>
                     </div>
                     <div class="slip-row">
@@ -693,16 +841,16 @@
                     </div>
                 </div>
                 <div class="slip-footer">
-                    <p>⚠️ Please bring a printed copy of this slip & your writing board on the test day.</p>
+                    <p>⚠️ NOTE: Please print this slip or take a screenshot. You must present this Roll Number to enter the test center.</p>
                 </div>
             </div>
 
-            <div class="no-print" style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+            <div class="no-print" style="margin-top: 15px; margin-bottom: 25px; display: flex; gap: 15px; justify-content: center;">
                 <button class="btn-dismiss" id="printSlipBtn" style="background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--secondary-blue) 100%); color: #081C36;">
-                    🖨️ Print Admit Slip
+                    🖨️ Print Slip
                 </button>
                 <button class="btn-dismiss" id="closeSlipBtn" style="background-color: #CBD5E1; color: #1E293B;">
-                    Close Window
+                    Dismiss
                 </button>
             </div>
         </div>
@@ -748,7 +896,6 @@
         </div>
     </div>
 
-    <!-- PERSISTENT FOOTER (Admin Link Removed for Security) -->
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
@@ -776,7 +923,6 @@
             </div>
         </div>
 
-        <!-- ULTRAPROFESSIONAL INVISO DESIGNER SIGNATURE FOOTER RESTORED -->
         <div class="inviso-developer-footer">
             <div class="inviso-wrapper">
                 <div class="inviso-emblem-box">
@@ -804,3 +950,6 @@
     <script src="/static/js/main.js"></script>
 </body>
 </html>
+
+
+```
