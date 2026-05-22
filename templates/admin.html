@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,14 +33,12 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- UNIFIED SAAS LAYOUT WRAPPER --- */
         .dashboard-wrapper {
             max-width: 1280px;
             margin: 0 auto;
             padding: 40px 24px;
         }
 
-        /* TOP CONSOLE HEADER */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -83,7 +82,6 @@
             transform: translateY(-2px);
         }
 
-        /* --- HIGH-END ANALYTICS GRID --- */
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -128,7 +126,6 @@
             font-size: 1.8rem;
         }
 
-        /* --- SHARE HUB AND SEARCH STRIP --- */
         .hub-banner {
             background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-blue) 100%);
             color: white;
@@ -190,7 +187,6 @@
             transform: translateY(-2px);
         }
 
-        /* CONTROL UTILITIES BAR */
         .controls-card {
             background: var(--panel-bg);
             border-radius: var(--radius-box);
@@ -244,7 +240,6 @@
             gap: 12px;
         }
 
-        /* --- THE ENTERPRISE TAB CONSOLE --- */
         .tab-buttons-row {
             display: flex;
             gap: 12px;
@@ -285,7 +280,6 @@
             border-radius: 5px;
         }
 
-        /* --- WORKSPACE VIEW MODULES --- */
         .workspace-panel {
             background-color: var(--panel-bg);
             border-radius: var(--radius-box);
@@ -556,7 +550,7 @@
             background-color: #DC2626;
         }
 
-        /* --- INVISO SAAS SIGNATURE STYLING --- */
+        /* --- INVISO DESIGNER SIGNATURE FOOTER --- */
         .inviso-developer-footer {
             width: 100%;
             margin-top: 50px;
@@ -622,7 +616,6 @@
             stroke-linecap: round;
         }
 
-        /* Interactive Hover states for Inviso Logo on Light Mode Admin Panel */
         .inviso-wrapper:hover .inviso-emblem-box {
             border-color: var(--accent-cyan);
             background: #000000;
@@ -767,6 +760,7 @@
             <button class="tab-btn" data-tab="enquiries">Admission Enquiries</button>
         </div>
 
+        <!-- Viewport A -->
         <div class="workspace-panel active" id="scholarshipPanel">
             {% if students %}
                 <div class="table-scroller">
@@ -799,9 +793,11 @@
                                     <td><span class="badge-stream" style="background-color: #ECFDF5; color: #065F46;">{{ student.heard_from }}</span></td>
                                     <td>
                                         <div class="actions-cell">
-                                            <a class="handle-btn handle-whatsapp" 
-                                               href="https://api.whatsapp.com/send?phone={{ student.phone }}&text=Dear%20{{ student.name | urlencode }},%20your%20registration%20for%20the%20Paraworld%20Scholarship%20Test%20is%20successful.%20Your%20Roll%20Number%20is%20{{ student.roll_number }}.%20Please%20arrive%20at%20the%20center%20on%20time." 
-                                               target="_blank">💬</a>
+                                            <!-- Dynamic JS-driven WhatsApp button -->
+                                            <button class="handle-btn handle-whatsapp whatsapp-trigger" 
+                                                    data-phone="{{ student.phone }}" 
+                                                    data-name="{{ student.name }}" 
+                                                    data-roll="{{ student.roll_number }}">💬</button>
                                             <a class="handle-btn handle-phone" href="tel:{{ student.phone }}">📞</a>
                                             <button class="handle-btn handle-delete delete-student-trigger" 
                                                     data-roll="{{ student.roll_number }}" 
@@ -821,6 +817,7 @@
             {% endif %}
         </div>
 
+        <!-- Viewport B -->
         <div class="workspace-panel" id="enquiriesPanel">
             {% if enquiries %}
                 <div class="table-scroller">
@@ -843,9 +840,10 @@
                                     <td>{{ enquiry.phone }}</td>
                                     <td>
                                         <div class="actions-cell">
-                                            <a class="handle-btn handle-whatsapp" 
-                                               href="https://api.whatsapp.com/send?phone={{ enquiry.phone }}&text=Dear%20parent/student,%20thanks%20for%20inquiring%20about%20the%20Paraworld%20Educations%20batches.%20Please%20let%20us%20know%20how%20we%20can%20assist." 
-                                               target="_blank">💬</a>
+                                            <!-- Dynamic JS-driven WhatsApp button -->
+                                            <button class="handle-btn handle-whatsapp whatsapp-enquiry-trigger" 
+                                                    data-phone="{{ enquiry.phone }}" 
+                                                    data-name="{{ enquiry.name }}">💬</button>
                                             <a class="handle-btn handle-phone" href="tel:{{ enquiry.phone }}">📞</a>
                                             <button class="handle-btn handle-delete delete-enquiry-trigger" 
                                                     data-id="{{ enquiry.id }}" 
@@ -866,7 +864,7 @@
         </div>
         
         <div class="inviso-developer-footer">
-            <div class="inviso-wrapper">
+            <div class="inviso-wrapper" onclick="window.open('https://github.com/zaid170', '_blank')">
                 <div class="inviso-emblem-box">
                     <svg class="inviso-mask-svg" viewBox="0 0 100 100">
                         <circle cx="50" cy="50" r="45" class="outer-ring" />
@@ -918,6 +916,26 @@
                     setTimeout(() => toast.remove(), 400);
                 }, 3000);
             }
+
+            // WhatsApp Dynamic Dispatcher (100% crash-proof browser mechanism)
+            document.querySelectorAll('.whatsapp-trigger').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const phone = btn.getAttribute('data-phone');
+                    const name = btn.getAttribute('data-name');
+                    const roll = btn.getAttribute('data-roll');
+                    const textMessage = `Dear ${name}, your registration for the Paraworld Scholarship Test is successful. Your Roll Number is ${roll}. Please arrive at the center on time.`;
+                    window.open(`https://api.whatsapp.com/send?phone=${encodeURIComponent(phone)}&text=${encodeURIComponent(textMessage)}`, '_blank');
+                });
+            });
+
+            document.querySelectorAll('.whatsapp-enquiry-trigger').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const phone = btn.getAttribute('data-phone');
+                    const name = btn.getAttribute('data-name');
+                    const textMessage = `Dear ${name}, thank you for inquiring about Paraworld Educations batches. Please let us know how we can assist you.`;
+                    window.open(`https://api.whatsapp.com/send?phone=${encodeURIComponent(phone)}&text=${encodeURIComponent(textMessage)}`, '_blank');
+                });
+            });
 
             let currentTab = 'scholarship';
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1100,3 +1118,5 @@
     </script>
 </body>
 </html>
+
+```
