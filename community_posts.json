@@ -1,1 +1,38 @@
-
+[
+    {
+        "id": 1,
+        "title": "Welcome to the Paraworld Community Hub! 🌟",
+        "content": "We are incredibly excited to launch this safe interactive forum for all Paraworld students in Shopian. Here, you can read official school announcements, study advice from Sajad Sir, Owais Sir, and other mentors, and share supportive feedback with your classmates. Let's work together to keep this space helpful, encouraging, and kind!",
+        "date": "May 15, 2026",
+        "likes": 42,
+        "comments": [
+            {
+                "id": 1715784000000,
+                "author": "Sajad Sir",
+                "text": "Welcome everyone! I look forward to using this space to share physics tips and help you build strong conceptual basics.",
+                "approved": true
+            },
+            {
+                "id": 1715784100000,
+                "author": "Insha",
+                "text": "This is wonderful! It's so helpful to have a dedicated place to stay updated and motivated.",
+                "approved": true
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Top 3 Study Tips for Board Exam Preparation 📝",
+        "content": "As board examinations approach, managing your preparation strategically makes all the difference. First, solve at least one complete past-year question paper every week under exam-like timings. Second, focus on understanding the core mechanisms and formulas instead of just memorizing notes. Third, make sure to get plenty of rest so your brain stays sharp. We believe in you!",
+        "date": "May 20, 2026",
+        "likes": 31,
+        "comments": [
+            {
+                "id": 1716216000000,
+                "author": "Owais Sir",
+                "text": "Excellent tips! Especially the second point—conceptual clarity is what makes chemistry reaction mechanisms easy to solve.",
+                "approved": true
+            }
+        ]
+    }
+]
