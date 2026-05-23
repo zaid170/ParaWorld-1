@@ -15,12 +15,20 @@ SETTINGS_FILE = 'settings.json'
 
 # --- MINI GEMINI AI SETUP ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+model = None
+
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
-    # Using the universally supported "gemini-pro" to prevent 404 API errors
-    model = genai.GenerativeModel(model_name="gemini-pro")
-else:
-    model = None
+    try:
+        # Smart Auto-Detect: Finds the exact model your specific API key is allowed to use!
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                model = genai.GenerativeModel(model_name=m.name)
+                # If it finds a fast "flash" model, it locks it in and stops searching
+                if 'flash' in m.name.lower():
+                    break
+    except Exception as e:
+        print(f"Warning: Could not connect to Google AI: {e}")
 
 # --- ANTI-CACHE FORCE RULE ---
 @app.after_request
@@ -185,7 +193,7 @@ def delete_enquiry(enquiry_id):
 def mini_gemini_chat():
     """Handles messages between the website and Mini Gemini."""
     if not model:
-        return jsonify({"status": "error", "message": "Mini Gemini is currently offline. Missing API Key."}), 500
+        return jsonify({"status": "error", "message": "Mini Gemini is currently offline. The server is still starting up or the API key is missing."}), 500
         
     try:
         data = request.get_json()
