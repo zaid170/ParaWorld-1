@@ -1,1 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paraworld Gallery | Secure Campus Album</title>
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DESIGN TOKENS --- */
+        :root {
+            --primary-navy: #081C36;
+            --secondary-blue: #0A3663;
+            --accent-gold: #FFB300;
+            --accent-cyan: #00E5FF;
+            --bg-dark: #030A14;
+            --card-bg: #0B1E36;
+            --text-light: #F1F5F9;
+            --text-muted: #94A3B8;
+            --radius-lg: 20px;
+            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
+        /* --- GLOBAL STYLE & NO-COPY PROTECTION --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            /* Blocks text/image selection across the entire page */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.08) 0%, transparent 50%);
+        }
+
+        header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: var(--accent-cyan);
+            color: var(--primary-navy);
+            border-color: var(--accent-cyan);
+            transform: translateX(-4px);
+        }
+
+        .gallery-title h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: white;
+        }
+
+        .gallery-title h1 span {
+            color: var(--accent-cyan);
+        }
+
+        /* --- THE GALLERY GRID --- */
+        .gallery-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 24px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .photo-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 15px 35px rgba(0, 229, 255, 0.15);
+        }
+
+        /* --- 🛡️ THE ANTI-SCREENSHOT SHIELD --- */
+        .photo-shield-wrapper {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+            background-color: #020617;
+        }
+
+        /* Transparent glass wall placed over the image to block long press/drag */
+        .glass-shield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0); /* Perfectly invisible */
+            cursor: default;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+            /* Disables standard browser image dragging */
+            pointer-events: none;
+            -webkit-user-drag: none;
+        }
+
+        .photo-card:hover .gallery-img {
+            transform: scale(1.05);
+        }
+
+        .photo-details {
+            padding: 20px;
+        }
+
+        .photo-details h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .photo-details p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* --- SECURITY WARNING TOAST ALERT --- */
+        .security-alert {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translate(-50%, 50px);
+            background: linear-gradient(135deg, #EF4444 0%, #991B1B 100%);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.35);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .security-alert.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+
+        /* --- 🚫 PRINT TO BLACK SHIELD (PREVENTS PRINT-TO-PDF STEALING) --- */
+        @media print {
+            body {
+                display: none !important;
+            }
+            .gallery-grid, .photo-card, img {
+                display: none !important;
+                visibility: hidden !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SECURE HEADER -->
+    <header>
+        <div class="gallery-title">
+            <h1>Campus <span>Gallery</span></h1>
+        </div>
+        <a href="/" class="back-btn">← Back to Campus</a>
+    </header>
+
+    <!-- ALBUM CONTAINER -->
+    <main class="gallery-container">
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Dynamic Python Loop will inject images here. 
+                 Includes beautiful placeholders so it displays immediately even if no images are added yet! -->
+            {% if photos and photos|length > 0 %}
+                {% for photo in photos %}
+                <div class="photo-card">
+                    <div class="photo-shield-wrapper">
+                        <!-- The invisible shield that blocks right-clicks & drags -->
+                        <div class="glass-shield"></div>
+                        <img class="gallery-img" src="{{ photo.url }}" alt="{{ photo.title }}" draggable="false">
+                    </div>
+                    <div class="photo-details">
+                        <h3>{{ photo.title }}</h3>
+                        <p>{{ photo.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback Placeholders -->
+                <div class="photo-card">
+                    <div class="photo-shield-wrapper">
+                        <div class="glass-shield"></div>
+                        <img class="gallery-img" src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=600" alt="Classroom" draggable="false">
+                    </div>
+                    <div class="photo-details">
+                        <h3>Interactive Classrooms</h3>
+                        <p>Modern layouts designed to facilitate focused learning and close mentorship.</p>
+                    </div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-shield-wrapper">
+                        <div class="glass-shield"></div>
+                        <img class="gallery-img" src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=600" alt="Study Space" draggable="false">
+                    </div>
+                    <div class="photo-details">
+                        <h3>Paraworld Environment</h3>
+                        <p>Where dedication meets advanced technology to deliver premium educational paths.</p>
+                    </div>
+                </div>
+                <div class="photo-card">
+                    <div class="photo-shield-wrapper">
+                        <div class="glass-shield"></div>
+                        <img class="gallery-img" src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=600" alt="Excellence" draggable="false">
+                    </div>
+                    <div class="photo-details">
+                        <h3>Legacy of Achievement</h3>
+                        <p>Celebrating the incredible academic triumphs of our outstanding student batches.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- FLOATING ALERT BANNER -->
+    <div class="security-alert" id="securityAlert">
+        ⚠️ Protected Content: Saving or copying photos is disabled!
+    </div>
+
+    <!-- --- HIGH-END PROTECTION SCRIPTS --- -->
+    <script>
+        const alertBanner = document.getElementById('securityAlert');
+
+        function triggerSecurityAlert() {
+            alertBanner.classList.add('show');
+            setTimeout(() => {
+                alertBanner.classList.remove('show');
+            }, 3000);
+        }
+
+        // 1. Block Mouse Right-Click Menu
+        document.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            triggerSecurityAlert();
+        });
+
+        // 2. Block Keyboard Stealing Shortcuts (Ctrl+S, Ctrl+P, F12, Ctrl+Shift+I)
+        document.addEventListener('keydown', (event) => {
+            // Check for F12 (Inspect Element)
+            if (event.key === 'F12') {
+                event.preventDefault();
+                triggerSecurityAlert();
+            }
+            
+            // Check for Ctrl+S (Save), Ctrl+P (Print), Ctrl+U (Source Code)
+            if (event.ctrlKey && (event.key === 's' || event.key === 'S' || event.key === 'p' || event.key === 'P' || event.key === 'u' || event.key === 'U')) {
+                event.preventDefault();
+                triggerSecurityAlert();
+            }
+
+            // Check for Ctrl+Shift+I (Inspect) or Ctrl+Shift+C
+            if (event.ctrlKey && event.shiftKey && (event.key === 'i' || event.key === 'I' || event.key === 'c' || event.key === 'C')) {
+                event.preventDefault();
+                triggerSecurityAlert();
+            }
+        });
+
+        // 3. Extra protection for mobile long-press
+        document.querySelectorAll('.glass-shield').forEach(shield => {
+            shield.addEventListener('touchstart', (e) => {
+                // Prevent long-press menu trigger on iOS and Android
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+        });
+    </script>
+</body>
+</html>
