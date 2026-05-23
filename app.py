@@ -19,14 +19,13 @@ COMMUNITY_FILE = 'community_posts.json'
 FLAGGED_FILE = 'flagged_comments.json'
 TOPPERS_FILE = 'toppers.json'
 
-# --- 🤖 MINI GEMINI AI SETUP ---
+# --- 🤖 PARA GEMINI AI SETUP ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 model = None
 
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
     try:
-        # Smart Auto-Detect: Finds the exact model your specific API key is allowed to use!
         for m in genai.list_models():
             if 'generateContent' in m.supported_generation_methods:
                 model = genai.GenerativeModel(model_name=m.name)
@@ -43,9 +42,8 @@ def add_header(response):
     response.headers['Expires'] = '-1'
     return response
 
-# --- 🛠️ BULLETPROOF DATABASE METHODS (AUTO-CREATION SHIELD) ---
+# --- 🛠️ BULLETPROOF DATABASE METHODS ---
 def load_data(filepath, default_structure=[]):
-    """Loads a JSON database safely. Creates the file if it is missing."""
     if not os.path.exists(filepath):
         save_data(filepath, default_structure)
         return default_structure
@@ -60,13 +58,13 @@ def load_data(filepath, default_structure=[]):
 
 def load_settings():
     default_ai = (
-        "You are Mini Gemini, an official AI tutor for Paraworld Educations in Shopian. "
+        "You are Para Gemini, an official AI tutor for Paraworld Educations in Shopian. "
         "You help students solve math problems, answer science questions, and provide info about the institute. "
-        "Keep your answers clear, concise, and friendly. Never mention you are made by Google; "
-        "you are exclusively Mini Gemini for Paraworld."
+        "Keep your answers clear, concise, and friendly."
     )
     default_settings = {
-        "show_scholarship": True,
+        "show_scholarship_junior": True,
+        "show_scholarship_senior": True,
         "ai_prompt": default_ai,
         "low_power_mode": False
     }
@@ -80,7 +78,6 @@ def save_data(filepath, data):
         print(f"Error saving {filepath}: {e}")
 
 # --- 🏠 PUBLIC PAGES ---
-
 @app.route('/')
 def home():
     settings = load_settings()
@@ -88,7 +85,8 @@ def home():
     toppers = load_data(TOPPERS_FILE)
     return render_template(
         'index.html', 
-        show_scholarship=settings.get('show_scholarship', True), 
+        show_scholarship_junior=settings.get('show_scholarship_junior', True), 
+        show_scholarship_senior=settings.get('show_scholarship_senior', True), 
         notices=notices,
         toppers=toppers,
         low_power=settings.get('low_power_mode', False)
@@ -105,7 +103,6 @@ def community():
     return render_template('community.html', posts=posts)
 
 # --- 🔑 ADMINISTRATOR ROUTING ---
-
 @app.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
     if session.get('logged_in'):
@@ -159,7 +156,6 @@ def admin_dashboard():
     )
 
 # --- 🎓 SCHOLARSHIP & GENERAL ENQUIRIES API ---
-
 @app.route('/submit-enquiry', methods=['POST'])
 def submit_enquiry():
     try:
@@ -179,10 +175,6 @@ def submit_enquiry():
 
 @app.route('/register-scholarship', methods=['POST'])
 def register_scholarship():
-    settings = load_settings()
-    if not settings.get('show_scholarship', True):
-        return jsonify({"status": "error", "message": "Registrations are currently closed."}), 403
-
     try:
         data = request.get_json()
         students = load_data(SCHOLARSHIP_FILE)
@@ -204,7 +196,6 @@ def register_scholarship():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 # --- 💬 ACTIVE COMMUNITY SYSTEM ENDPOINTS ---
-
 @app.route('/api/like-post/<int:post_id>', methods=['POST'])
 def like_post(post_id):
     posts = load_data(COMMUNITY_FILE)
@@ -224,7 +215,7 @@ def comment_post(post_id):
         "id": int(datetime.datetime.now().timestamp() * 1000),
         "author": data.get('author', 'Anonymous'),
         "text": data.get('text', ''),
-        "approved": False  # Every comment starts as unapproved until you review it!
+        "approved": False
     }
     
     for p in posts:
@@ -239,7 +230,6 @@ def comment_post(post_id):
 
 @app.route('/api/flag-comment', methods=['POST'])
 def flag_comment():
-    """Secretly logs blocked inappropriate comment attempts to the server."""
     data = request.get_json()
     flagged = load_data(FLAGGED_FILE)
     
@@ -254,8 +244,7 @@ def flag_comment():
     save_data(FLAGGED_FILE, flagged)
     return jsonify({"status": "success"}), 200
 
-# --- 👑 ADMINISTRATIVE MANAGEMENT ACTIONS (THE "BOSS" FEATURES) ---
-
+# --- 👑 ADMINISTRATIVE MANAGEMENT ACTIONS ---
 @app.route('/api/analytics', methods=['GET'])
 def get_analytics():
     if not session.get('logged_in'): return jsonify({"status": "error"}), 403
@@ -271,23 +260,19 @@ def get_analytics():
         
     return jsonify({"status": "success", "streams": streams, "classes": classes}), 200
 
-@app.route('/toggle-scholarship', methods=['POST'])
-def toggle_scholarship():
+# UNIFIED SETTINGS UPDATER
+@app.route('/update-settings', methods=['POST'])
+def update_settings():
     if not session.get('logged_in'): return jsonify({"status": "error"}), 403
     data = request.get_json()
     settings = load_settings()
-    settings['show_scholarship'] = data.get('show_scholarship', True)
+    
+    # Allows updating any setting switch dynamically from the admin panel
+    for key, value in data.items():
+        settings[key] = value
+        
     save_data(SETTINGS_FILE, settings)
-    return jsonify({"status": "success", "show_scholarship": settings['show_scholarship']}), 200
-
-@app.route('/toggle-performance-mode', methods=['POST'])
-def toggle_performance_mode():
-    if not session.get('logged_in'): return jsonify({"status": "error"}), 403
-    data = request.get_json()
-    settings = load_settings()
-    settings['low_power_mode'] = data.get('low_power_mode', False)
-    save_data(SETTINGS_FILE, settings)
-    return jsonify({"status": "success", "low_power_mode": settings['low_power_mode']}), 200
+    return jsonify({"status": "success"}), 200
 
 # Notice Board
 @app.route('/add-notice', methods=['POST'])
@@ -432,12 +417,11 @@ def update_ai():
     save_data(SETTINGS_FILE, settings)
     return jsonify({"status": "success"}), 200
 
-# --- 🤖 THE SECURE MINI GEMINI AI CHAT ROUTE ---
-
+# --- 🤖 PARA GEMINI AI CHAT ROUTE ---
 @app.route('/api/chat', methods=['POST'])
 def mini_gemini_chat():
     if not model:
-        return jsonify({"status": "error", "message": "Mini Gemini is currently starting up or offline. Please check your API configuration."}), 500
+        return jsonify({"status": "error", "message": "Para Gemini is currently starting up or offline."}), 500
         
     try:
         data = request.get_json()
@@ -447,7 +431,7 @@ def mini_gemini_chat():
             return jsonify({"status": "error", "message": "Please type a message!"}), 400
             
         settings = load_settings()
-        ai_prompt = settings.get('ai_prompt', "You are Mini Gemini, an official AI tutor for Paraworld Educations.")
+        ai_prompt = settings.get('ai_prompt', "You are Para Gemini, an official AI tutor for Paraworld Educations.")
         
         full_prompt = f"{ai_prompt}\n\nStudent asks: {user_message}"
         response = model.generate_content(full_prompt)
