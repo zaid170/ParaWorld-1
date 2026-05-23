@@ -3,1070 +3,743 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paraworld Educations | Premium Coaching Institute in Shopian</title>
+    <title>PARA WORLD - Secure Admin Portal</title>
     
+    <!-- Premium Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <style>
-        /* --- MODERN DESIGN TOKENS & PALETTE --- */
+        /* ==========================================================================
+           1. DESIGN TOKENS, CONFIGURATIONS & CSS CUSTOM PROPERTIES
+           ==========================================================================
+           These variables establish a highly consistent, premium dark theme.
+           Using variables allows us to easily maintain colors, spacing, and sizing rules.
+        */
         :root {
-            --primary-navy: #081C36;
-            --secondary-blue: #0A3663;
-            --accent-gold: #FFB300;
-            --accent-cyan: #00E5FF;
-            --bg-light: #F8FAFC;
-            --card-bg: #FFFFFF;
-            --text-dark: #0F172A;
-            --text-muted: #475569;
-            --text-light: #F1F5F9;
-            --color-success: #10B981;
-            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --shadow-subtle: 0px 10px 30px rgba(0, 0, 0, 0.03);
-            --shadow-hover: 0px 20px 40px rgba(10, 54, 99, 0.12);
+            --primary-navy: #081C36;       /* Deep corporate brand base */
+            --secondary-blue: #0A3663;     /* Trustworthy dark cobalt */
+            --accent-gold: #FFB300;       /* High-visibility vibrant yellow-gold */
+            --accent-cyan: #00E5FF;       /* Electric cyan for neon styling accents */
+            --bg-dark-core: #030408;      /* Absolute deep background base */
+            --glass-base: rgba(15, 23, 42, 0.45); /* Rich transparent slate overlay */
+            --glass-border-light: rgba(255, 255, 255, 0.35); /* High-contrast top highlights */
+            --glass-border-dark: rgba(255, 255, 255, 0.08);  /* Subtle bottom shadows */
+            --text-light: #F1F5F9;        /* Pure off-white for strong content contrast */
+            --text-muted: #94A3B8;        /* Soft gray for descriptions and placeholders */
+            --color-danger: #FF4D4D;      /* Warning red for failure diagnostics */
+            --color-success: #10B981;     /* High-visibility green for active states */
+            --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Natural movement curves */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
-        html { scroll-behavior: smooth; }
-        body { background-color: var(--bg-light); color: var(--text-dark); overflow-x: hidden; line-height: 1.6; }
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-light); }
-        ::-webkit-scrollbar-thumb { background: var(--secondary-blue); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
+        /* ==========================================================================
+           2. GLOBAL RESET & BASE DIRECTIVES
+           ==========================================================================
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-        /* GPU ACCELERATION FOR 60FPS SMOOTHNESS */
-        .btn-primary, .nav-cta, .topper-card, .teacher-card, .classroom-tab, .filter-btn, .para-bot-launcher {
-            will-change: transform;
-            transform: translateZ(0);
+        body {
+            background: radial-gradient(circle at 50% 0%, #1b1736 0%, #0a0b14 80%, var(--bg-dark-core) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ==========================================================================
+           3. 🚀 HARDWARE GPU ACCELERATION DIRECTIVES (60FPS FOR OLDER PHONES)
+           ==========================================================================
+           By promoting layers directly to the system's graphics card, we prevent 
+           the processor from choking on blurs. This guarantees butter-smooth rendering.
+        */
+        .glass-card, 
+        .blob-container, 
+        .blob-core, 
+        .blob-ring, 
+        .float-item, 
+        .btn-enter, 
+        .brand-header, 
+        .diagnostic-card,
+        .system-badge {
+            will-change: transform, opacity;
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            perspective: 1000px;
         }
 
-        {% if low_power %}
-        * { animation-duration: 0.1s !important; transition-duration: 0.1s !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-        .logo-wrapper, .logo-wrapper::after, .display-icon, .stat-box { animation: none !important; }
-        .hero-section { background: var(--primary-navy) !important; }
-        {% endif %}
-
-        /* --- NAVIGATION --- */
-        nav { position: fixed; top: 0; width: 100%; padding: 24px 8%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; transition: var(--transition-smooth); background: transparent; }
-        nav.scrolled { padding: 14px 8%; background: rgba(8, 28, 54, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); }
-        .nav-logo { color: var(--text-light); font-size: 1.7rem; font-weight: 800; text-decoration: none; display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px; }
-        .nav-logo span { color: var(--accent-cyan); }
-        .nav-links { display: flex; gap: 32px; align-items: center; flex-wrap: wrap; }
-        .nav-links a { color: rgba(241, 245, 249, 0.85); text-decoration: none; font-weight: 600; font-size: 0.95rem; position: relative; padding: 6px 0; transition: var(--transition-smooth); }
-        .nav-links a:hover { color: var(--accent-cyan); }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 2px; background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan)); transition: var(--transition-smooth); }
-        .nav-links a:hover::after { width: 100%; }
-        .nav-cta { background: linear-gradient(135deg, var(--accent-gold), #FF9100); color: var(--primary-navy) !important; padding: 12px 28px !important; border-radius: 50px; font-weight: 700 !important; box-shadow: 0 4px 20px rgba(255, 179, 0, 0.3); }
-        .nav-cta:hover { transform: translateY(-2px) translateZ(0); box-shadow: 0 8px 25px rgba(255, 179, 0, 0.5); color: var(--primary-navy) !important; }
-        .nav-cta::after { display: none !important; }
-        .mobile-hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1100; }
-        .mobile-hamburger div { width: 30px; height: 3px; background-color: var(--text-light); border-radius: 2px; transition: var(--transition-smooth); }
-
-        /* --- TICKER --- */
-        .ticker-wrapper { background: linear-gradient(90deg, #0A3663, #081C36); color: white; padding: 12px 5%; text-align: center; font-weight: 700; position: fixed; top: 76px; width: 100%; z-index: 990; box-shadow: 0 4px 15px rgba(0,0,0, 0.2); display: flex; align-items: center; gap: 15px; border-bottom: 2px solid var(--accent-gold); }
-        .ticker-badge { background: var(--accent-gold); color: var(--primary-navy); padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 900; white-space: nowrap; }
-
-        /* --- HERO HEADER --- */
-        .hero-section { background: radial-gradient(circle at 80% 20%, rgba(0, 229, 255, 0.1) 0%, transparent 60%), linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-blue) 100%); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: var(--text-light); padding: 160px 24px 80px 24px; position: relative; overflow: hidden; }
-        .hero-section::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px); background-size: 24px 24px; pointer-events: none; }
-        {% if notices and notices|length > 0 %} .hero-section { padding-top: 220px; } {% endif %}
-        
-        .logo-wrapper { position: relative; width: 180px; height: 180px; margin-bottom: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: linear-gradient(45deg, var(--accent-gold), var(--accent-cyan)); padding: 6px; box-shadow: 0 10px 40px rgba(0, 229, 255, 0.25); animation: floatLogo 6s ease-in-out infinite; }
-        .logo-wrapper::after { content: ''; position: absolute; top: -12px; left: -12px; right: -12px; bottom: -12px; border: 2px dashed rgba(0, 229, 255, 0.25); border-radius: 50%; animation: spinCircle 25s linear infinite; }
-        .logo-inner-circle { width: 100%; height: 100%; background-color: #000000; border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .logo-inner-circle img { width: 85%; height: auto; object-fit: contain; }
-        
-        .hero-section h1 { font-size: clamp(2.8rem, 7vw, 4.8rem); font-weight: 900; margin-bottom: 24px; letter-spacing: -1.5px; line-height: 1.1; }
-        .text-gradient { background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-section p { font-size: clamp(1.1rem, 2.2vw, 1.4rem); max-width: 850px; margin-bottom: 45px; line-height: 1.7; color: #94A3B8; font-weight: 400; }
-        .btn-primary { display: inline-block; background: linear-gradient(135deg, var(--accent-gold) 0%, #FF9100 100%); color: var(--primary-navy); padding: 18px 48px; text-decoration: none; font-weight: 800; font-size: 1.25rem; border-radius: 50px; box-shadow: 0 10px 25px rgba(255, 179, 0, 0.35); transition: var(--transition-smooth); border: none; cursor: pointer; }
-        .btn-primary:hover { transform: scale(1.05) translateY(-3px) translateZ(0); box-shadow: 0 15px 35px rgba(255, 179, 0, 0.55); }
-
-        /* --- STATS STRIP --- */
-        .stats-strip { background-color: var(--card-bg); padding: 40px 5%; width: 100%; box-shadow: var(--shadow-subtle); border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
-        .stats-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; }
-        .stat-box { text-align: center; }
-        .stat-number { font-size: 2.8rem; font-weight: 800; color: var(--secondary-blue); }
-        .stat-label { font-size: 1rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-
-        section { padding: 120px 8%; width: 100%; }
-        .section-header { text-align: center; max-width: 800px; margin: 0 auto 80px auto; }
-        .section-header h2 { color: var(--primary-navy); font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 800; margin-bottom: 24px; position: relative; display: inline-block; letter-spacing: -0.5px; }
-        .section-header h2::after { content: ''; position: absolute; bottom: -12px; left: 20%; width: 60%; height: 5px; background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan)); border-radius: 10px; }
-        .section-header p { color: var(--text-muted); font-size: 1.15rem; line-height: 1.6; margin-top: 25px; }
-
-        /* --- TOPPERS BOARD --- */
-        .toppers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
-        .topper-card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 40px 25px; text-align: center; box-shadow: var(--shadow-subtle); border: 1px solid rgba(0,0,0,0.03); transition: var(--transition-smooth); position: relative; }
-        .topper-card:hover { transform: translateY(-8px) translateZ(0); box-shadow: var(--shadow-hover); }
-        .topper-avatar-container { position: relative; width: 120px; height: 120px; margin: 0 auto 20px auto; }
-        .topper-portrait { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 4px solid var(--accent-gold); box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: var(--transition-smooth); }
-        .rank-halo-1 { border-color: var(--accent-gold); box-shadow: 0 0 25px rgba(255, 179, 0, 0.4); }
-        .rank-halo-2 { border-color: #CBD5E1; box-shadow: 0 0 20px rgba(203, 213, 225, 0.3); }
-        .rank-halo-3 { border-color: #CD7F32; box-shadow: 0 0 20px rgba(205, 127, 50, 0.3); }
-        .topper-portrait img { width: 100%; height: 100%; object-fit: cover; }
-        .topper-crown { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 1.8rem; }
-        .topper-card h3 { color: var(--primary-navy); font-size: 1.35rem; font-weight: 800; margin-bottom: 4px; }
-        .topper-score { color: var(--accent-gold); font-weight: 800; font-size: 1.1rem; display: block; margin-bottom: 15px; }
-        .topper-quote { font-style: italic; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; padding-top: 12px; border-top: 1px dashed #E2E8F0; }
-
-        /* --- CLASSROOMS --- */
-        .infrastructure-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; max-width: 1200px; margin: 0 auto; align-items: center; }
-        .classroom-tabs { display: flex; flex-direction: column; gap: 15px; }
-        .classroom-tab { background-color: var(--card-bg); border: 1px solid #E2E8F0; padding: 24px; border-radius: var(--radius-md); cursor: pointer; transition: var(--transition-smooth); text-align: left; position: relative; overflow: hidden; box-shadow: var(--shadow-subtle); }
-        .classroom-tab::before { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 6px; background-color: transparent; transition: var(--transition-smooth); }
-        .classroom-tab.active { border-color: var(--secondary-blue); box-shadow: 0 10px 25px rgba(10, 54, 99, 0.08); transform: translateX(10px) translateZ(0); }
-        .classroom-tab.active::before { background-color: var(--secondary-blue); }
-        .classroom-tab h3 { color: var(--primary-navy); font-size: 1.25rem; margin-bottom: 8px; font-weight: 700; }
-        .classroom-tab p { color: var(--text-muted); font-size: 0.95rem; }
-        .classroom-display { background-color: var(--primary-navy); border-radius: var(--radius-lg); height: 480px; position: relative; overflow: hidden; box-shadow: var(--shadow-hover); border: 6px solid var(--card-bg); display: flex; justify-content: center; align-items: center; text-align: center; color: white; padding: 40px; }
-        .classroom-display::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(8, 28, 54, 0.95) 0%, rgba(10, 54, 99, 0.8) 100%); z-index: 1; }
-        .display-content { position: relative; z-index: 2; transition: var(--transition-smooth); max-width: 500px; }
-        .display-icon { font-size: 4.5rem; margin-bottom: 25px; display: inline-block; animation: bounceIcon 3s ease-in-out infinite; }
-        .display-content h3 { font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; color: var(--accent-gold); }
-        .display-content p { color: #E2E8F0; font-size: 1.15rem; line-height: 1.6; }
-
-        /* --- SCHOLARSHIP SECTION --- */
-        .scholarship-section { background: radial-gradient(circle at 10% 90%, rgba(0, 229, 255, 0.05) 0%, transparent 50%), linear-gradient(135deg, #041226 0%, var(--primary-navy) 100%); color: white; }
-        .scholarship-container { max-width: 900px; margin: 0 auto; }
-        .scholarship-form-card { background-color: rgba(8, 28, 54, 0.85); border-radius: var(--radius-lg); padding: 45px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45); border: 2px solid rgba(0, 229, 255, 0.25); transition: var(--transition-smooth); }
-        .scholarship-form-card h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 30px; text-align: center; color: var(--accent-cyan); }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        .form-grid .full-width { grid-column: span 2; }
-        .form-grid label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--text-light); font-size: 0.95rem; }
-        .scholarship-form-card .form-field { width: 100%; padding: 15px 22px; border: 2px solid #CBD5E1 !important; border-radius: var(--radius-md) !important; outline: none; font-size: 1rem !important; font-weight: 700 !important; background-color: #FFFFFF !important; color: #081C36 !important; transition: var(--transition-smooth); box-sizing: border-box; }
-        .scholarship-form-card .form-field::placeholder { color: #64748B !important; font-weight: 500; }
-        .scholarship-form-card .form-field:focus { border-color: var(--accent-cyan) !important; box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.3) !important; }
-        .scholarship-form-card option { background-color: #FFFFFF !important; color: #081C36 !important; font-weight: 600; }
-
-        /* --- 🎨 UPGRADED PREMIUM ADMIT SLIP MODAL --- */
-        .scholarship-slip-card { max-width: 500px !important; padding: 0 !important; background: transparent !important; box-shadow: none !important; }
-        .admit-slip-printable { background-color: white; border-radius: 16px; overflow: hidden; text-align: left; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid #E2E8F0; position: relative;}
-        
-        .slip-header-bg { background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-blue) 100%); padding: 30px 20px; text-align: center; border-bottom: 5px solid var(--accent-gold); display: flex; flex-direction: column; align-items: center; gap: 15px; }
-        .slip-header-bg img { width: 70px; height: 70px; border-radius: 50%; border: 3px solid white; object-fit: cover; background: white; padding: 2px; }
-        .slip-header-bg h4 { color: white; font-size: 1.6rem; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
-        .slip-header-bg h5 { color: var(--accent-cyan); font-size: 0.9rem; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
-        
-        .slip-content-wrapper { padding: 30px 25px; }
-        .slip-body { display: flex; flex-direction: column; gap: 16px; margin-bottom: 25px; }
-        .slip-row { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px dashed #CBD5E1; }
-        .slip-label { font-weight: 700; color: var(--text-muted); font-size: 0.95rem; }
-        .slip-value { font-weight: 700; color: var(--primary-navy); font-size: 1rem; text-align: right; max-width: 60%; }
-        .slip-value.highlight-blue { color: var(--secondary-blue); font-size: 1.25rem; font-weight: 900; background: #E0F2FE; padding: 4px 12px; border-radius: 6px; }
-        
-        .slip-footer { background-color: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 15px; font-size: 0.85rem; color: #B45309; font-weight: 700; text-align: center; line-height: 1.5; }
-        
-        .slip-btn-row { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .btn-download-pdf { background: linear-gradient(135deg, var(--color-success) 0%, #059669 100%); color: white; border: none; padding: 16px; font-size: 1.1rem; font-weight: 800; border-radius: 12px; cursor: pointer; transition: var(--transition-smooth); width: 100%; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3); }
-        .btn-download-pdf:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4); }
-        .btn-close-slip { background: transparent; color: var(--text-light); border: 2px solid rgba(255,255,255,0.2); padding: 14px; font-size: 1rem; font-weight: 700; border-radius: 12px; cursor: pointer; width: 100%; transition: var(--transition-smooth); }
-        .btn-close-slip:hover { background: rgba(255,255,255,0.1); }
-
-        /* --- PARA GEMINI CHATBOT WIDGET --- */
-        .para-bot-widget { position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; }
-        .para-bot-launcher { width: 65px; height: 65px; border-radius: 50%; background-color: #000000; border: 3px solid var(--accent-gold); box-shadow: 0 10px 25px rgba(0, 229, 255, 0.35); display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; transition: var(--transition-smooth); position: relative; }
-        .para-bot-launcher::after { content: ''; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border: 1px dashed var(--accent-cyan); border-radius: 50%; animation: spinCircle 15s linear infinite; }
-        .para-bot-launcher:hover { transform: scale(1.1) rotate(5deg) translateZ(0); border-color: var(--accent-cyan); }
-        .launcher-avatar-inner { color: var(--accent-cyan); font-size: 1.8rem; font-family: 'Space Grotesk', sans-serif; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
-        
-        .para-bot-window { width: 360px; height: 520px; background-color: var(--card-bg); border-radius: var(--radius-lg); box-shadow: 0 15px 40px rgba(8, 28, 54, 0.18); border: 1px solid #E2E8F0; display: none; flex-direction: column; overflow: hidden; margin-bottom: 15px; transition: var(--transition-smooth); transform: translateY(20px); opacity: 0; }
-        .para-bot-window.active { display: flex; transform: translateY(0); opacity: 1; }
-        .para-bot-header { background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-blue) 100%); padding: 18px 20px; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .para-bot-profile { display: flex; align-items: center; gap: 12px; }
-        .para-bot-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent-gold); background-color: #000000; display: flex; justify-content: center; align-items: center; color: var(--accent-cyan); font-size: 1.2rem; font-family: 'Space Grotesk', sans-serif; }
-        .para-bot-profile h4 { margin: 0; font-size: 1.05rem; font-weight: 800; }
-        .para-bot-status { font-size: 0.75rem; color: #A7F3D0; font-weight: 600; }
-        .para-bot-close { background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; line-height: 1; opacity: 0.8; transition: var(--transition-smooth); }
-        .para-bot-close:hover { opacity: 1; transform: scale(1.1); }
-        
-        .para-bot-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background-color: #F8FAFC; }
-        .para-msg { max-width: 80%; padding: 12px 16px; border-radius: var(--radius-md); font-size: 0.95rem; line-height: 1.5; animation: bubbleSlideIn 0.3s ease-out; }
-        .para-msg.bot { background-color: white; color: var(--text-dark); align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border: 1px solid #E2E8F0; }
-        .para-msg.user { background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .para-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 15px; background-color: #F8FAFC; border-top: 1px solid #F1F5F9; }
-        .para-chip { background-color: white; border: 1px solid #E2E8F0; color: var(--secondary-blue); font-size: 0.85rem; font-weight: 700; padding: 6px 14px; border-radius: 50px; cursor: pointer; transition: var(--transition-smooth); }
-        .para-chip:hover { background-color: var(--secondary-blue); color: white; border-color: var(--secondary-blue); }
-        
-        .para-bot-input-area { display: flex; padding: 15px; background-color: white; border-top: 1px solid #E2E8F0; gap: 10px; }
-        .para-bot-input-area input { flex: 1; border: 1px solid #CBD5E1; border-radius: var(--radius-md); padding: 12px 16px; outline: none; font-size: 0.95rem; transition: var(--transition-smooth); }
-        .para-bot-input-area input:focus { border-color: var(--secondary-blue); }
-        .para-bot-input-area button { background-color: var(--secondary-blue); color: white; border: none; width: 44px; height: 44px; border-radius: var(--radius-md); cursor: pointer; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; transition: var(--transition-smooth); }
-        .para-bot-input-area button:hover { background-color: var(--primary-navy); transform: scale(1.05); }
-        .typing-dots { display: flex; gap: 4px; padding: 4px 0; }
-        .typing-dots span { width: 8px; height: 8px; background-color: var(--text-muted); border-radius: 50%; display: inline-block; animation: bounceDots 1.4s infinite ease-in-out both; }
-        .typing-dots span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dots span:nth-child(2) { animation-delay: -0.16s; }
-
-        /* --- PRESTIGIOUS FOOTER --- */
-        footer { background-color: var(--primary-navy); color: var(--text-light); padding: 90px 8% 40px 8%; border-top: 1px solid rgba(255, 255, 255, 0.06); position: relative; }
-        .footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto 60px auto; }
-        .footer-col h3 { font-size: 1.7rem; font-weight: 800; margin-bottom: 24px; }
-        .footer-col h3 span { color: var(--accent-cyan); }
-        .footer-col p { color: #94A3B8; line-height: 1.8; font-size: 1rem; }
-        .footer-col h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 24px; color: var(--accent-gold); letter-spacing: 0.5px; }
-        .footer-links { list-style: none; }
-        .footer-links li { margin-bottom: 14px; }
-        .footer-links a { color: #94A3B8; text-decoration: none; transition: var(--transition-smooth); font-size: 1rem; }
-        .footer-links a:hover { color: var(--accent-cyan); padding-left: 6px; }
-        .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 35px; border-top: 1px solid rgba(148, 163, 184, 0.1); text-align: center; color: #64748B; font-size: 0.95rem; }
-
-        /* --- KEYFRAME ANIMATIONS --- */
-        @keyframes floatLogo { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-16px) rotate(1.5deg); } 100% { transform: translateY(0px) rotate(0deg); } }
-        @keyframes spinCircle { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes bounceIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes bubbleSlideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes bounceDots { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
-
-        /* --- RESPONSIVE Breakpoints --- */
-        @media (max-width: 992px) { .infrastructure-container, .contact-wrapper { grid-template-columns: 1fr; gap: 50px; } .classroom-display { height: 380px; } }
-        @media (max-width: 768px) {
-            nav { padding: 16px 5%; background: var(--primary-navy); }
-            .mobile-hamburger { display: flex; }
-            .nav-links { position: fixed; top: 72px; left: -100%; width: 100%; height: calc(100vh - 72px); background-color: var(--primary-navy); flex-direction: column; padding: 60px 0; gap: 32px; transition: var(--transition-smooth); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
-            .nav-links.active { left: 0; }
-            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-            .para-bot-window { width: calc(100vw - 40px); right: 20px; bottom: 85px; }
+        /* ==========================================================================
+           4. FLOATING BACKGROUND DECORATIONS (THE FLUID EDUCATION OBJECTS)
+           ==========================================================================
+           These items float silently in the background, adding visual depth.
+        */
+        .floating-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
         }
+
+        .float-item {
+            position: absolute;
+            bottom: -150px;
+            left: var(--left);
+            font-size: var(--size);
+            opacity: 0.12;
+            filter: blur(1.5px) sepia(0.4) hue-rotate(180deg);
+            animation: floatUp var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+            transition: opacity 1.2s ease;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translate3d(0, 0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.2;
+            }
+            85% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translate3d(0, -120vh, 0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Gracefully hide floating objects when the interface begins its secure login melt */
+        body.melting .float-item {
+            opacity: 0 !important;
+            transition: opacity 1.5s ease-out;
+        }
+
+        /* ==========================================================================
+           5. BRAND IDENTITY HEADER
+           ==========================================================================
+        */
+        .brand-header {
+            position: absolute;
+            top: 4vh;
+            left: 50%;
+            transform: translate3d(-50%, 0, 0);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .brand-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.65rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            text-shadow: 0 0 25px rgba(0, 229, 255, 0.45);
+        }
+
+        /* ==========================================================================
+           6. GOOEY SVG SHAPE COMPONENT (Z-INDEX: 1)
+           ==========================================================================
+           This element runs beneath the form and handles the organic fluid effect.
+           Because it is separated from the interactive form, form inputs remain crisp.
+        */
+        .scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            filter: url('#goo'); /* Merges ONLY background shapes, leaving card crystal-clear */
+            pointer-events: none;
+        }
+
+        .blob-container {
+            position: absolute;
+            width: 55vw;
+            height: 55vw;
+            max-width: 500px;
+            max-height: 500px;
+            z-index: 1;
+            animation: floatBlob 14s infinite ease-in-out alternate;
+        }
+
+        .blob-core {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, var(--accent-cyan) 0%, var(--secondary-blue) 50%, var(--primary-navy) 100%);
+            border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%;
+            filter: blur(12px);
+            box-shadow: 0 0 80px rgba(0, 229, 255, 0.35);
+            animation: morphBlob 14s infinite linear;
+            transition: all 1.5s cubic-bezier(0.5, 0, 0.2, 1);
+        }
+
+        .blob-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            width: 50%;
+            height: 50%;
+            border: 15px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            box-shadow: 
+                inset 0 0 25px rgba(255, 255, 255, 0.2), 
+                0 0 25px rgba(0, 229, 255, 0.2);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            animation: pulseRing 4s infinite alternate ease-in-out;
+            transition: all 1.5s cubic-bezier(0.5, 0, 0.2, 1);
+        }
+
+        /* ==========================================================================
+           7. INTERACTIVE SECURE FORM MODULE (Z-INDEX: 10)
+           ==========================================================================
+           A highly polished card displaying the input console.
+        */
+        .glass-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform-origin: bottom center;
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.55); /* Dark backing to guarantee premium input contrast */
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border-top: 2px solid var(--glass-border-light);
+            border-left: 2px solid var(--glass-border-light);
+            border-right: 1px solid var(--glass-border-dark);
+            border-bottom: 1px solid var(--glass-border-dark);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.65), 
+                inset 0 15px 30px rgba(255, 255, 255, 0.1);
+            padding: 45px 40px;
+            width: 390px;
+            max-width: 90vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 40px;
+            animation: breatheCard 9s infinite alternate ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shiny dynamic diagonal light reflections */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
+            transform: skewX(-25deg);
+            animation: shine 6s infinite;
+        }
+
+        .glass-title {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #ffffff;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ==========================================================================
+           8. INPUT COMPONENT STYLING
+           ==========================================================================
+        */
+        .input-group {
+            width: 100%;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .glass-input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.65); /* Heavy backing prevents standard input bleeding */
+            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            border-radius: 30px;
+            padding: 15px 22px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.45);
+            -webkit-appearance: none;
+        }
+
+        .glass-input::placeholder {
+            color: rgba(255, 255, 255, 0.55);
+            font-weight: 400;
+        }
+
+        .glass-input:focus {
+            border-color: var(--accent-cyan);
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 
+                0 0 15px rgba(0, 229, 255, 0.35), 
+                inset 0 2px 4px rgba(0, 0, 0, 0.45);
+        }
+
+        /* ==========================================================================
+           9. DYNAMIC STATUS DECORATIONS & ALERTS
+           ==========================================================================
+        */
+        .error-banner {
+            width: 100%;
+            color: var(--color-danger);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-align: center;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+            display: none;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            25% { transform: translate3d(-6px, 0, 0); }
+            75% { transform: translate3d(6px, 0, 0); }
+        }
+
+        .safety-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .safety-badge span {
+            color: var(--color-success);
+        }
+
+        /* ==========================================================================
+           10. PREMIUM GLOWING LOGIN SUBMIT BUTTON
+           ==========================================================================
+        */
+        .btn-enter {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-gold) 100%);
+            border: none;
+            color: var(--primary-navy);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            padding: 15px 35px;
+            border-radius: 30px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+        }
+
+        .btn-enter:hover:not(:disabled) {
+            transform: translate3d(0, -2px, 0) scale(1.02);
+            box-shadow: 
+                0 6px 20px rgba(0, 229, 255, 0.5), 
+                0 0 10px rgba(255, 179, 0, 0.3);
+        }
+
+        .btn-enter:active:not(:disabled) {
+            transform: translate3d(0, 0, 0) scale(0.98);
+        }
+
+        .btn-enter:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            background: #475569;
+            color: #94a3b8;
+            box-shadow: none;
+        }
+
+        /* ==========================================================================
+           11. NEW: HIGH-TECH REAL-TIME INTERACTIVE DIAGNOSTICS OVERLAY
+           ==========================================================================
+           Free Render servers sleep when inactive. This diagnostic section lets the
+           admin know the server status, profiles connection speed, and counts inputs!
+        */
+        .diagnostic-card {
+            margin-top: 25px;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: var(--transition-smooth);
+        }
+
+        .diag-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .diag-header h4 {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .system-badge {
+            background-color: rgba(16, 185, 129, 0.12);
+            color: var(--color-success);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .diagnostic-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .diag-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .diag-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .diag-value {
+            font-size: 0.85rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .ping-active {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            animation: pulseText 1.5s infinite alternate;
+        }
+
+        @keyframes pulseText {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
+        }
+
+        /* ==========================================================================
+           12. THE HEAVY DRIZZLING / LIQUID MELTING ANIMATION CLASSES
+           ==========================================================================
+           On success, the body melting class is applied to trigger organic liquid behavior.
+        */
+        body.melting .glass-card {
+            animation: liquidMelt 2.2s forwards cubic-bezier(0.5, 0, 0.2, 1);
+        }
+
+        body.melting .blob-core {
+            animation: blobMelt 2.2s forwards cubic-bezier(0.5, 0, 0.2, 1);
+        }
+        
+        body.melting .blob-ring {
+            transform: translate3d(-50%, -150%, 0) scale(0);
+            opacity: 0;
+        }
+
+        body.melting .brand-header {
+            opacity: 0;
+            transform: translate3d(-50%, -20px, 0);
+        }
+
+        /* Keyframes pushing the card out of bounds as an organic drop */
+        @keyframes liquidMelt {
+            0% { 
+                transform: translate3d(0, 0, 0) scale(1); 
+                border-radius: 40px; 
+            }
+            30% { 
+                transform: translate3d(0, 50px, 0) scaleY(1.35) scaleX(0.75); 
+                border-radius: 50% 50% 100% 100%; 
+            }
+            100% { 
+                transform: translate3d(0, 120vh, 0) scaleY(3.2) scaleX(0.15); 
+                border-radius: 50% 50% 100% 100%; 
+                opacity: 0; 
+            }
+        }
+
+        @keyframes blobMelt {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(0, 100vh, 0) scaleY(2.2) scaleX(0.4); opacity: 0; }
+        }
+
+        /* Background Morphing & Motion */
+        @keyframes morphBlob {
+            0% { border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%; }
+            50% { border-radius: 60% 40% 50% 50% / 40% 60% 50% 40%; }
+            100% { border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%; }
+        }
+
+        @keyframes floatBlob {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+            100% { transform: translate3d(20px, -30px, 0) rotate(15deg); }
+        }
+
+        @keyframes pulseRing {
+            0% { transform: translate3d(-50%, -50%, 0) scale(1); opacity: 0.8; }
+            100% { transform: translate3d(-50%, -50%, 0) scale(1.06); opacity: 1; }
+        }
+
+        @keyframes breatheCard {
+            0% { border-radius: 35px 45px 35px 45px; }
+            100% { border-radius: 45px 35px 45px 35px; }
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
     </style>
 </head>
 <body>
 
-    <nav id="navbar">
-        <a href="#" class="nav-logo">📘 Paraworld<span>.</span></a>
-        <div class="mobile-hamburger" id="hamburger-menu">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div class="nav-links" id="nav-drawer">
-            <a href="#home">Home</a>
-            <a href="#classrooms">Classrooms</a>
-            <a href="#faculty">Faculty</a>
-            <a href="#faq">FAQ</a>
-            <a href="#contact" class="nav-cta">Enroll Now</a>
-        </div>
-    </nav>
-
-    {% if notices and notices|length > 0 %}
-    <div class="ticker-wrapper">
-        <span class="ticker-badge">LATEST</span>
-        <marquee behavior="scroll" direction="left" scrollamount="6">
-            {% for notice in notices %}
-            <span style="margin-right: 40px;">{{ notice.text }}</span>
-            {% endfor %}
-        </marquee>
+    <!-- Floating Education Objects Background -->
+    <div class="floating-bg">
+        <div class="float-item" style="--left: 10%; --duration: 15s; --delay: 0s; --size: 3rem;">📚</div>
+        <div class="float-item" style="--left: 30%; --duration: 18s; --delay: 2s; --size: 2.5rem;">🖋️</div>
+        <div class="float-item" style="--left: 50%; --duration: 22s; --delay: 5s; --size: 3.5rem;">📖</div>
+        <div class="float-item" style="--left: 70%; --duration: 14s; --delay: 1s; --size: 2rem;">✏️</div>
+        <div class="float-item" style="--left: 85%; --duration: 20s; --delay: 4s; --size: 3rem;">📘</div>
+        <div class="float-item" style="--left: 20%; --duration: 17s; --delay: 7s; --size: 2.5rem;">📝</div>
+        <div class="float-item" style="--left: 90%; --duration: 19s; --delay: 3s; --size: 2.2rem;">🖋️</div>
     </div>
-    {% endif %}
 
-    <header id="home" class="hero-section">
-        <div class="logo-wrapper">
-            <div class="logo-inner-circle">
-                <img src="/static/images/images.jpg" alt="Paraworld Logo" onerror="this.src='https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=300';">
-            </div>
-        </div>
-        <h1>Your Gateway to <br><span class="text-gradient">Academic Success</span></h1>
-        <p>Providing the absolute finest tutorial standards, interactive conceptual structures, and comfortable modern classrooms right here in Shopian. Walk in with dreams, walk out with results.</p>
-        <a href="#contact" class="btn-primary">Reserve Your Batch Seat</a>
-    </header>
+    <!-- Header branding -->
+    <div class="brand-header">
+        <h1 class="brand-logo">PARA WORLD</h1>
+    </div>
 
-    <div class="stats-strip">
-        <div class="stats-container">
-            <div class="stat-box">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">Board Pass Rate</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">13+</div>
-                <div class="stat-label">Dedicated Staff</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">2018</div>
-                <div class="stat-label">Established Year</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">1000+</div>
-                <div class="stat-label">Happy Students</div>
-            </div>
+    <!-- scene wrapper holding the gooey SVG filter ONLY for background shapes -->
+    <div class="scene" id="scene">
+        <div class="blob-container">
+            <div class="blob-core"></div>
+            <div class="blob-ring"></div>
         </div>
     </div>
 
-    {% if toppers and toppers|length > 0 %}
-    <section id="toppers" style="background-color: var(--bg-light);">
-        <div class="section-header">
-            <h2>Our Wall of Fame</h2>
-            <p>Celebrating the incredible achievements of our brightest stars.</p>
-        </div>
-        <div class="toppers-grid">
-            {% for topper in toppers %}
-            <div class="topper-card">
-                {% if topper.rank == 1 %}
-                <div class="topper-crown">👑</div>
-                {% endif %}
-                <div class="topper-avatar-container">
-                    <div class="topper-portrait {% if topper.rank == 1 %}rank-halo-1{% elif topper.rank == 2 %}rank-halo-2{% else %}rank-halo-3{% endif %}">
-                        <img src="{{ topper.photo }}" alt="{{ topper.name }}">
-                    </div>
-                </div>
-                <h3>{{ topper.name }}</h3>
-                <span class="topper-score">{{ topper.score }}</span>
-                <span class="subject-badge badge-physics" style="background: var(--bg-light); color: var(--primary-navy);">{{ topper.subject }}</span>
-                <p class="topper-quote">"{{ topper.quote }}"</p>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-
-    <section id="classrooms" style="background-color: white;">
-        <div class="section-header">
-            <h2>Our Classrooms & Environment</h2>
-            <p>We believe learning space shapes concentration. Take a closer look at what makes the physical environment at Paraworld Shopian stand out.</p>
-        </div>
-
-        <div class="infrastructure-container">
-            <div class="classroom-tabs">
-                <div class="classroom-tab active" data-content="smart">
-                    <h3>Focus-Oriented Seating</h3>
-                    <p>Comfortable individual desks designed with ample personal workspace to eliminate distractions during lecturing.</p>
-                </div>
-                <div class="classroom-tab" data-content="heating">
-                    <h3>Cozy Winter Heating Support</h3>
-                    <p>Equipped with effective heating arrangements so that winter temperatures never block your educational path.</p>
-                </div>
-                <div class="classroom-tab" data-content="boards">
-                    <h3>Smart Teaching Boards</h3>
-                    <p>Clean, high-visibility whiteboards and interactive presentation structures for ultimate conceptual clarity.</p>
-                </div>
-            </div>
-
-            <div class="classroom-display">
-                <div class="display-content" id="display-window">
-                    <span class="display-icon">🏫</span>
-                    <h3>Focus-Oriented Seating</h3>
-                    <p>Study in spacious layouts designed to allow teachers to monitor every individual's notebook while keeping seating highly comfortable for long batches.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {% if photos and photos|length > 0 %}
-    <section id="gallery" style="background-color: var(--bg-light);">
-        <div class="section-header">
-            <h2>Campus Gallery</h2>
-            <p>A glimpse into our modern learning environment.</p>
-        </div>
-        <div class="toppers-grid">
-            {% for photo in photos %}
-            <div class="topper-card" style="padding: 15px;">
-                <img src="{{ photo.url }}" alt="{{ photo.title }}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 15px;">
-                <h3>{{ photo.title }}</h3>
-                <p style="font-size: 0.9rem; color: var(--text-muted);">{{ photo.description }}</p>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-
-    <section id="faculty" class="faculty-section" style="background-color: white;">
-        <div class="section-header">
-            <h2>Our Renowned Mentors & Staff</h2>
-            <p>Our educators aren't just lecturers; they are highly skilled instructors with years of teaching experience. Click subjects below to view specific departments.</p>
-        </div>
-
-        <div class="filter-container">
-            <button class="filter-btn active" data-filter="all">All Members</button>
-            <button class="filter-btn" data-filter="physics">Physics</button>
-            <button class="filter-btn" data-filter="chemistry">Chemistry</button>
-            <button class="filter-btn" data-filter="biology">Biology (Botany/Zoology)</button>
-            <button class="filter-btn" data-filter="math">Mathematics</button>
-            <button class="filter-btn" data-filter="administration">Administration</button>
-        </div>
-
-        <div class="faculty-grid">
-            <div class="teacher-card" data-category="administration">
-                <div class="avatar-container"><div class="avatar-circle">👑</div></div>
-                <span class="subject-badge badge-admin">Managing Director</span>
-                <h3>Mansa Umer</h3>
-                <p>Leading Paraworld with strategic vision, dedication, and an unyielding commitment to absolute academic excellence.</p>
-            </div>
-            <div class="teacher-card" data-category="physics">
-                <div class="avatar-container"><div class="avatar-circle">⚛️</div></div>
-                <span class="subject-badge badge-physics">Physics</span>
-                <h3>Sajad Sir</h3>
-                <p>A true genius in mechanics, electrodynamics, and formulas. Simplifies physics theories with exceptional precision.</p>
-            </div>
-            <div class="teacher-card" data-category="physics">
-                <div class="avatar-container"><div class="avatar-circle">⚡</div></div>
-                <span class="subject-badge badge-physics">Physics</span>
-                <h3>Aqib Sir</h3>
-                <p>Highly interactive coaching style. Guides students to solve complex numeric puzzles and competitive question papers.</p>
-            </div>
-            <div class="teacher-card" data-category="biology">
-                <div class="avatar-container"><div class="avatar-circle">🌿</div></div>
-                <span class="subject-badge badge-biology">Botany</span>
-                <h3>Tariq Sir</h3>
-                <p>Expert in biological plant tissues, life cycles, and detailed anatomical botany concepts for higher grades.</p>
-            </div>
-            <div class="teacher-card" data-category="biology">
-                <div class="avatar-container"><div class="avatar-circle">🦁</div></div>
-                <span class="subject-badge badge-biology">Zoology</span>
-                <h3>Basharat Sir</h3>
-                <p>Brings zoological structures, organic biology, and human system physiology concepts to life using clever learning hacks.</p>
-            </div>
-            <div class="teacher-card" data-category="chemistry">
-                <div class="avatar-container"><div class="avatar-circle">🧪</div></div>
-                <span class="subject-badge badge-chemistry">Chemistry</span>
-                <h3>Owais Sir</h3>
-                <p>Unravels organic reaction mechanisms and atomic configurations, making chemical bonding highly logical.</p>
-            </div>
-            <div class="teacher-card" data-category="chemistry">
-                <div class="avatar-container"><div class="avatar-circle">⚗️</div></div>
-                <span class="subject-badge badge-chemistry">Chemistry</span>
-                <h3>Yasir Sir</h3>
-                <p>Expert in Physical Chemistry, numerical thermodynamics, and solving periodic equations with incredible clarity.</p>
-            </div>
-            <div class="teacher-card" data-category="math">
-                <div class="avatar-container"><div class="avatar-circle">📐</div></div>
-                <span class="subject-badge badge-math">Mathematics</span>
-                <h3>Sajad Sir</h3>
-                <p>Breaks down complex integration, algebraic calculations, matrices, and tricky trigonometry equations into basic steps.</p>
-            </div>
-            <div class="teacher-card" data-category="administration">
-                <div class="avatar-container"><div class="avatar-circle">🗂️</div></div>
-                <span class="subject-badge badge-admin">Administration</span>
-                <h3>Murtaza Sir</h3>
-                <p>Manages general office operations, batch coordination, and seamless administration support for parent queries.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="faq-section" style="background-color: var(--bg-light);">
-        <div class="section-header">
-            <h2>Frequently Asked Questions</h2>
-            <p>Clear details about admissions, batches, and locations to help parents and students make the perfect choice.</p>
-        </div>
-        <div class="faq-container">
-            <div class="faq-item">
-                <button class="faq-question">Where precisely is Paraworld located?<span class="faq-icon">+</span></button>
-                <div class="faq-answer"><p>We are situated in Therian, near the Government Degree College Road in Shopian. Our campus location is safe, quiet, and easily reachable for students walking or traveling via transit.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">What batches or subjects are currently available?<span class="faq-icon">+</span></button>
-                <div class="faq-answer"><p>We host complete science and mathematics modules for class 10th, 11th, and 12th board curricula. We also run dedicated problem-solving workshops for competitive medical/engineering pathways.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">How do you support winter studies?<span class="faq-icon">+</span></button>
-                <div class="faq-answer"><p>Shopian winters can be severe. We provide heating configurations inside our classrooms so students can stay warm, comfortable, and focused entirely on their lectures.</p></div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question">Is there personalized counseling or test evaluation?<span class="faq-icon">+</span></button>
-                <div class="faq-answer"><p>Yes. All test papers are reviewed in detail, and Sajad Sir, Owais Sir, or our other faculty sit down individually with students to correct errors and boost confidence.</p></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="contact-section" style="background-color: white;">
-        <div class="contact-wrapper">
-            <div class="contact-info">
-                <h3>Contact Admin</h3>
-                <p>Have some queries about current batch timings, monthly schedules, or fees structures? Drop us an enquiry and join Shopian's leading institute.</p>
-                <div class="info-card">
-                    <div class="info-icon-box">📍</div>
-                    <div class="info-text"><h4>Campus Location</h4><p>Therian, Near Govt. Degree College Road, Shopian</p></div>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon-box">🕒</div>
-                    <div class="info-text"><h4>Working Hours</h4><p>Monday - Saturday: 9:00 AM - 5:00 PM</p></div>
-                </div>
-            </div>
-
-            <div class="enquiry-card">
-                <h3>Join Paraworld</h3>
-                <form id="enquiryForm">
-                    <div class="form-row">
-                        <label for="studentName">Student Name</label>
-                        <input type="text" id="studentName" class="form-field" placeholder="Enter full name of student" required>
-                    </div>
-                    <div class="form-row">
-                        <label for="studentPhone">Contact Number</label>
-                        <input type="tel" id="studentPhone" class="form-field" placeholder="Enter 10-digit mobile number" required>
-                    </div>
-                    <div class="form-row">
-                        <label for="gradeSelection">Class Level</label>
-                        <select id="gradeSelection" class="form-field" required>
-                            <option value="" disabled selected>Select class program...</option>
-                            <option value="Class 7th">Class 7th</option>
-                            <option value="Class 8th">Class 8th</option>
-                            <option value="Class 9th">Class 9th</option>
-                            <option value="Class 10th">Class 10th</option>
-                            <option value="Class 11th">Class 11th</option>
-                            <option value="Class 12th">Class 12th</option>
-                            <option value="Target Batch">Competitive Biology/Physics</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn-submit">Submit Enquiry Request</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <div class="modal-background" id="modalWindow">
-        <div class="modal-card">
-            <div class="success-icon">✓</div>
-            <h3>Enquiry Registered!</h3>
-            <p>Thank you for choosing Paraworld Educations, Shopian. Our administrative department will reach out on your contact number shortly with batch schedule options.</p>
-            <button class="btn-dismiss" id="dismissModalBtn">Back to Site</button>
-        </div>
-    </div>
-
-    {% if show_scholarship_junior or show_scholarship_senior or show_scholarship %}
-    <section id="scholarship" class="scholarship-section">
-        <div class="section-header">
-            <h2 style="color: white;">Scholarship Evaluation Test</h2>
-            <p style="color: #94A3B8;">Register for our upcoming scholarship assessment program to unlock premium mentorship and reward plans.</p>
-        </div>
-
-        <div class="scholarship-container">
+    <!-- Active interactive login wrapper kept OUTSIDE the gooey filter -->
+    <div class="glass-wrapper" id="loginWrapper">
+        <form class="glass-card" id="loginForm">
+            <div class="glass-title">WELCOME TO PARA</div>
             
-            <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
-                <button class="filter-btn active" id="btn-junior-schol" onclick="switchScholTab('junior')">Junior Wing (Class 7th - 10th)</button>
-                <button class="filter-btn" id="btn-senior-schol" onclick="switchScholTab('senior')">Senior Wing (Class 11th - 12th)</button>
+            <!-- Secure Validation Alert Banner -->
+            <div class="error-banner" id="errorBanner">Invalid Credentials</div>
+
+            <div class="input-group">
+                <input type="email" id="emailInput" class="glass-input" placeholder="Administrator Email" autocomplete="email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="passwordInput" class="glass-input" placeholder="Secret Key" required>
             </div>
 
-            <div class="scholarship-form-card" id="junior-schol-card">
-                <h3>Submit Junior Candidate File</h3>
-                <form id="scholarshipFormJunior" onsubmit="handleScholSubmit(event, 'junior')">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Candidate Name</label>
-                            <input type="text" id="scholNameJ" class="form-field" placeholder="Full name of student" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input type="email" id="scholEmailJ" class="form-field" placeholder="student@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Residence / Village</label>
-                            <input type="text" id="scholResidenceJ" class="form-field" placeholder="Village / Town name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Active Contact Phone</label>
-                            <input type="tel" id="scholPhoneJ" class="form-field" placeholder="10-digit mobile number" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Current School Name</label>
-                            <input type="text" id="scholSchoolJ" class="form-field" placeholder="Name of your current school" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Current Class Level</label>
-                            <select id="scholCurrentClassJ" class="form-field" required>
-                                <option value="" disabled selected>Choose class level...</option>
-                                <option value="Class 7th">Class 7th</option>
-                                <option value="Class 8th">Class 8th</option>
-                                <option value="Class 9th">Class 9th</option>
-                                <option value="Class 10th">Class 10th</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Target Class (Promoting To)</label>
-                            <select id="scholPromotingClassJ" class="form-field" required>
-                                <option value="" disabled selected>Promoting to stream...</option>
-                                <option value="Class 8th">Class 8th</option>
-                                <option value="Class 9th">Class 9th</option>
-                                <option value="Class 10th">Class 10th</option>
-                                <option value="Class 11th (Medical)">Class 11th (Medical)</option>
-                                <option value="Class 11th (Non-Medical)">Class 11th (Non-Medical)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>How Did You Hear About Us?</label>
-                            <select id="scholHeardJ" class="form-field" required>
-                                <option value="" disabled selected>Choose option...</option>
-                                <option value="Social Media">Social Media</option>
-                                <option value="School Friends">School Friends</option>
-                                <option value="Newspaper Banner">Newspaper Banner</option>
-                                <option value="Word of Mouth">Word of Mouth</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-submit" style="margin-top: 30px; background: linear-gradient(135deg, var(--accent-gold) 0%, #FF9100 100%); color: var(--primary-navy);">
-                        Register Junior & Secure Roll Token
-                    </button>
-                </form>
-            </div>
+            <button type="submit" class="btn-enter" id="enterBtn">LOGIN</button>
 
-            <div class="scholarship-form-card" id="senior-schol-card" style="display: none;">
-                <h3>Submit Senior Candidate File</h3>
-                <form id="scholarshipFormSenior" onsubmit="handleScholSubmit(event, 'senior')">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Candidate Name</label>
-                            <input type="text" id="scholNameS" class="form-field" placeholder="Full name of student" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input type="email" id="scholEmailS" class="form-field" placeholder="student@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Residence / Village</label>
-                            <input type="text" id="scholResidenceS" class="form-field" placeholder="Village / Town name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Active Contact Phone</label>
-                            <input type="tel" id="scholPhoneS" class="form-field" placeholder="10-digit mobile number" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Current School Name</label>
-                            <input type="text" id="scholSchoolS" class="form-field" placeholder="Name of your current school" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Current Class Level</label>
-                            <select id="scholCurrentClassS" class="form-field" required>
-                                <option value="" disabled selected>Choose class level...</option>
-                                <option value="Class 11th (Medical)">Class 11th (Medical)</option>
-                                <option value="Class 11th (Non-Medical)">Class 11th (Non-Medical)</option>
-                                <option value="Class 12th (Medical)">Class 12th (Medical)</option>
-                                <option value="Class 12th (Non-Medical)">Class 12th (Non-Medical)</option>
-                                <option value="Target Batch">Target Batch</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Target Class (Promoting To)</label>
-                            <select id="scholPromotingClassS" class="form-field" required>
-                                <option value="" disabled selected>Promoting to stream...</option>
-                                <option value="Class 12th (Medical)">Class 12th (Medical)</option>
-                                <option value="Class 12th (Non-Medical)">Class 12th (Non-Medical)</option>
-                                <option value="NEET/JEE Crash Course">NEET/JEE Crash Course</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>How Did You Hear About Us?</label>
-                            <select id="scholHeardS" class="form-field" required>
-                                <option value="" disabled selected>Choose option...</option>
-                                <option value="Social Media">Social Media</option>
-                                <option value="School Friends">School Friends</option>
-                                <option value="Newspaper Banner">Newspaper Banner</option>
-                                <option value="Word of Mouth">Word of Mouth</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-submit" style="margin-top: 30px; background: linear-gradient(135deg, var(--accent-gold) 0%, #FF9100 100%); color: var(--primary-navy);">
-                        Register Senior & Secure Roll Token
-                    </button>
-                </form>
-            </div>
-
-        </div>
-    </section>
-    {% endif %}
-
-    <div class="modal-background" id="scholarshipSlipModal" style="z-index: 3000;">
-        <div class="modal-card scholarship-slip-card">
-            
-            <div class="admit-slip-printable" id="printableAdmitSlip">
-                <div class="slip-header-bg">
-                    <img src="/static/images/images.jpg" alt="Paraworld Logo" onerror="this.style.display='none'">
-                    <div>
-                        <h4>Paraworld Educations</h4>
-                        <h5>Scholarship Admit Card 2026</h5>
-                    </div>
+            <!-- Diagnostic Center (Highly helpful for admins waiting for free tier spin-ups) -->
+            <div class="diagnostic-card">
+                <div class="diag-header">
+                    <h4>Diagnostic Center</h4>
+                    <span class="system-badge" id="serverState">Analyzing...</span>
                 </div>
-                
-                <div class="slip-content-wrapper">
-                    <div class="slip-body">
-                        <div class="slip-row">
-                            <span class="slip-label">Student Roll Token:</span>
-                            <span class="slip-value highlight-blue" id="slipRollNo">PW-2026-XYZ</span>
-                        </div>
-                        <div class="slip-row">
-                            <span class="slip-label">Candidate Name:</span>
-                            <span class="slip-value" id="slipName">Candidate</span>
-                        </div>
-                        <div class="slip-row">
-                            <span class="slip-label">Current School:</span>
-                            <span class="slip-value" id="slipSchool">School</span>
-                        </div>
-                        <div class="slip-row">
-                            <span class="slip-label">Residence Location:</span>
-                            <span class="slip-value" id="slipResidence">Location</span>
-                        </div>
-                        <div class="slip-row">
-                            <span class="slip-label">Target Class:</span>
-                            <span class="slip-value" id="slipPromotingClass">Target Class</span>
-                        </div>
+                <div class="diagnostic-grid">
+                    <div class="diag-item">
+                        <span class="diag-label">Latency Lathe</span>
+                        <span class="diag-value ping-active" id="latencyOutput">calculating...</span>
                     </div>
-                    <div class="slip-footer">
-                        📝 Please keep a safe screenshot or PDF of this slip. Bring it to the Therian Campus during the scheduled evaluation date!
+                    <div class="diag-item">
+                        <span class="diag-label">Input Tracker</span>
+                        <span class="diag-value" id="typedCount">0 keystrokes</span>
                     </div>
                 </div>
             </div>
-            
-            <div class="slip-btn-row no-print">
-                <button class="btn-download-pdf" id="downloadPdfSlipBtn">📥 Download Secure PDF</button>
-                <div style="background: rgba(8, 28, 54, 0.85); padding: 10px; border-radius: 16px; margin-top: 5px;">
-                    <button class="btn-close-slip" id="closeSlipBtn">Close</button>
-                </div>
+
+            <div class="safety-badge">
+                <span>🛡️</span> Protected by Para Gemini SSL Standard
             </div>
-        </div>
+        </form>
     </div>
 
-    <div class="para-bot-widget">
-        <div class="para-bot-launcher" id="paraBotLauncher">
-            <div class="launcher-avatar-inner">PG</div>
-        </div>
-        <div class="para-bot-window" id="paraBotWindow">
-            <div class="para-bot-header">
-                <div class="para-bot-profile">
-                    <div class="para-bot-avatar">PG</div>
-                    <div>
-                        <h4>Para Gemini</h4>
-                        <span class="para-bot-status">🟢 Online Assistant</span>
-                    </div>
-                </div>
-                <button class="para-bot-close" id="paraBotClose">&times;</button>
-            </div>
-            <div class="para-bot-messages" id="paraBotMessages"></div>
-            <div class="para-chips">
-                <button class="para-chip" data-question="What is the address of Paraworld?">📍 Location</button>
-                <button class="para-chip" data-question="What subjects are taught here?">📚 Courses</button>
-                <button class="para-chip" data-question="Who is the director of the institute?">👑 Director</button>
-            </div>
-            <div class="para-bot-input-area">
-                <input type="text" id="paraBotInput" placeholder="Ask about math, biology, batches...">
-                <button id="paraBotSend">➔</button>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h3>Paraworld<span>.</span></h3>
-                <p>Building high academic records and outstanding scoring capabilities in Therian, Shopian since 2018. Standard education designed for future leaders.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Menu</h4>
-                <ul class="footer-links">
-                    <li><a href="#home">Home Base</a></li>
-                    <li><a href="#classrooms">Classrooms</a></li>
-                    <li><a href="#faculty">Expert Mentors</a></li>
-                    <li><a href="#faq">FAQ Board</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Departments</h4>
-                <ul class="footer-links">
-                    <li><a href="#faculty">Physics (Sajad/Aqib Sir)</a></li>
-                    <li><a href="#faculty">Biology (Tariq/Basharat Sir)</a></li>
-                    <li><a href="#faculty">Chemistry (Owais/Yasir Sir)</a></li>
-                    <li><a href="#faculty">Mathematics (Sajad Sir)</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Paraworld Educations. Designed & Crafted with Excellence.</p>
-        </div>
-    </footer>
+    <!-- EXTREME LIQUID MELT SVG FILTER -->
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display:none;">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -15" result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+        </defs>
+    </svg>
 
     <script>
-        // SCHOLARSHIP WING SWITCHER
-        function switchScholTab(tabType) {
-            const btnJunior = document.getElementById('btn-junior-schol');
-            const btnSenior = document.getElementById('btn-senior-schol');
-            const cardJunior = document.getElementById('junior-schol-card');
-            const cardSenior = document.getElementById('senior-schol-card');
-
-            if (tabType === 'junior') {
-                btnJunior.classList.add('active');
-                btnSenior.classList.remove('active');
-                cardJunior.style.display = 'block';
-                cardSenior.style.display = 'none';
-            } else {
-                btnSenior.classList.add('active');
-                btnJunior.classList.remove('active');
-                cardSenior.style.display = 'block';
-                cardJunior.style.display = 'none';
-            }
-        }
-
-        // UNIFIED SCHOLARSHIP SUBMISSION HANDLER
-        async function handleScholSubmit(e, formType) {
-            e.preventDefault();
-            const prefix = formType === 'junior' ? 'J' : 'S';
-            
-            const name = document.getElementById('scholName' + prefix).value;
-            const email = document.getElementById('scholEmail' + prefix).value;
-            const residence = document.getElementById('scholResidence' + prefix).value;
-            const phone = document.getElementById('scholPhone' + prefix).value;
-            const school = document.getElementById('scholSchool' + prefix).value;
-            const currentClass = document.getElementById('scholCurrentClass' + prefix).value;
-            const promotingClass = document.getElementById('scholPromotingClass' + prefix).value;
-            const heardFrom = document.getElementById('scholHeard' + prefix).value;
-
-            try {
-                const res = await fetch('/register-scholarship', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, residence, phone, school, currentClass, promotingClass, heardFrom })
-                });
-                const data = await res.json();
-                if (res.ok && data.status === 'success') {
-                    document.getElementById('slipRollNo').textContent = data.student.roll_number;
-                    document.getElementById('slipName').textContent = data.student.name;
-                    document.getElementById('slipSchool').textContent = data.student.school;
-                    document.getElementById('slipResidence').textContent = data.student.residence;
-                    document.getElementById('slipPromotingClass').textContent = data.student.promoting_class;
-
-                    document.getElementById('scholarshipSlipModal').classList.add('active');
-                    e.target.reset(); // clear form
-                } else { alert(data.message); }
-            } catch (err) { alert("Server connection error."); }
-        }
-
+        /* ==========================================================================
+           13. JAVASCRIPT SYSTEM CONTROLLER & INTERACTIVE DIAGNOSTICS ENGINE
+           ==========================================================================
+           This Javascript runs cleanly without libraries to measure Render sleep times
+           and process user logging requests safely.
+        */
         document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('emailInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const errorBanner = document.getElementById('errorBanner');
+            const btn = document.getElementById('enterBtn');
+            
+            const serverState = document.getElementById('serverState');
+            const latencyOutput = document.getElementById('latencyOutput');
+            const typedCount = document.getElementById('typedCount');
 
-            // 1. NAVIGATION COLOR SHIFT ON SCROLL
-            const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 40) { navbar.classList.add('scrolled'); } 
-                else { navbar.classList.remove('scrolled'); }
-            });
+            let totalKeystrokes = 0;
 
-            // 2. MOBILE NAVIGATION DRAWER
-            const hamburgerMenu = document.getElementById('hamburger-menu');
-            const navDrawer = document.getElementById('nav-drawer');
-            hamburgerMenu.addEventListener('click', () => {
-                navDrawer.classList.toggle('active');
-                const bars = hamburgerMenu.querySelectorAll('div');
-                if (navDrawer.classList.contains('active')) {
-                    bars[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
-                    bars[1].style.opacity = '0';
-                    bars[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
-                } else {
-                    bars[0].style.transform = 'none';
-                    bars[1].style.opacity = '1';
-                    bars[2].style.transform = 'none';
+            // Simple Keystroke Analytics (Pure Client-side Diagnostic)
+            const trackInputs = () => {
+                totalKeystrokes++;
+                typedCount.textContent = `${totalKeystrokes} keystrokes`;
+            };
+            emailInput.addEventListener('input', trackInputs);
+            passwordInput.addEventListener('input', trackInputs);
+
+            // Active Ping Test: Measures response speed of app.py
+            const runServerPing = async () => {
+                const startTime = performance.now();
+                try {
+                    // Try reaching out to base URL to calculate server awake state and speed
+                    const response = await fetch('/', { method: 'HEAD' });
+                    const endTime = performance.now();
+                    const latency = Math.round(endTime - startTime);
+
+                    if (response.ok) {
+                        serverState.textContent = "ONLINE";
+                        serverState.style.backgroundColor = "rgba(16, 185, 129, 0.15)";
+                        serverState.style.color = "var(--color-success)";
+                        latencyOutput.textContent = `${latency} ms`;
+                    }
+                } catch (err) {
+                    serverState.textContent = "OFFLINE";
+                    serverState.style.backgroundColor = "rgba(239, 68, 68, 0.15)";
+                    serverState.style.color = "var(--color-danger)";
+                    latencyOutput.textContent = "unreachable";
+                    latencyOutput.classList.remove('ping-active');
+                    latencyOutput.style.color = "var(--color-danger)";
                 }
-            });
-
-            navDrawer.querySelectorAll('a').forEach(anchor => {
-                anchor.addEventListener('click', () => {
-                    navDrawer.classList.remove('active');
-                    const bars = hamburgerMenu.querySelectorAll('div');
-                    bars[0].style.transform = 'none';
-                    bars[1].style.opacity = '1';
-                    bars[2].style.transform = 'none';
-                });
-            });
-
-            // 3. CLASSROOM SECTION - INTERACTIVE TAB
-            const tabs = document.querySelectorAll('.classroom-tab');
-            const displayWindow = document.getElementById('display-window');
-            const contentMap = {
-                smart: { icon: "🏫", title: "Focus-Oriented Seating", text: "Study in spacious layouts designed to allow teachers to monitor every individual's notebook while keeping seating highly comfortable for long batches." },
-                heating: { icon: "🔥", title: "Cozy Winter Heating Support", text: "Shopian winters are cold, but our studies never pause. Our classroom environment stays warm and comfortable to make sure you never lose focus due to freezing weather." },
-                boards: { icon: "🖊️", title: "Smart Teaching Boards", text: "Our physical whiteboards are clean, glare-free, and matched with colorful interactive illustrations from teachers to explain formulas and science mechanisms clearly." }
             };
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    const key = tab.getAttribute('data-content');
-                    const data = contentMap[key];
-                    displayWindow.style.opacity = '0';
-                    displayWindow.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        displayWindow.innerHTML = `<span class="display-icon">${data.icon}</span><h3>${data.title}</h3><p>${data.text}</p>`;
-                        displayWindow.style.opacity = '1';
-                        displayWindow.style.transform = 'scale(1)';
-                    }, 300);
-                });
-            });
+            // Run Diagnostic on load
+            runServerPing();
 
-            // 4. INTERACTIVE FACULTY FILTERS
-            const filterBtns = document.querySelectorAll('.filter-btn:not(#btn-junior-schol):not(#btn-senior-schol)');
-            const cards = document.querySelectorAll('.teacher-card');
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    const department = btn.getAttribute('data-filter');
-                    cards.forEach(card => {
-                        const category = card.getAttribute('data-category');
-                        if (department === 'all' || category === department) {
-                            card.classList.remove('hidden');
-                            setTimeout(() => { card.style.transform = 'scale(1) translateZ(0)'; card.style.opacity = '1'; }, 50);
-                        } else {
-                            card.style.transform = 'scale(0.85) translateZ(0)'; card.style.opacity = '0';
-                            setTimeout(() => { card.classList.add('hidden'); }, 300);
-                        }
-                    });
-                });
-            });
+            // Secure Login authorization post request
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault(); 
 
-            // 5. FAQ ACCORDION ENGINE
-            const questions = document.querySelectorAll('.faq-question');
-            questions.forEach(q => {
-                q.addEventListener('click', () => {
-                    const item = q.parentElement;
-                    const isActive = item.classList.contains('active');
-                    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-                    if (!isActive) { item.classList.add('active'); }
-                });
-            });
+                const email = emailInput.value;
+                const password = passwordInput.value;
 
-            // 6. ADMISSION ENQUIRY SUBMISSION
-            const form = document.getElementById('enquiryForm');
-            const modal = document.getElementById('modalWindow');
-            const dismissBtn = document.getElementById('dismissModalBtn');
-            form.addEventListener('submit', async (event) => {
-                event.preventDefault(); 
-                const name = document.getElementById('studentName').value;
-                const phone = document.getElementById('studentPhone').value;
-                const grade = document.getElementById('gradeSelection').value;
+                // Reset UI state during auth
+                btn.textContent = "VERIFYING...";
+                btn.disabled = true;
+                errorBanner.style.display = 'none';
                 
                 try {
-                    const res = await fetch('/submit-enquiry', {
+                    // Post authorization credentials to backend server
+                    const response = await fetch('/admin-login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name, phone, grade })
+                        body: JSON.stringify({ email, password })
                     });
-                    if (res.ok) {
-                        modal.classList.add('active');
-                        form.reset();
+
+                    const result = await response.json();
+
+                    if (response.ok && result.status === 'success') {
+                        // Success triggers the beautiful liquid melting animation sequence
+                        btn.textContent = "GRANTED";
+                        btn.style.background = "var(--color-success)";
+                        document.body.classList.add('melting');
+                        
+                        // Allow the transition animations to play out fully before secure routing
+                        setTimeout(() => {
+                            window.location.href = "/admin-dashboard"; 
+                        }, 2100);
+
+                    } else {
+                        // Fail triggers error animation sequence
+                        errorBanner.textContent = result.message || "Invalid administrator email or password.";
+                        errorBanner.style.display = 'block';
+                        
+                        btn.textContent = "LOGIN";
+                        btn.disabled = false;
                     }
-                } catch(e) {}
-            });
-            dismissBtn.addEventListener('click', () => { modal.classList.remove('active'); });
-
-            // 7. SCHOLARSHIP SLIP MODAL ACTIONS
-            const scholarshipSlipModal = document.getElementById('scholarshipSlipModal');
-            const closeSlipBtn = document.getElementById('closeSlipBtn');
-            const downloadPdfSlipBtn = document.getElementById('downloadPdfSlipBtn');
-
-            if (closeSlipBtn) { closeSlipBtn.addEventListener('click', () => { scholarshipSlipModal.classList.remove('active'); }); }
-
-            // ✨ DOWNLOAD PDF BUTTON ENGINE (FIXED BLANK BUG) ✨
-            // This new method completely clones the slip into a perfect visible container at the top of the body before capturing.
-            if (downloadPdfSlipBtn) {
-                downloadPdfSlipBtn.addEventListener('click', () => {
-                    const originalElement = document.getElementById('printableAdmitSlip');
-                    const studentName = document.getElementById('slipName').textContent.replace(/\s+/g, '_');
-                    
-                    const clone = originalElement.cloneNode(true);
-                    const wrapper = document.createElement('div');
-                    
-                    // Force the wrapper to be perfectly visible but physically covering everything (prevents mobile browser culling)
-                    wrapper.style.position = 'absolute';
-                    wrapper.style.top = '0';
-                    wrapper.style.left = '0';
-                    wrapper.style.width = '800px'; 
-                    wrapper.style.background = '#F8FAFC';
-                    wrapper.style.zIndex = '999999';
-                    wrapper.style.padding = '20px';
-                    wrapper.appendChild(clone);
-                    
-                    document.body.appendChild(wrapper);
-                    
-                    // Instantly snap scroll to top so html2canvas doesn't get confused
-                    const originalScrollY = window.scrollY;
-                    window.scrollTo(0, 0);
-
-                    const opt = {
-                        margin:       5,
-                        filename:     `Paraworld_AdmitCard_${studentName}.pdf`,
-                        image:        { type: 'jpeg', quality: 1 },
-                        html2canvas:  { scale: 2, useCORS: true, scrollY: 0, windowWidth: 800 },
-                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    };
-                    
-                    html2pdf().from(wrapper).set(opt).save().then(() => {
-                        document.body.removeChild(wrapper); 
-                        window.scrollTo(0, originalScrollY); // Put the user back where they were
-                    });
-                });
-            }
-
-            // 8. PARA GEMINI AI CHATBOT
-            const launcher = document.getElementById('paraBotLauncher');
-            const chatWindow = document.getElementById('paraBotWindow');
-            const messagesContainer = document.getElementById('paraBotMessages');
-            const botInput = document.getElementById('paraBotInput');
-
-            launcher.addEventListener('click', () => {
-                chatWindow.classList.add('active');
-                launcher.style.display = 'none';
-                if(messagesContainer.children.length === 0){
-                    const intro = document.createElement('div');
-                    intro.className = 'para-msg bot';
-                    intro.innerText = "Hi! I am Para Gemini, your official AI tutor for Paraworld Educations Shopian. Ask me anything about mathematics, science, or our current class batch schedules! 😊";
-                    messagesContainer.appendChild(intro);
+                } catch (err) {
+                    errorBanner.textContent = "Server Connection Timeout. Please wait for the server to wake up!";
+                    errorBanner.style.display = 'block';
+                    btn.textContent = "LOGIN";
+                    btn.disabled = false;
                 }
-            });
-
-            document.getElementById('paraBotClose').addEventListener('click', () => {
-                chatWindow.classList.remove('active');
-                setTimeout(() => { launcher.style.display = 'flex'; }, 200);
-            });
-
-            async function askBot(msgText) {
-                const userMsg = document.createElement('div');
-                userMsg.className = 'para-msg user';
-                userMsg.innerText = msgText;
-                messagesContainer.appendChild(userMsg);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                const typing = document.createElement('div');
-                typing.className = 'para-msg bot';
-                typing.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
-                messagesContainer.appendChild(typing);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-                try {
-                    const res = await fetch('/api/chat', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ message: msgText })
-                    });
-                    const data = await res.json();
-                    typing.remove();
-
-                    const botMsg = document.createElement('div');
-                    botMsg.className = 'para-msg bot';
-                    botMsg.innerText = data.status === 'success' ? data.response : "Brain offline. Try again!";
-                    messagesContainer.appendChild(botMsg);
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                } catch(e) {
-                    typing.remove();
-                }
-            }
-
-            document.getElementById('paraBotSend').addEventListener('click', () => {
-                const text = botInput.value.trim();
-                if(text) { askBot(text); botInput.value = ''; }
-            });
-
-            botInput.addEventListener('keypress', (e) => {
-                if(e.key === 'Enter') {
-                    const text = botInput.value.trim();
-                    if(text) { askBot(text); botInput.value = ''; }
-                }
-            });
-
-            document.querySelectorAll('.para-chip').forEach(c => {
-                c.addEventListener('click', () => {
-                    askBot(c.getAttribute('data-question'));
-                });
             });
         });
     </script>
+
 </body>
 </html>
