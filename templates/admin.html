@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
@@ -29,22 +29,22 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        body { background-color: var(--bg-slate); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
-        .dashboard-wrapper { max-width: 1280px; margin: 0 auto; padding: 40px 24px; }
+        body { background-color: var(--bg-slate); color: var(--text-main); min-height: 100vh; overflow-x: hidden; } /* Forces absolutely no horizontal scroll on body */
+        .dashboard-wrapper { max-width: 1280px; margin: 0 auto; padding: 40px 24px; overflow-x: hidden; }
+
+        /* GPU ACCELERATION FOR 60FPS SMOOTHNESS */
+        .control-card, .metric-card, .chart-box, .btn-primary, .action-icon-btn, .action-logout, .tab-btn {
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
 
         /* --- TOP HEADER --- */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 2px solid #E2E8F0; padding-bottom: 24px; flex-wrap: wrap; gap: 20px; }
         .brand-meta h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary-navy); letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
         .brand-meta p { font-size: 0.95rem; color: var(--text-secondary); font-weight: 600; margin-top: 4px; }
         .action-logout { background-color: #FEF2F2; color: var(--color-danger); font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: var(--radius-btn); font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition-smooth); }
-        .action-logout:hover { background-color: var(--color-danger); color: white; transform: translateY(-2px); }
-
-        /* --- SECURITY BLOCK ALERTS --- */
-        .security-alert-bar { background: linear-gradient(135deg, #FEE2E2 0%, #FCA5A5 100%); border: 2px solid var(--color-danger); border-radius: var(--radius-btn); padding: 18px 24px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; animation: pulseAlert 2s infinite alternate ease-in-out; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.1); flex-wrap: wrap; gap: 15px;}
-        @keyframes pulseAlert { 0% { border-color: var(--color-danger); } 100% { border-color: #B91C1C; } }
-        .alert-content { display: flex; align-items: center; gap: 15px; color: #991B1B; font-weight: 700; font-size: 1.05rem; }
-        .alert-btn-clear { background-color: #991B1B; color: white; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: var(--transition-smooth); }
-        .alert-btn-clear:hover { background-color: #7F1D1D; }
+        .action-logout:hover { background-color: var(--color-danger); color: white; transform: translateY(-2px) translateZ(0); }
 
         /* --- CONTROLLER CARDS GRIDS --- */
         .control-panel-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 35px; }
@@ -63,7 +63,7 @@
         .tab-btn.active { color: var(--secondary-blue); background: rgba(10, 54, 99, 0.05); border-radius: 8px;}
 
         /* --- ACTIVE WORKSPACE PANELS --- */
-        .workspace-panel { background-color: var(--panel-bg); border-radius: var(--radius-box); padding: 30px; box-shadow: var(--shadow-subtle); border: 1px solid #E2E8F0; display: none; }
+        .workspace-panel { background-color: var(--panel-bg); border-radius: var(--radius-box); padding: 30px; box-shadow: var(--shadow-subtle); border: 1px solid #E2E8F0; display: none; width: 100%; overflow: hidden; }
         .workspace-panel.active { display: block; }
 
         /* --- TAB 1: OVERVIEW & ANALYTICS --- */
@@ -73,8 +73,9 @@
         .metric-details h2 { font-size: 2.2rem; font-weight: 800; color: var(--primary-navy); margin-top: 6px; }
         .metric-icon { width: 50px; height: 50px; background: white; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .charts-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .chart-box { background: var(--bg-slate); border-radius: var(--radius-box); padding: 25px; border: 1px solid #E2E8F0; text-align: center; }
+        .chart-box { background: var(--bg-slate); border-radius: var(--radius-box); padding: 25px; border: 1px solid #E2E8F0; text-align: center; width: 100%; max-width: 100%; overflow: hidden; }
         .chart-box h4 { margin-bottom: 20px; color: var(--primary-navy); font-weight: 700; }
+        .chart-box canvas { max-width: 100% !important; height: auto !important; } /* Force charts to stay inside their box */
 
         /* --- TAB 2: SMART CLASS SEPARATION SYSTEM --- */
         .class-filter-menu { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; padding-bottom: 10px; }
@@ -83,28 +84,29 @@
         .count-badge { background: rgba(255, 255, 255, 0.2); color: inherit; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 800; }
         .class-filter-btn:not(.active) .count-badge { background: #E2E8F0; color: var(--text-secondary); }
 
-        /* TABLES: Mobile Responsive & Vertical Stacking (No Horizontal Scroll!) */
-        .search-row { margin-bottom: 25px; }
-        .search-field { width: 100%; max-width: 100%; padding: 14px 20px; background: var(--bg-slate); border: 1px solid #CBD5E1; border-radius: var(--radius-btn); outline: none; font-size: 0.95rem; transition: var(--transition-smooth); }
+        /* --- TRUE VERTICAL MOBILE TABLES (Solves the Horizontal Scroll Problem) --- */
+        .search-row { margin-bottom: 25px; width: 100%; }
+        .search-field { width: 100%; padding: 14px 20px; background: var(--bg-slate); border: 1px solid #CBD5E1; border-radius: var(--radius-btn); outline: none; font-size: 0.95rem; transition: var(--transition-smooth); box-sizing: border-box; }
         .search-field:focus { border-color: var(--secondary-blue); background: white; box-shadow: 0 0 0 4px rgba(10, 54, 99, 0.05); }
 
-        table { width: 100%; border-collapse: collapse; text-align: left; }
+        table { width: 100%; border-collapse: collapse; text-align: left; table-layout: fixed; word-break: break-word; }
         th { background: var(--bg-slate); color: var(--primary-navy); padding: 16px; font-weight: 700; border-bottom: 2px solid #CBD5E1; font-size: 0.85rem; text-transform: uppercase; }
         td { padding: 16px; border-bottom: 1px solid #E2E8F0; color: var(--text-secondary); font-size: 0.95rem; }
 
-        /* Mobile Table Stacking Magic (Fixes Horizontal Scroll) */
+        /* The Ultimate Mobile Table Stacking Trick */
         @media (max-width: 768px) {
             table, thead, tbody, th, td, tr { display: block; width: 100%; }
-            thead tr { display: none; }
-            tr { margin-bottom: 20px; border: 1px solid #CBD5E1; border-radius: 12px; padding: 15px; background: var(--bg-slate); }
+            thead tr { display: none; } /* Hide the normal table headers on phone */
+            tr { margin-bottom: 20px; border: 1px solid #CBD5E1; border-radius: 12px; padding: 15px; background: var(--bg-slate); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
             td { padding: 10px 5px; border-bottom: 1px dashed #CBD5E1; display: flex; justify-content: space-between; align-items: center; text-align: right; }
             td:last-child { border-bottom: none; justify-content: flex-end;}
-            td::before { content: attr(data-label); font-weight: 800; color: var(--primary-navy); font-size: 0.85rem; text-transform: uppercase; text-align: left; padding-right: 15px; }
+            /* Force the labels to appear on the left side of the stacked card */
+            td::before { content: attr(data-label); font-weight: 800; color: var(--primary-navy); font-size: 0.85rem; text-transform: uppercase; text-align: left; padding-right: 15px; flex-shrink: 0;}
         }
 
         .badge-roll { font-weight: 800; color: var(--secondary-blue); background: #E0F2FE; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; }
         .badge-stream { font-weight: 700; color: #1E3A8A; background: #DBEAFE; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; text-align: right; }
-        .actions-col { display: flex; gap: 6px; }
+        .actions-col { display: flex; gap: 6px; justify-content: flex-end; }
         .action-icon-btn { width: 36px; height: 36px; border-radius: 8px; border: none; cursor: pointer; display: inline-flex; justify-content: center; align-items: center; font-size: 1rem; text-decoration: none; transition: var(--transition-smooth); }
         .action-call { background: #EFF6FF; color: var(--accent-cyan); }
         .action-delete { background: #FEF2F2; color: var(--color-danger); }
@@ -118,13 +120,18 @@
         .btn-mod-approve { background-color: var(--color-success); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: var(--transition-smooth); }
 
         /* --- FORMS & INPUT LAYOUTS --- */
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; width: 100%; box-sizing: border-box; }
         .full-width { grid-column: span 2; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; width: 100%; box-sizing: border-box; }
         .form-group label { font-weight: 700; color: var(--primary-navy); font-size: 0.9rem; }
-        .form-field { width: 100%; padding: 12px 18px; border: 1px solid #CBD5E1; border-radius: var(--radius-btn); background: var(--bg-slate); outline: none; font-size: 0.95rem; transition: var(--transition-smooth); }
+        .form-field { width: 100%; padding: 12px 18px; border: 1px solid #CBD5E1; border-radius: var(--radius-btn); background: var(--bg-slate); outline: none; font-size: 0.95rem; transition: var(--transition-smooth); box-sizing: border-box; }
+        /* Style for Device File Upload Buttons */
+        input[type="file"] { padding: 9px 18px; cursor: pointer; }
+        input[type="file"]::file-selector-button { background: var(--secondary-blue); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: var(--transition-smooth); margin-right: 10px; }
+        input[type="file"]::file-selector-button:hover { background: var(--primary-navy); }
         .form-field:focus { border-color: var(--secondary-blue); background: white; }
-        .btn-primary { background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%); color: white; border: none; padding: 14px 28px; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-btn); cursor: pointer; transition: var(--transition-smooth); }
+        .btn-primary { background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%); color: white; border: none; padding: 14px 28px; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-btn); cursor: pointer; transition: var(--transition-smooth); width: fit-content; }
+        .btn-primary:hover { transform: translateY(-2px) translateZ(0); box-shadow: 0 10px 20px rgba(10, 54, 99, 0.2); }
 
         /* --- TOAST SYSTEM --- */
         .toast-box { position: fixed; bottom: 30px; left: 30px; background-color: #0F172A; color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateY(20px); opacity: 0; transition: var(--transition-smooth); z-index: 999; display: flex; align-items: center; gap: 10px; border-left: 4px solid var(--accent-cyan); }
@@ -135,6 +142,7 @@
             .form-grid .full-width { grid-column: span 1; }
             .pending-card { flex-direction: column; align-items: stretch; }
             .workspace-panel { padding: 20px 15px; }
+            .control-panel-strip { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -150,27 +158,12 @@
             <a href="/admin-logout" class="action-logout">Logout Console 🔓</a>
         </div>
 
-        {% if flagged and flagged|length > 0 %}
-        <div class="security-alert-bar" id="securityAlert">
-            <div class="alert-content">
-                <span>⚠️</span>
-                <div>
-                    <div><strong>Security Warning:</strong> {{ flagged|length }} inappropriate comments were blocked today!</div>
-                    <div style="font-size: 0.8rem; font-weight: 500; opacity: 0.85; margin-top: 3px;">
-                        Latest Blocked Text: "{{ flagged[-1].text }}" by @{{ flagged[-1].author }}
-                    </div>
-                </div>
-            </div>
-            <button class="alert-btn-clear" onclick="clearSecurityAlerts()">Dismiss Logs</button>
-        </div>
-        {% endif %}
-
         <div class="control-panel-strip">
             <!-- JUNIOR WING TOGGLE -->
             <div class="control-card">
                 <div class="control-meta">
                     <h3>Junior Scholarship Form</h3>
-                    <p>Classes 8th to 10th registrations.</p>
+                    <p>Classes 7th to 10th registrations.</p>
                 </div>
                 <button id="juniorToggleBtn" class="toggle-btn {{ 'status-on' if settings.get('show_scholarship_junior', True) else 'status-off' }}" data-status="{{ 'true' if settings.get('show_scholarship_junior', True) else 'false' }}">
                     {% if settings.get('show_scholarship_junior', True) %} ACTIVE {% else %} HIDDEN {% endif %}
@@ -220,20 +213,16 @@
                     <div class="metric-details"><span>Total Enquiries</span><h2>{{ enquiries|length }}</h2></div>
                     <div class="metric-icon">✉️</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-details"><span>Blocked Abuse Attempts</span><h2>{{ flagged|length }}</h2></div>
-                    <div class="metric-icon">🛡️</div>
-                </div>
             </div>
 
             <div class="charts-row">
                 <div class="chart-box">
                     <h4>Course Stream Breakdowns</h4>
-                    <canvas id="streamChart" width="400" height="250"></canvas>
+                    <canvas id="streamChart"></canvas>
                 </div>
                 <div class="chart-box">
                     <h4>Applying Class Breakdowns</h4>
-                    <canvas id="classChart" width="400" height="250"></canvas>
+                    <canvas id="classChart"></canvas>
                 </div>
             </div>
         </div>
@@ -241,6 +230,7 @@
         <div class="workspace-panel" id="registrationsPanel">
             <div class="class-filter-menu">
                 <button class="class-filter-btn active" data-filter="all">All <span class="count-badge" id="count-all">{{ students|length }}</span></button>
+                <button class="class-filter-btn" data-filter="Class 7th">7th <span class="count-badge" id="count-7">0</span></button>
                 <button class="class-filter-btn" data-filter="Class 8th">8th <span class="count-badge" id="count-8">0</span></button>
                 <button class="class-filter-btn" data-filter="Class 9th">9th <span class="count-badge" id="count-9">0</span></button>
                 <button class="class-filter-btn" data-filter="Class 10th">10th <span class="count-badge" id="count-10">0</span></button>
@@ -252,6 +242,7 @@
                 <input type="text" id="studentSearch" class="search-field" placeholder="Search by name, school, residence, or roll...">
             </div>
 
+            <!-- Vertically Stacking Mobile Table -->
             <table id="studentsTable">
                 <thead>
                     <tr>
@@ -259,7 +250,7 @@
                         <th>Candidate Name</th>
                         <th>School</th>
                         <th>Residence</th>
-                        <th>Promoting Class</th>
+                        <th>Target Stream</th>
                         <th>Phone</th>
                         <th>Actions</th>
                     </tr>
@@ -286,6 +277,7 @@
         </div>
 
         <div class="workspace-panel" id="enquiriesPanel">
+            <!-- Vertically Stacking Mobile Table -->
             <table>
                 <thead>
                     <tr>
@@ -324,9 +316,9 @@
                 <h4 style="margin-bottom: 15px; color: var(--primary-navy);">Currently Active Tickers:</h4>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     {% for notice in notices %}
-                    <div style="background: var(--bg-slate); border: 1px solid #CBD5E1; border-left: 4px solid var(--accent-gold); padding: 15px 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="background: var(--bg-slate); border: 1px solid #CBD5E1; border-left: 4px solid var(--accent-gold); padding: 15px 20px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; word-break: break-word;">
                         <span style="font-weight: 600; color: var(--primary-navy);">{{ notice.text }}</span>
-                        <button class="action-icon-btn action-delete" onclick="deleteNotice({{ notice.id }})">🗑️</button>
+                        <button class="action-icon-btn action-delete" onclick="deleteNotice({{ notice.id }})" style="flex-shrink: 0; margin-left: 10px;">🗑️</button>
                     </div>
                     {% endfor %}
                 </div>
@@ -396,10 +388,13 @@
                     <label>Marks / Score Details</label>
                     <input type="text" id="topperScore" class="form-field" placeholder="E.g., 98% in JKBOSE 12th">
                 </div>
+                
+                <!-- NEW DEVICE FILE UPLOAD (Replaced URL Link) -->
                 <div class="form-group">
-                    <label>Photo URL (Square/Square-ish)</label>
-                    <input type="url" id="topperPhoto" class="form-field" placeholder="https://...">
+                    <label>Student Photo (From Device)</label>
+                    <input type="file" id="topperPhoto" class="form-field" accept="image/*">
                 </div>
+                
                 <div class="form-group">
                     <label>Champion Subject</label>
                     <input type="text" id="topperSubject" class="form-field" placeholder="e.g. Overall, Physics, Math">
@@ -433,9 +428,10 @@
         <div class="workspace-panel" id="galleryPanel">
             <h3 style="margin-bottom: 20px; color: var(--primary-navy);">Post Live Photo to Campus Album</h3>
             <div class="form-grid">
+                <!-- NEW DEVICE FILE UPLOAD (Replaced URL Link) -->
                 <div class="form-group">
-                    <label>Image Direct URL</label>
-                    <input type="url" id="photoUrl" class="form-field" placeholder="https://i.imgur.com/your-campus-pic.jpg">
+                    <label>Campus Image (From Device)</label>
+                    <input type="file" id="photoFile" class="form-field" accept="image/*">
                 </div>
                 <div class="form-group">
                     <label>Photo Title</label>
@@ -465,6 +461,7 @@
         </div>
 
         <div class="workspace-panel" id="aiPanel">
+            <!-- Renamed AI to Para Gemini -->
             <h3 style="margin-bottom: 12px; color: var(--primary-navy);">Reprogram AI Assistant</h3>
             <p style="color: var(--text-secondary); margin-bottom: 25px;">Adjust Para Gemini's personality instructions instantly.</p>
             <div class="form-group" style="margin-bottom: 25px;">
@@ -492,12 +489,11 @@
 
         fetch('/api/analytics').then(r => r.json()).then(data => {
             if (data.status === 'success') {
-                // Ensure counting logic supports new 8th and 9th filters
+                document.getElementById('count-7').innerText = data.classes['Class 7th'] || 0;
                 document.getElementById('count-8').innerText = data.classes['Class 8th'] || 0;
                 document.getElementById('count-9').innerText = data.classes['Class 9th'] || 0;
                 document.getElementById('count-10').innerText = data.classes['Class 10th'] || 0;
                 
-                // Add up medical and non-medical for simple grade counting 11/12th
                 let count11 = 0; let count12 = 0;
                 Object.keys(data.classes).forEach(cls => {
                     if (cls.includes('Class 11th')) count11 += data.classes[cls];
@@ -529,7 +525,6 @@
             rows.forEach(row => {
                 const rowClass = row.getAttribute('data-class');
                 const searchMeta = row.getAttribute('data-search');
-                // Check if current class *includes* the filter term (for 11th Medical vs 11th Non-Med)
                 const matchesClass = (activeFilter === 'all' || rowClass.includes(activeFilter));
                 const matchesSearch = (!searchVal || searchMeta.includes(searchVal));
                 row.style.display = (matchesClass && matchesSearch) ? '' : 'none';
@@ -546,7 +541,6 @@
             if (r.ok) location.reload();
         }
 
-        // New Independent Switches
         document.getElementById('juniorToggleBtn').addEventListener('click', function() {
             updateSettings('show_scholarship_junior', this.getAttribute('data-status') === 'false');
         });
@@ -575,22 +569,51 @@
         }
         async function approveComment(postId, commentId) { const r = await fetch(`/approve-comment/${postId}/${commentId}`, { method: 'POST' }); if (r.ok) location.reload(); }
         async function deleteComment(postId, commentId) { const r = await fetch(`/delete-comment/${postId}/${commentId}`, { method: 'DELETE' }); if (r.ok) location.reload(); }
-        async function clearSecurityAlerts() { const r = await fetch('/clear-flagged', { method: 'POST' }); if (r.ok) location.reload(); }
 
-        // GALLERY
+        // GALLERY (Updated for Device Files via FormData)
         async function uploadPhoto() {
-            const url = document.getElementById('photoUrl').value.trim(); const title = document.getElementById('photoTitle').value.trim(); const description = document.getElementById('photoDesc').value.trim();
-            if(!url || !title) return;
-            const r = await fetch('/add-photo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url, title, description }) });
+            const fileInput = document.getElementById('photoFile');
+            const title = document.getElementById('photoTitle').value.trim(); 
+            const description = document.getElementById('photoDesc').value.trim();
+            
+            if(fileInput.files.length === 0 || !title) {
+                alert("Please select a file and provide a title.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('photo', fileInput.files[0]);
+            formData.append('title', title);
+            formData.append('description', description);
+
+            const r = await fetch('/add-photo', { method: 'POST', body: formData });
             if (r.ok) location.reload();
         }
         async function deletePhoto(id) { const r = await fetch(`/delete-photo/${id}`, { method: 'DELETE' }); if (r.ok) location.reload(); }
 
-        // TOPPERS
+        // TOPPERS (Updated for Device Files via FormData)
         async function uploadTopper() {
-            const name = document.getElementById('topperName').value.trim(); const rank = document.getElementById('topperRank').value; const score = document.getElementById('topperScore').value.trim(); const photo = document.getElementById('topperPhoto').value.trim(); const quote = document.getElementById('topperQuote').value.trim(); const subject = document.getElementById('topperSubject').value;
-            if(!name || !score || !photo) return;
-            const r = await fetch('/add-topper', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, rank, score, photo, quote, subject }) });
+            const name = document.getElementById('topperName').value.trim(); 
+            const rank = document.getElementById('topperRank').value; 
+            const score = document.getElementById('topperScore').value.trim(); 
+            const fileInput = document.getElementById('topperPhoto'); 
+            const quote = document.getElementById('topperQuote').value.trim(); 
+            const subject = document.getElementById('topperSubject').value;
+
+            if(!name || !score || fileInput.files.length === 0) {
+                alert("Please provide a name, score, and select a photo file.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('rank', rank);
+            formData.append('score', score);
+            formData.append('photo', fileInput.files[0]);
+            formData.append('quote', quote);
+            formData.append('subject', subject);
+
+            const r = await fetch('/add-topper', { method: 'POST', body: formData });
             if (r.ok) location.reload();
         }
         async function deleteTopper(id) { const r = await fetch(`/delete-topper/${id}`, { method: 'DELETE' }); if (r.ok) location.reload(); }
