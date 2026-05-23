@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (printSlipBtn) { printSlipBtn.addEventListener('click', () => { window.print(); }); }
     if (closeSlipBtn) { closeSlipBtn.addEventListener('click', () => { scholarshipSlipModal.classList.remove('active'); }); }
 
-    // --- 8. DYNAMIC CHATBOT "PARA" CONVERSATION SYSTEM ---
+    // --- 8. MINI GEMINI AI CHATBOT INTEGRATION ---
     const launcher = document.getElementById('paraBotLauncher');
     const chatWindow = document.getElementById('paraBotWindow');
     const closeBotBtn = document.getElementById('paraBotClose');
@@ -273,7 +273,9 @@ document.addEventListener('DOMContentLoaded', () => {
             chatWindow.classList.add('active');
             launcher.style.display = 'none';
             if (messagesContainer.children.length === 0) {
-                showTypingThenReply("Hi! I'm **Para**, your virtual assistant. 😊 How can I help you today?");
+                // Initial greeting without calling API
+                const greeting = "Hi! I am **Mini Gemini**, your AI tutor for Paraworld Educations. I can help you solve math problems, explain science concepts, or tell you about our institute. How can I help you today? 😊";
+                displayBotMessage(greeting);
             }
         });
     }
@@ -285,65 +287,63 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function showTypingThenReply(replyText) {
-        const typingBubble = document.createElement('div');
-        typingBubble.className = 'para-msg bot typing-msg';
-        typingBubble.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
-        messagesContainer.appendChild(typingBubble);
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-        setTimeout(() => {
-            typingBubble.remove();
-            const messageBubble = document.createElement('div');
-            messageBubble.className = 'para-msg bot';
-            messageBubble.innerHTML = replyText;
-            messagesContainer.appendChild(messageBubble);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }, 1100);
+    function formatAIMessage(text) {
+        // Convert basic markdown formatting from Gemini to HTML
+        let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); // Bold
+        formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');       // Italics
+        formattedText = formattedText.replace(/\n/g, '<br>');                     // Line breaks
+        return formattedText;
     }
 
-    function handleUserMessage(message) {
+    function displayBotMessage(text) {
+        const messageBubble = document.createElement('div');
+        messageBubble.className = 'para-msg bot';
+        messageBubble.innerHTML = formatAIMessage(text);
+        messagesContainer.appendChild(messageBubble);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    async function handleUserMessage(message) {
+        // 1. Display the user's message
         const userBubble = document.createElement('div');
         userBubble.className = 'para-msg user';
         userBubble.textContent = message;
         messagesContainer.appendChild(userBubble);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        const cleanMessage = message.toLowerCase().trim();
-        let reply = "I didn't quite catch that. Could you ask about our **teachers**, **scholarship**, or **classes**?";
+        // 2. Show the animated typing dots
+        const typingBubble = document.createElement('div');
+        typingBubble.className = 'para-msg bot typing-msg';
+        typingBubble.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+        messagesContainer.appendChild(typingBubble);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        if (cleanMessage.includes('hello') || cleanMessage.includes('hi')) {
-            reply = "Hello! Hope you are having a fantastic day. How can I help you choose your course? 🎓";
-        } 
-        else if (cleanMessage.includes('teacher') || cleanMessage.includes('sir')) {
-            reply = "We have an incredible faculty! Physics by Sajad/Aqib Sir, Chemistry by Owais/Yasir Sir, Zoology/Botany by Basharat/Tariq Sir, Math by Sajad Sir, and more.";
-        } 
-        else if (cleanMessage.includes('scholarship')) {
-            reply = "🏆 Just scroll to our **Scholarship Entry Form**, fill in your details, and you'll instantly get a printable Roll Number Slip!";
-        } 
-        else if (cleanMessage.includes('location') || cleanMessage.includes('where')) {
-            reply = "We are located at: **Therian, near Government Degree College Road, Shopian**. 📍";
-        } 
-        else if (cleanMessage.includes('subject') || cleanMessage.includes('courses') || cleanMessage.includes('classes') || cleanMessage.includes('stream')) {
-            reply = "We offer organized educational batches for multiple streams: 📚<br><br>" +
-                    "• **Class 9th & 10th:** Complete general board preparation.<br>" +
-                    "• **Class 11th & 12th (Medical):** Specialized batches in Physics, Chemistry, Botany, and Zoology.<br>" +
-                    "• **Class 11th & 12th (Non-Medical):** Specialized batches in Physics, Chemistry, and Mathematics.";
-        }
-        else if (cleanMessage.includes('winter') || cleanMessage.includes('heating')) {
-            reply = "We provide high-quality heating systems and traditional cozy Hamams in all our classrooms to keep you warm and focused all winter long! ❄️";
-        }
-        else if (cleanMessage.includes('timing') || cleanMessage.includes('hours') || cleanMessage.includes('shift')) {
-            reply = "We run multiple batches to fit student schedules: 🕒<br><br>" +
-                    "• **Morning Shifts:** Starts at 8:00 AM<br>" +
-                    "• **Evening Shifts:** Starts at 3:00 PM<br><br>" +
-                    "Feel free to drop a general contact enquiry, and Murtaza Sir will call you to finalize your timings!";
-        }
-        else if (cleanMessage.includes('inviso')) {
-            reply = "This premium website is designed & crafted by **Inviso**, a professional digital creative studio creating high-end, responsive web apps. ✨";
-        }
+        try {
+            // 3. Send the message securely to our Python server (which talks to Google)
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message })
+            });
 
-        showTypingThenReply(reply);
+            const result = await response.json();
+
+            // 4. Remove typing dots
+            typingBubble.remove();
+
+            // 5. Display Mini Gemini's brilliant response!
+            if (response.ok && result.status === 'success') {
+                displayBotMessage(result.response);
+            } else {
+                displayBotMessage("Oops! My AI brain is currently offline. " + (result.message || "Try again later."));
+            }
+
+        } catch (error) {
+            typingBubble.remove();
+            displayBotMessage("I am having trouble connecting to the network! Please check your internet connection.");
+        }
     }
 
     if (sendBotBtn) {
@@ -362,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Allow quick-action chips to send messages to the AI
     chipButtons.forEach(chip => {
         chip.addEventListener('click', () => {
             handleUserMessage(chip.getAttribute('data-question'));
