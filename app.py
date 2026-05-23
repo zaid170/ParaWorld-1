@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import json
 import os
+import google.generativeai as genai
 
 app = Flask(__name__)
 
@@ -12,13 +13,28 @@ SCHOLARSHIP_FILE = 'scholarship_students.json'
 ENQUIRY_FILE = 'general_enquiries.json'
 SETTINGS_FILE = 'settings.json'
 
-# --- YOUR PERSONAL SECURED LOGINS ---
-AUTHORIZED_EMAILS = ['zaidbinxubair@gmail.com', 'admin@paraworld.com', 'mansaumer@paraworld.com']
-ADMIN_PASSWORD = 'Para World -- @mansa'
+# --- MINI GEMINI AI SETUP ---
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+if GEMINI_API_KEY:
+    genai.configure(api_key=GEMINI_API_KEY)
+    # Give Mini Gemini its personality and rules
+    model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        system_instruction="You are Mini Gemini, an official AI tutor for Paraworld Educations in Shopian. You help students solve math problems, answer science questions, and provide info about the institute. Keep your answers clear, concise, and friendly. Never mention you are made by Google; you are exclusively Mini Gemini for Paraworld."
+    )
+else:
+    model = None
+
+# --- ANTI-CACHE FORCE RULE ---
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '-1'
+    return response
 
 # --- BULLETPROOF DATABASE METHODS ---
 def load_data(filepath):
-    """Safely loads data from a JSON database. If empty, corrupt or missing, heals automatically."""
     if not os.path.exists(filepath):
         return []
     try:
@@ -28,11 +44,9 @@ def load_data(filepath):
                 return []
             return json.loads(content)
     except Exception as e:
-        print(f"Error loading {filepath}, returning empty database: {e}")
         return []
 
 def load_settings():
-    """Safely loads global portal settings. Defaults to Scholarship ON."""
     if not os.path.exists(SETTINGS_FILE):
         return {"show_scholarship": True}
     try:
@@ -45,7 +59,6 @@ def load_settings():
         return {"show_scholarship": True}
 
 def save_data(filepath, data):
-    """Safely writes structured database lists back to a JSON file."""
     try:
         with open(filepath, 'w', encoding='utf-8') as file:
             json.dump(data, file, indent=4)
@@ -56,13 +69,11 @@ def save_data(filepath, data):
 
 @app.route('/')
 def home():
-    """Renders the main landing homepage, checking if Scholarship is ON."""
     settings = load_settings()
     return render_template('index.html', show_scholarship=settings.get('show_scholarship', True))
 
 @app.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
-    """Renders the secure admin login gateway."""
     if session.get('logged_in'):
         return redirect(url_for('admin_dashboard'))
 
@@ -72,13 +83,11 @@ def admin_login():
             email = data.get('email', '').strip().lower()
             password = data.get('password')
 
-            if email in AUTHORIZED_EMAILS and password == ADMIN_PASSWORD:
+            if email in ['zaidbinxubair@gmail.com', 'admin@paraworld.com', 'mansaumer@paraworld.com'] and password == 'Para World -- @mansa':
                 session['logged_in'] = True
-                session['user_email'] = email
-                session['user_role'] = 'Administrator'
                 return jsonify({"status": "success", "message": "Access Granted! Welcome back."})
             else:
-                return jsonify({"status": "error", "message": "Invalid administrator email or password."}), 401
+                return jsonify({"status": "error", "message": "Invalid administrator credentials."}), 401
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
 
@@ -86,13 +95,11 @@ def admin_login():
 
 @app.route('/admin-logout')
 def admin_logout():
-    """Destroys current session tokens and locks the admin environment."""
     session.clear()
     return redirect(url_for('admin_login'))
 
 @app.route('/admin-dashboard')
 def admin_dashboard():
-    """Renders the premium admin control dashboard."""
     if not session.get('logged_in'):
         return redirect(url_for('admin_login'))
 
@@ -106,122 +113,96 @@ def admin_dashboard():
 
 @app.route('/submit-enquiry', methods=['POST'])
 def submit_enquiry():
-    """Receives and registers raw program inquiries."""
     try:
         data = request.get_json()
-        student_name = data.get('name')
-        student_phone = data.get('phone')
-        grade_level = data.get('grade')
-        
-        if not student_name or not student_phone or not grade_level:
-            return jsonify({"status": "error", "message": "Please fill out all required fields!"}), 400
-            
         enquiries = load_data(ENQUIRY_FILE)
-        
         new_enquiry = {
             "id": len(enquiries) + 1,
-            "name": student_name,
-            "phone": student_phone,
-            "grade": grade_level
+            "name": data.get('name'),
+            "phone": data.get('phone'),
+            "grade": data.get('grade')
         }
-        
         enquiries.append(new_enquiry)
         save_data(ENQUIRY_FILE, enquiries)
-        
         return jsonify({"status": "success", "message": "Enquiry submitted successfully!"}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
 @app.route('/register-scholarship', methods=['POST'])
 def register_scholarship():
-    """Accepts student profiles for the scholarship."""
     settings = load_settings()
     if not settings.get('show_scholarship', True):
-        return jsonify({"status": "error", "message": "Scholarship registrations are currently closed."}), 403
+        return jsonify({"status": "error", "message": "Registrations closed."}), 403
 
     try:
         data = request.get_json()
-        name = data.get('name')
-        email = data.get('email')
-        residence = data.get('residence')
-        phone = data.get('phone')
-        school = data.get('school')
-        current_class = data.get('currentClass')
-        promoting_class = data.get('promotingClass')
-        heard_from = data.get('heardFrom')
-
-        if not name or not email or not residence or not phone or not school or not current_class or not promoting_class or not heard_from:
-            return jsonify({"status": "error", "message": "All database parameters are mandatory!"}), 400
-
         students = load_data(SCHOLARSHIP_FILE)
-        next_id = 101 + len(students)
-        roll_number = f"PW-2026-{next_id}"
-
         new_student = {
-            "roll_number": roll_number,
-            "name": name,
-            "email": email,
-            "residence": residence,
-            "phone": phone,
-            "school": school,
-            "current_class": current_class,
-            "promoting_class": promoting_class,
-            "heard_from": heard_from
+            "roll_number": f"PW-2026-{101 + len(students)}",
+            "name": data.get('name'),
+            "email": data.get('email'),
+            "residence": data.get('residence'),
+            "phone": data.get('phone'),
+            "school": data.get('school'),
+            "current_class": data.get('currentClass'),
+            "promoting_class": data.get('promotingClass'),
+            "heard_from": data.get('heardFrom')
         }
-
         students.append(new_student)
         save_data(SCHOLARSHIP_FILE, students)
-
-        return jsonify({
-            "status": "success",
-            "message": "Student registered successfully!",
-            "student": new_student
-        }), 200
-
+        return jsonify({"status": "success", "message": "Student registered!", "student": new_student}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-# --- SECURE ADMINISTRATIVE TOGGLES & ENDPOINTS ---
+# --- SECURE ADMINISTRATIVE TOGGLES ---
 
 @app.route('/toggle-scholarship', methods=['POST'])
 def toggle_scholarship():
-    """Allows Admin to turn the scholarship page ON or OFF."""
     if not session.get('logged_in'):
-        return jsonify({"status": "error", "message": "Unauthorized"}), 403
-    
+        return jsonify({"status": "error"}), 403
     try:
         data = request.get_json()
         settings = load_settings()
         settings['show_scholarship'] = data.get('show_scholarship', True)
         save_data(SETTINGS_FILE, settings)
-        
         return jsonify({"status": "success", "show_scholarship": settings['show_scholarship']}), 200
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({"status": "error"}), 500
 
 @app.route('/delete-student/<roll_number>', methods=['DELETE'])
 def delete_student(roll_number):
-    if not session.get('logged_in'):
-        return jsonify({"status": "error", "message": "Access Denied."}), 403
-    try:
-        students = load_data(SCHOLARSHIP_FILE)
-        updated_students = [s for s in students if s['roll_number'] != roll_number]
-        save_data(SCHOLARSHIP_FILE, updated_students)
-        return jsonify({"status": "success"}), 200
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+    if not session.get('logged_in'): return jsonify({"status": "error"}), 403
+    students = [s for s in load_data(SCHOLARSHIP_FILE) if s['roll_number'] != roll_number]
+    save_data(SCHOLARSHIP_FILE, students)
+    return jsonify({"status": "success"}), 200
 
 @app.route('/delete-enquiry/<int:enquiry_id>', methods=['DELETE'])
 def delete_enquiry(enquiry_id):
-    if not session.get('logged_in'):
-        return jsonify({"status": "error", "message": "Access Denied."}), 403
+    if not session.get('logged_in'): return jsonify({"status": "error"}), 403
+    enquiries = [e for e in load_data(ENQUIRY_FILE) if e['id'] != enquiry_id]
+    save_data(ENQUIRY_FILE, enquiries)
+    return jsonify({"status": "success"}), 200
+
+# --- MINI GEMINI CHAT ENDPOINT ---
+@app.route('/api/chat', methods=['POST'])
+def mini_gemini_chat():
+    """Handles messages between the website and Mini Gemini."""
+    if not model:
+        return jsonify({"status": "error", "message": "Mini Gemini is currently offline. Missing API Key."}), 500
+        
     try:
-        enquiries = load_data(ENQUIRY_FILE)
-        updated_enquiries = [e for e in enquiries if e['id'] != enquiry_id]
-        save_data(ENQUIRY_FILE, updated_enquiries)
-        return jsonify({"status": "success"}), 200
+        data = request.get_json()
+        user_message = data.get('message', '')
+        
+        if not user_message:
+            return jsonify({"status": "error", "message": "Please ask a question!"}), 400
+            
+        # Ask Google's servers
+        response = model.generate_content(user_message)
+        
+        return jsonify({"status": "success", "response": response.text}), 200
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return jsonify({"status": "error", "message": "Mini Gemini is thinking too hard right now. Try again later!"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
