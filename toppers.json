@@ -1,1 +1,29 @@
-
+[
+    {
+        "id": 1,
+        "name": "Insha Jan",
+        "rank": 1,
+        "score": "98.4% (JKBOSE Class 12th)",
+        "photo": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&q=80&w=400",
+        "quote": "Believing in yourself and practicing regularly under the guidance of Tariq Sir made biology my absolute favorite subject!",
+        "subject": "Biology"
+    },
+    {
+        "id": 2,
+        "name": "Owais Ahmad",
+        "rank": 2,
+        "score": "97.2% (JKBOSE Class 12th)",
+        "photo": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400",
+        "quote": "Consistency and Owais Sir's chemistry notes were my secret!",
+        "subject": "Chemistry"
+    },
+    {
+        "id": 3,
+        "name": "Sajad Bashir",
+        "rank": 3,
+        "score": "96.8% (JKBOSE Class 12th)",
+        "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400",
+        "quote": "Solving physics numerical questions daily with Sajad Sir turned my weak areas into my strongest core strength.",
+        "subject": "Physics"
+    }
+]
