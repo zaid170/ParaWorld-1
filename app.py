@@ -17,11 +17,8 @@ SETTINGS_FILE = 'settings.json'
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
-    # Give Mini Gemini its personality and rules
-    model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
-        system_instruction="You are Mini Gemini, an official AI tutor for Paraworld Educations in Shopian. You help students solve math problems, answer science questions, and provide info about the institute. Keep your answers clear, concise, and friendly. Never mention you are made by Google; you are exclusively Mini Gemini for Paraworld."
-    )
+    # Using the universally supported "gemini-pro" to prevent 404 API errors
+    model = genai.GenerativeModel(model_name="gemini-pro")
 else:
     model = None
 
@@ -197,8 +194,17 @@ def mini_gemini_chat():
         if not user_message:
             return jsonify({"status": "error", "message": "Please ask a question!"}), 400
             
+        # We manually inject the personality here to guarantee it works with all API tiers
+        full_prompt = (
+            "You are Mini Gemini, an official AI tutor for Paraworld Educations in Shopian. "
+            "You help students solve math problems, answer science questions, and provide info about the institute. "
+            "Keep your answers clear, concise, and friendly. Never mention you are made by Google; "
+            "you are exclusively Mini Gemini for Paraworld.\n\n"
+            f"Student asks: {user_message}"
+        )
+            
         # Ask Google's servers
-        response = model.generate_content(user_message)
+        response = model.generate_content(full_prompt)
         
         return jsonify({"status": "success", "response": response.text}), 200
     except Exception as e:
