@@ -121,7 +121,7 @@ def admin_login():
             email = data.get('email', '').strip().lower()
             password = data.get('password')
 
-            # Cleaned login specifically to admin@paraworld.com
+            # Cleaned login strictly to the official admin email
             if email == 'admin@paraworld.com' and password == 'Para World -- @mansa':
                 session['logged_in'] = True
                 return jsonify({"status": "success", "message": "Access Granted! Welcome back."})
@@ -275,6 +275,7 @@ def update_settings():
     data = request.get_json()
     settings = load_settings()
     
+    # Allows updating any setting switch dynamically from the admin panel
     for key, value in data.items():
         settings[key] = value
         
@@ -372,7 +373,7 @@ def add_photo():
     photos = load_data(GALLERY_FILE)
     new_photo = {
         "id": len(photos) + 1,
-        "url": f"/{filepath}",  # This generates the perfect URL for the HTML to read
+        "url": f"/static/uploads/{unique_filename}",  # Formats perfectly for the browser
         "title": title,
         "description": description
     }
@@ -414,7 +415,7 @@ def add_topper():
         "name": name,
         "rank": rank,
         "score": score,
-        "photo": f"/{filepath}",
+        "photo": f"/static/uploads/{unique_filename}",
         "quote": quote,
         "subject": subject
     }
