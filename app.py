@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 import json
 import os
 import datetime
+from werkzeug.utils import secure_filename
 import google.generativeai as genai
 
 app = Flask(__name__)
@@ -18,6 +19,12 @@ GALLERY_FILE = 'gallery_photos.json'
 COMMUNITY_FILE = 'community_posts.json'
 FLAGGED_FILE = 'flagged_comments.json'
 TOPPERS_FILE = 'toppers.json'
+
+# --- 🖼️ IMAGE UPLOAD SETTINGS ---
+UPLOAD_FOLDER = 'static/uploads'
+# Create the uploads folder automatically if it doesn't exist
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # --- 🤖 PARA GEMINI AI SETUP ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
@@ -114,7 +121,8 @@ def admin_login():
             email = data.get('email', '').strip().lower()
             password = data.get('password')
 
-            if email in ['zaidbinxubair@gmail.com', 'admin@paraworld.com', 'mansaumer@paraworld.com'] and password == 'Para World -- @mansa':
+            # Cleaned login specifically to admin@paraworld.com
+            if email == 'admin@paraworld.com' and password == 'Para World -- @mansa':
                 session['logged_in'] = True
                 return jsonify({"status": "success", "message": "Access Granted! Welcome back."})
             else:
@@ -267,7 +275,6 @@ def update_settings():
     data = request.get_json()
     settings = load_settings()
     
-    # Allows updating any setting switch dynamically from the admin panel
     for key, value in data.items():
         settings[key] = value
         
@@ -344,17 +351,30 @@ def clear_flagged():
     save_data(FLAGGED_FILE, [])
     return jsonify({"status": "success"}), 200
 
-# Campus Gallery Photo Management
+# Campus Gallery Photo Management (Upgraded for Device Uploads)
 @app.route('/add-photo', methods=['POST'])
 def add_photo():
     if not session.get('logged_in'): return jsonify({"status": "error"}), 403
-    data = request.get_json()
+    
+    file = request.files.get('photo')
+    title = request.form.get('title')
+    description = request.form.get('description')
+
+    if not file or not title:
+        return jsonify({"status": "error", "message": "Missing file or title"}), 400
+
+    # Secure the file and save to static/uploads
+    filename = secure_filename(file.filename)
+    unique_filename = f"{int(datetime.datetime.now().timestamp())}_{filename}"
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+    file.save(filepath)
+
     photos = load_data(GALLERY_FILE)
     new_photo = {
         "id": len(photos) + 1,
-        "url": data.get('url'),
-        "title": data.get('title'),
-        "description": data.get('description')
+        "url": f"/{filepath}",  # This generates the perfect URL for the HTML to read
+        "title": title,
+        "description": description
     }
     photos.append(new_photo)
     save_data(GALLERY_FILE, photos)
@@ -367,20 +387,36 @@ def delete_photo(photo_id):
     save_data(GALLERY_FILE, photos)
     return jsonify({"status": "success"}), 200
 
-# Toppers Board management
+# Toppers Board management (Upgraded for Device Uploads)
 @app.route('/add-topper', methods=['POST'])
 def add_topper():
     if not session.get('logged_in'): return jsonify({"status": "error"}), 403
-    data = request.get_json()
+    
+    file = request.files.get('photo')
+    name = request.form.get('name')
+    rank = int(request.form.get('rank', 1))
+    score = request.form.get('score')
+    quote = request.form.get('quote')
+    subject = request.form.get('subject', 'Overall')
+
+    if not file or not name or not score:
+        return jsonify({"status": "error", "message": "Missing fields"}), 400
+
+    # Secure the file and save to static/uploads
+    filename = secure_filename(file.filename)
+    unique_filename = f"topper_{int(datetime.datetime.now().timestamp())}_{filename}"
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_filename)
+    file.save(filepath)
+
     toppers = load_data(TOPPERS_FILE)
     new_topper = {
         "id": len(toppers) + 1,
-        "name": data.get('name'),
-        "rank": int(data.get('rank', 1)),
-        "score": data.get('score'),
-        "photo": data.get('photo'),
-        "quote": data.get('quote'),
-        "subject": data.get('subject', 'Overall')
+        "name": name,
+        "rank": rank,
+        "score": score,
+        "photo": f"/{filepath}",
+        "quote": quote,
+        "subject": subject
     }
     toppers.append(new_topper)
     save_data(TOPPERS_FILE, toppers)
