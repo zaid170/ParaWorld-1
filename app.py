@@ -202,7 +202,8 @@ def mini_gemini_chat():
         
         return jsonify({"status": "success", "response": response.text}), 200
     except Exception as e:
-        return jsonify({"status": "error", "message": "Mini Gemini is thinking too hard right now. Try again later!"}), 500
+        # DETECTIVE MODE: This sends the EXACT Google error right to your chatbot screen!
+        return jsonify({"status": "error", "message": f"Google Error Details: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
