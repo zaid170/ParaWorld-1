@@ -29,7 +29,9 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        body { background-color: var(--bg-slate); color: var(--text-main); min-height: 100vh; overflow-x: hidden; } /* Forces absolutely no horizontal scroll on body */
+        
+        /* Forces absolutely no horizontal scroll on body */
+        body { background-color: var(--bg-slate); color: var(--text-main); min-height: 100vh; overflow-x: hidden; } 
         .dashboard-wrapper { max-width: 1280px; margin: 0 auto; padding: 40px 24px; overflow-x: hidden; }
 
         /* GPU ACCELERATION FOR 60FPS SMOOTHNESS */
@@ -75,7 +77,7 @@
         .charts-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .chart-box { background: var(--bg-slate); border-radius: var(--radius-box); padding: 25px; border: 1px solid #E2E8F0; text-align: center; width: 100%; max-width: 100%; overflow: hidden; }
         .chart-box h4 { margin-bottom: 20px; color: var(--primary-navy); font-weight: 700; }
-        .chart-box canvas { max-width: 100% !important; height: auto !important; } /* Force charts to stay inside their box */
+        .chart-box canvas { max-width: 100% !important; height: auto !important; }
 
         /* --- TAB 2: SMART CLASS SEPARATION SYSTEM --- */
         .class-filter-menu { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; padding-bottom: 10px; }
@@ -93,7 +95,7 @@
         th { background: var(--bg-slate); color: var(--primary-navy); padding: 16px; font-weight: 700; border-bottom: 2px solid #CBD5E1; font-size: 0.85rem; text-transform: uppercase; }
         td { padding: 16px; border-bottom: 1px solid #E2E8F0; color: var(--text-secondary); font-size: 0.95rem; }
 
-        /* The Ultimate Mobile Table Stacking Trick */
+        /* The Ultimate Mobile Table Stacking Trick (Vertical Cards) */
         @media (max-width: 768px) {
             table, thead, tbody, th, td, tr { display: block; width: 100%; }
             thead tr { display: none; } /* Hide the normal table headers on phone */
@@ -125,10 +127,12 @@
         .form-group { display: flex; flex-direction: column; gap: 8px; width: 100%; box-sizing: border-box; }
         .form-group label { font-weight: 700; color: var(--primary-navy); font-size: 0.9rem; }
         .form-field { width: 100%; padding: 12px 18px; border: 1px solid #CBD5E1; border-radius: var(--radius-btn); background: var(--bg-slate); outline: none; font-size: 0.95rem; transition: var(--transition-smooth); box-sizing: border-box; }
+        
         /* Style for Device File Upload Buttons */
         input[type="file"] { padding: 9px 18px; cursor: pointer; }
         input[type="file"]::file-selector-button { background: var(--secondary-blue); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: var(--transition-smooth); margin-right: 10px; }
         input[type="file"]::file-selector-button:hover { background: var(--primary-navy); }
+        
         .form-field:focus { border-color: var(--secondary-blue); background: white; }
         .btn-primary { background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%); color: white; border: none; padding: 14px 28px; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-btn); cursor: pointer; transition: var(--transition-smooth); width: fit-content; }
         .btn-primary:hover { transform: translateY(-2px) translateZ(0); box-shadow: 0 10px 20px rgba(10, 54, 99, 0.2); }
@@ -259,7 +263,7 @@
                     {% for student in students %}
                     <tr class="student-row" data-class="{{ student.current_class }}" data-search="{{ student.name|lower }} {{ student.roll_number|lower }} {{ student.school|lower }} {{ student.residence|lower }}">
                         <td data-label="Roll Token"><span class="badge-roll">{{ student.roll_number }}</span></td>
-                        <td data-label="Name" style="font-weight: 700; color: var(--primary-navy);">{{ student.name }}</td>
+                        <td data-label="Candidate Name" style="font-weight: 700; color: var(--primary-navy);">{{ student.name }}</td>
                         <td data-label="School">{{ student.school }}</td>
                         <td data-label="Residence">{{ student.residence }}</td>
                         <td data-label="Target Stream"><span class="badge-stream">{{ student.promoting_class }}</span></td>
@@ -290,9 +294,9 @@
                 <tbody>
                     {% for enquiry in enquiries %}
                     <tr>
-                        <td data-label="Name" style="font-weight: 700; color: var(--primary-navy);">{{ enquiry.name }}</td>
-                        <td data-label="Target"><span class="badge-stream">{{ enquiry.grade }}</span></td>
-                        <td data-label="Phone">{{ enquiry.phone }}</td>
+                        <td data-label="Candidate Name" style="font-weight: 700; color: var(--primary-navy);">{{ enquiry.name }}</td>
+                        <td data-label="Target Batch Program"><span class="badge-stream">{{ enquiry.grade }}</span></td>
+                        <td data-label="Contact Phone">{{ enquiry.phone }}</td>
                         <td data-label="Actions">
                             <div class="actions-col">
                                 <a class="action-icon-btn action-call" href="tel:{{ enquiry.phone }}">📞</a>
