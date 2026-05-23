@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paraworld Educations | Premium Coaching Institute in Shopian</title>
     
-    <!-- Premium Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     
-    <!-- PDF Generator Engine (Crucial for Mobile Downloads) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -41,6 +39,13 @@
         ::-webkit-scrollbar-thumb { background: var(--secondary-blue); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold); }
 
+        /* GPU ACCELERATION FOR 60FPS SMOOTHNESS */
+        .btn-primary, .nav-cta, .topper-card, .teacher-card, .classroom-tab, .filter-btn, .para-bot-launcher {
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
+
         {% if low_power %}
         * { animation-duration: 0.1s !important; transition-duration: 0.1s !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
         .logo-wrapper, .logo-wrapper::after, .display-icon, .stat-box { animation: none !important; }
@@ -58,7 +63,7 @@
         .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 2px; background: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan)); transition: var(--transition-smooth); }
         .nav-links a:hover::after { width: 100%; }
         .nav-cta { background: linear-gradient(135deg, var(--accent-gold), #FF9100); color: var(--primary-navy) !important; padding: 12px 28px !important; border-radius: 50px; font-weight: 700 !important; box-shadow: 0 4px 20px rgba(255, 179, 0, 0.3); }
-        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 179, 0, 0.5); color: var(--primary-navy) !important; }
+        .nav-cta:hover { transform: translateY(-2px) translateZ(0); box-shadow: 0 8px 25px rgba(255, 179, 0, 0.5); color: var(--primary-navy) !important; }
         .nav-cta::after { display: none !important; }
         .mobile-hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1100; }
         .mobile-hamburger div { width: 30px; height: 3px; background-color: var(--text-light); border-radius: 2px; transition: var(--transition-smooth); }
@@ -75,15 +80,13 @@
         .logo-wrapper { position: relative; width: 180px; height: 180px; margin-bottom: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: linear-gradient(45deg, var(--accent-gold), var(--accent-cyan)); padding: 6px; box-shadow: 0 10px 40px rgba(0, 229, 255, 0.25); animation: floatLogo 6s ease-in-out infinite; }
         .logo-wrapper::after { content: ''; position: absolute; top: -12px; left: -12px; right: -12px; bottom: -12px; border: 2px dashed rgba(0, 229, 255, 0.25); border-radius: 50%; animation: spinCircle 25s linear infinite; }
         .logo-inner-circle { width: 100%; height: 100%; background-color: #000000; border-radius: 50%; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        
-        /* Updated Logo Path to target static folder */
         .logo-inner-circle img { width: 85%; height: auto; object-fit: contain; }
         
         .hero-section h1 { font-size: clamp(2.8rem, 7vw, 4.8rem); font-weight: 900; margin-bottom: 24px; letter-spacing: -1.5px; line-height: 1.1; }
         .text-gradient { background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-cyan) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-section p { font-size: clamp(1.1rem, 2.2vw, 1.4rem); max-width: 850px; margin-bottom: 45px; line-height: 1.7; color: #94A3B8; font-weight: 400; }
         .btn-primary { display: inline-block; background: linear-gradient(135deg, var(--accent-gold) 0%, #FF9100 100%); color: var(--primary-navy); padding: 18px 48px; text-decoration: none; font-weight: 800; font-size: 1.25rem; border-radius: 50px; box-shadow: 0 10px 25px rgba(255, 179, 0, 0.35); transition: var(--transition-smooth); border: none; cursor: pointer; }
-        .btn-primary:hover { transform: scale(1.05) translateY(-3px); box-shadow: 0 15px 35px rgba(255, 179, 0, 0.55); }
+        .btn-primary:hover { transform: scale(1.05) translateY(-3px) translateZ(0); box-shadow: 0 15px 35px rgba(255, 179, 0, 0.55); }
 
         /* --- STATS STRIP --- */
         .stats-strip { background-color: var(--card-bg); padding: 40px 5%; width: 100%; box-shadow: var(--shadow-subtle); border-top: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0; }
@@ -101,7 +104,7 @@
         /* --- TOPPERS BOARD --- */
         .toppers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
         .topper-card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 40px 25px; text-align: center; box-shadow: var(--shadow-subtle); border: 1px solid rgba(0,0,0,0.03); transition: var(--transition-smooth); position: relative; }
-        .topper-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+        .topper-card:hover { transform: translateY(-8px) translateZ(0); box-shadow: var(--shadow-hover); }
         .topper-avatar-container { position: relative; width: 120px; height: 120px; margin: 0 auto 20px auto; }
         .topper-portrait { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; border: 4px solid var(--accent-gold); box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: var(--transition-smooth); }
         .rank-halo-1 { border-color: var(--accent-gold); box-shadow: 0 0 25px rgba(255, 179, 0, 0.4); }
@@ -118,7 +121,7 @@
         .classroom-tabs { display: flex; flex-direction: column; gap: 15px; }
         .classroom-tab { background-color: var(--card-bg); border: 1px solid #E2E8F0; padding: 24px; border-radius: var(--radius-md); cursor: pointer; transition: var(--transition-smooth); text-align: left; position: relative; overflow: hidden; box-shadow: var(--shadow-subtle); }
         .classroom-tab::before { content: ''; position: absolute; top: 0; left: 0; height: 100%; width: 6px; background-color: transparent; transition: var(--transition-smooth); }
-        .classroom-tab.active { border-color: var(--secondary-blue); box-shadow: 0 10px 25px rgba(10, 54, 99, 0.08); transform: translateX(10px); }
+        .classroom-tab.active { border-color: var(--secondary-blue); box-shadow: 0 10px 25px rgba(10, 54, 99, 0.08); transform: translateX(10px) translateZ(0); }
         .classroom-tab.active::before { background-color: var(--secondary-blue); }
         .classroom-tab h3 { color: var(--primary-navy); font-size: 1.25rem; margin-bottom: 8px; font-weight: 700; }
         .classroom-tab p { color: var(--text-muted); font-size: 0.95rem; }
@@ -170,12 +173,12 @@
         .faculty-section { background-color: #F1F5F9; }
         .filter-container { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 60px; }
         .filter-btn { background-color: var(--card-bg); border: 1px solid #E2E8F0; color: var(--text-dark); padding: 12px 28px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 0.95rem; transition: var(--transition-smooth); box-shadow: var(--shadow-subtle); }
-        .filter-btn:hover, .filter-btn.active { background-color: var(--secondary-blue); color: var(--text-light); border-color: var(--secondary-blue); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(10, 54, 99, 0.15); }
+        .filter-btn:hover, .filter-btn.active { background-color: var(--secondary-blue); color: var(--text-light); border-color: var(--secondary-blue); transform: translateY(-2px) translateZ(0); box-shadow: 0 5px 15px rgba(10, 54, 99, 0.15); }
         .filter-btn.active { box-shadow: 0 5px 15px rgba(0, 229, 255, 0.2); background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%); }
         .faculty-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
-        .teacher-card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 40px 30px; box-shadow: var(--shadow-subtle); transition: var(--transition-smooth); text-align: center; border: 1px solid rgba(0,0,0,0.03); position: relative; opacity: 1; transform: scale(1); }
+        .teacher-card { background: var(--card-bg); border-radius: var(--radius-lg); padding: 40px 30px; box-shadow: var(--shadow-subtle); transition: var(--transition-smooth); text-align: center; border: 1px solid rgba(0,0,0,0.03); position: relative; opacity: 1; transform: scale(1) translateZ(0); }
         .teacher-card.hidden { display: none !important; }
-        .teacher-card:hover { transform: translateY(-12px); box-shadow: var(--shadow-hover); border-top: 5px solid var(--accent-gold); }
+        .teacher-card:hover { transform: translateY(-12px) translateZ(0); box-shadow: var(--shadow-hover); border-top: 5px solid var(--accent-gold); }
         .avatar-container { position: relative; width: 110px; height: 110px; margin: 0 auto 25px auto; }
         .avatar-circle { width: 100%; height: 100%; background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; color: white; box-shadow: 0 8px 16px rgba(10, 54, 99, 0.12); transition: var(--transition-smooth); }
         .teacher-card:hover .avatar-circle { transform: scale(1.08) rotate(-6deg); background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-cyan) 100%); color: var(--primary-navy); }
@@ -185,8 +188,6 @@
         .badge-biology { background-color: #DCFCE7; color: #15803D; }
         .badge-chemistry { background-color: #FEF3C7; color: #B45309; }
         .badge-math { background-color: #F3E8FF; color: #6B21A8; }
-        .badge-humanities { background-color: #FEE2E2; color: #991B1B; }
-        .badge-languages { background-color: #FCE7F3; color: #9D174D; }
         .badge-admin { background-color: #E2E8F0; color: #334155; }
         .teacher-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
 
@@ -234,14 +235,14 @@
         .para-bot-widget { position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; }
         .para-bot-launcher { width: 65px; height: 65px; border-radius: 50%; background-color: #000000; border: 3px solid var(--accent-gold); box-shadow: 0 10px 25px rgba(0, 229, 255, 0.35); display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; transition: var(--transition-smooth); position: relative; }
         .para-bot-launcher::after { content: ''; position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; border: 1px dashed var(--accent-cyan); border-radius: 50%; animation: spinCircle 15s linear infinite; }
-        .para-bot-launcher:hover { transform: scale(1.1) rotate(5deg); border-color: var(--accent-cyan); }
-        .launcher-avatar-inner { color: var(--accent-cyan); font-size: 1.8rem; font-weight: 900; font-family: 'Space Grotesk', sans-serif; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;}
+        .para-bot-launcher:hover { transform: scale(1.1) rotate(5deg) translateZ(0); border-color: var(--accent-cyan); }
+        .launcher-avatar-inner { color: var(--accent-cyan); font-size: 1.8rem; font-family: 'Space Grotesk', sans-serif; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
         
         .para-bot-window { width: 360px; height: 520px; background-color: var(--card-bg); border-radius: var(--radius-lg); box-shadow: 0 15px 40px rgba(8, 28, 54, 0.18); border: 1px solid #E2E8F0; display: none; flex-direction: column; overflow: hidden; margin-bottom: 15px; transition: var(--transition-smooth); transform: translateY(20px); opacity: 0; }
         .para-bot-window.active { display: flex; transform: translateY(0); opacity: 1; }
         .para-bot-header { background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-blue) 100%); padding: 18px 20px; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); }
         .para-bot-profile { display: flex; align-items: center; gap: 12px; }
-        .para-bot-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent-gold); background-color: #000000; display: flex; justify-content: center; align-items: center; color: var(--accent-cyan); font-size: 1.2rem; font-weight: 900; font-family: 'Space Grotesk', sans-serif;}
+        .para-bot-avatar { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent-gold); background-color: #000000; display: flex; justify-content: center; align-items: center; color: var(--accent-cyan); font-size: 1.2rem; font-family: 'Space Grotesk', sans-serif; }
         .para-bot-profile h4 { margin: 0; font-size: 1.05rem; font-weight: 800; }
         .para-bot-status { font-size: 0.75rem; color: #A7F3D0; font-weight: 600; }
         .para-bot-close { background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; line-height: 1; opacity: 0.8; transition: var(--transition-smooth); }
@@ -278,24 +279,6 @@
         .footer-links a:hover { color: var(--accent-cyan); padding-left: 6px; }
         .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 35px; border-top: 1px solid rgba(148, 163, 184, 0.1); text-align: center; color: #64748B; font-size: 0.95rem; }
 
-        /* --- INVISO CREATOR EMBLEM SIGNATURE FOOTER --- */
-        .inviso-developer-footer { width: 100%; margin-top: 40px; padding-top: 30px; border-top: 1px dashed rgba(255, 255, 255, 0.08); display: flex; justify-content: center; align-items: center; }
-        .inviso-wrapper { display: flex; align-items: center; gap: 15px; cursor: pointer; transition: var(--transition-smooth); }
-        .inviso-emblem-box { width: 60px; height: 60px; background: #000000; border: 2px solid #FFFFFF; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); transition: var(--transition-smooth); position: relative; }
-        .inviso-mask-svg { width: 82%; height: 82%; }
-        .outer-ring { fill: none; stroke: #FFFFFF; stroke-width: 2; stroke-dasharray: 4 2; transform-origin: center; animation: spinCircle 20s linear infinite; }
-        .inner-ring { fill: none; stroke: rgba(255, 255, 255, 0.4); stroke-width: 1.5; }
-        .mask-base { fill: none; stroke: #FFFFFF; stroke-width: 3.5; }
-        .mask-details { fill: none; stroke: #FFFFFF; stroke-width: 3; stroke-linecap: round; }
-        .inviso-wrapper:hover .inviso-emblem-box { border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(0, 229, 255, 0.45); transform: scale(1.08) rotate(-5deg); }
-        .inviso-wrapper:hover .outer-ring { stroke: var(--accent-cyan); animation-duration: 6s; }
-        .inviso-wrapper:hover .mask-base, .inviso-wrapper:hover .mask-details { stroke: var(--accent-cyan); }
-        .inviso-text-brand { display: flex; flex-direction: column; align-items: flex-start; }
-        .credit-tag { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; transition: var(--transition-smooth); }
-        .inviso-logo-text { font-size: 1.6rem; font-weight: 900; color: #FFFFFF; letter-spacing: 3px; font-style: italic; transition: var(--transition-smooth); transform: skewX(-8deg); }
-        .inviso-wrapper:hover .credit-tag { color: var(--accent-cyan); }
-        .inviso-wrapper:hover .inviso-logo-text { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
-
         /* --- KEYFRAME ANIMATIONS --- */
         @keyframes floatLogo { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-16px) rotate(1.5deg); } 100% { transform: translateY(0px) rotate(0deg); } }
         @keyframes spinCircle { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -317,7 +300,6 @@
 </head>
 <body>
 
-    <!-- STYLISH HEADER NAVIGATION -->
     <nav id="navbar">
         <a href="#" class="nav-logo">📘 Paraworld<span>.</span></a>
         <div class="mobile-hamburger" id="hamburger-menu">
@@ -334,7 +316,6 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <header id="home" class="hero-section">
         <div class="logo-wrapper">
             <div class="logo-inner-circle">
@@ -346,7 +327,6 @@
         <a href="#contact" class="btn-primary">Reserve Your Batch Seat</a>
     </header>
 
-    <!-- STATS STRIP -->
     <div class="stats-strip">
         <div class="stats-container">
             <div class="stat-box">
@@ -368,7 +348,6 @@
         </div>
     </div>
 
-    <!-- CLASSROOMS & INFRASTRUCTURE INTERACTIVE SECTION -->
     <section id="classrooms">
         <div class="section-header">
             <h2>Our Classrooms & Environment</h2>
@@ -401,7 +380,6 @@
         </div>
     </section>
 
-    <!-- EXPERT FACULTY SECTION -->
     <section id="faculty" class="faculty-section">
         <div class="section-header">
             <h2>Our Renowned Mentors & Staff</h2>
@@ -414,8 +392,6 @@
             <button class="filter-btn" data-filter="chemistry">Chemistry</button>
             <button class="filter-btn" data-filter="biology">Biology (Botany/Zoology)</button>
             <button class="filter-btn" data-filter="math">Mathematics</button>
-            <button class="filter-btn" data-filter="humanities">Humanities</button>
-            <button class="filter-btn" data-filter="languages">Languages</button>
             <button class="filter-btn" data-filter="administration">Administration</button>
         </div>
 
@@ -468,30 +444,6 @@
                 <h3>Sajad Sir</h3>
                 <p>Breaks down complex integration, algebraic calculations, matrices, and tricky trigonometry equations into basic steps.</p>
             </div>
-            <div class="teacher-card" data-category="humanities">
-                <div class="avatar-container"><div class="avatar-circle">📜</div></div>
-                <span class="subject-badge badge-humanities">History & Pol Sci</span>
-                <h3>Mashooq Sir</h3>
-                <p>Inspires students with deep historical insights, global political frameworks, and structural analysis of governance.</p>
-            </div>
-            <div class="teacher-card" data-category="humanities">
-                <div class="avatar-container"><div class="avatar-circle">🌍</div></div>
-                <span class="subject-badge badge-humanities">Geography</span>
-                <h3>Ayaan Sir</h3>
-                <p>Expert in landscape geomorphology, mapping concepts, and environmental ecology, simplifying physical sciences.</p>
-            </div>
-            <div class="teacher-card" data-category="languages">
-                <div class="avatar-container"><div class="avatar-circle">✍️</div></div>
-                <span class="subject-badge badge-languages">Urdu</span>
-                <h3>Khalid Sir</h3>
-                <p>Nurtures a rich comprehension of classical prose, poetry compositions, core grammar rules, and calligraphy styles.</p>
-            </div>
-            <div class="teacher-card" data-category="languages">
-                <div class="avatar-container"><div class="avatar-circle">📚</div></div>
-                <span class="subject-badge badge-languages">English</span>
-                <h3>Abaas Sir</h3>
-                <p>Enhances active communication, comprehensive reading habits, structural writing metrics, and competitive grammar.</p>
-            </div>
             <div class="teacher-card" data-category="administration">
                 <div class="avatar-container"><div class="avatar-circle">🗂️</div></div>
                 <span class="subject-badge badge-admin">Administration</span>
@@ -501,7 +453,6 @@
         </div>
     </section>
 
-    <!-- FAQ SECTION -->
     <section id="faq" class="faq-section">
         <div class="section-header">
             <h2>Frequently Asked Questions</h2>
@@ -514,7 +465,7 @@
             </div>
             <div class="faq-item">
                 <button class="faq-question">What batches or subjects are currently available?<span class="faq-icon">+</span></button>
-                <div class="faq-answer"><p>We host complete science, humanities, and mathematics modules for class 10th, 11th, and 12th board curricula. We also run dedicated problem-solving workshops for competitive medical/engineering pathways.</p></div>
+                <div class="faq-answer"><p>We host complete science and mathematics modules for class 10th, 11th, and 12th board curricula. We also run dedicated problem-solving workshops for competitive medical/engineering pathways.</p></div>
             </div>
             <div class="faq-item">
                 <button class="faq-question">How do you support winter studies?<span class="faq-icon">+</span></button>
@@ -527,7 +478,6 @@
         </div>
     </section>
 
-    <!-- CONTACT & ENQUIRY FORM SECTION -->
     <section id="contact" class="contact-section">
         <div class="contact-wrapper">
             <div class="contact-info">
@@ -558,6 +508,7 @@
                         <label for="gradeSelection">Class Level</label>
                         <select id="gradeSelection" class="form-field" required>
                             <option value="" disabled selected>Select class program...</option>
+                            <option value="Class 7th">Class 7th</option>
                             <option value="Class 8th">Class 8th</option>
                             <option value="Class 9th">Class 9th</option>
                             <option value="Class 10th">Class 10th</option>
@@ -572,7 +523,6 @@
         </div>
     </section>
 
-    <!-- CUSTOM SUBMISSION MODAL -->
     <div class="modal-background" id="modalWindow">
         <div class="modal-card">
             <div class="success-icon">✓</div>
@@ -582,7 +532,6 @@
         </div>
     </div>
 
-    <!-- 🎓 HIGH-CONTRAST SEPARATED SCHOLARSHIP PORTAL -->
     {% if show_scholarship_junior or show_scholarship_senior or show_scholarship %}
     <section id="scholarship" class="scholarship-section">
         <div class="section-header">
@@ -592,13 +541,11 @@
 
         <div class="scholarship-container">
             
-            <!-- SCHOLARSHIP WING SWITCHER -->
             <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
-                <button class="filter-btn active" id="btn-junior-schol" onclick="switchScholTab('junior')">Junior Wing (Class 8th - 10th)</button>
+                <button class="filter-btn active" id="btn-junior-schol" onclick="switchScholTab('junior')">Junior Wing (Class 7th - 10th)</button>
                 <button class="filter-btn" id="btn-senior-schol" onclick="switchScholTab('senior')">Senior Wing (Class 11th - 12th)</button>
             </div>
 
-            <!-- FORM 1: JUNIOR WING (8th, 9th, 10th) -->
             <div class="scholarship-form-card" id="junior-schol-card">
                 <h3>Submit Junior Candidate File</h3>
                 <form id="scholarshipFormJunior" onsubmit="handleScholSubmit(event, 'junior')">
@@ -627,6 +574,7 @@
                             <label>Current Class Level</label>
                             <select id="scholCurrentClassJ" class="form-field" required>
                                 <option value="" disabled selected>Choose class level...</option>
+                                <option value="Class 7th">Class 7th</option>
                                 <option value="Class 8th">Class 8th</option>
                                 <option value="Class 9th">Class 9th</option>
                                 <option value="Class 10th">Class 10th</option>
@@ -636,11 +584,11 @@
                             <label>Target Class (Promoting To)</label>
                             <select id="scholPromotingClassJ" class="form-field" required>
                                 <option value="" disabled selected>Promoting to stream...</option>
+                                <option value="Class 8th">Class 8th</option>
                                 <option value="Class 9th">Class 9th</option>
                                 <option value="Class 10th">Class 10th</option>
                                 <option value="Class 11th (Medical)">Class 11th (Medical)</option>
                                 <option value="Class 11th (Non-Medical)">Class 11th (Non-Medical)</option>
-                                <option value="Class 11th (Arts/Humanities)">Class 11th (Arts/Humanities)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -660,7 +608,6 @@
                 </form>
             </div>
 
-            <!-- FORM 2: SENIOR WING (11th, 12th) -->
             <div class="scholarship-form-card" id="senior-schol-card" style="display: none;">
                 <h3>Submit Senior Candidate File</h3>
                 <form id="scholarshipFormSenior" onsubmit="handleScholSubmit(event, 'senior')">
@@ -691,7 +638,6 @@
                                 <option value="" disabled selected>Choose class level...</option>
                                 <option value="Class 11th (Medical)">Class 11th (Medical)</option>
                                 <option value="Class 11th (Non-Medical)">Class 11th (Non-Medical)</option>
-                                <option value="Class 11th (Arts/Humanities)">Class 11th (Arts/Humanities)</option>
                                 <option value="Class 12th (Medical)">Class 12th (Medical)</option>
                                 <option value="Class 12th (Non-Medical)">Class 12th (Non-Medical)</option>
                                 <option value="Target Batch">Target Batch</option>
@@ -703,7 +649,6 @@
                                 <option value="" disabled selected>Promoting to stream...</option>
                                 <option value="Class 12th (Medical)">Class 12th (Medical)</option>
                                 <option value="Class 12th (Non-Medical)">Class 12th (Non-Medical)</option>
-                                <option value="Class 12th (Arts/Humanities)">Class 12th (Arts/Humanities)</option>
                                 <option value="NEET/JEE Crash Course">NEET/JEE Crash Course</option>
                             </select>
                         </div>
@@ -728,7 +673,6 @@
     </section>
     {% endif %}
 
-    <!-- 📄 PREMIUM DUAL-ACTION SCHOLARSHIP SLIP MODAL -->
     <div class="modal-background" id="scholarshipSlipModal" style="z-index: 3000;">
         <div class="modal-card scholarship-slip-card">
             
@@ -771,9 +715,7 @@
             </div>
             
             <div class="slip-btn-row no-print">
-                <!-- Direct Client-Side PDF Generation -->
                 <button class="btn-download-pdf" id="downloadPdfSlipBtn">📥 Download Secure PDF</button>
-                
                 <div style="background: rgba(8, 28, 54, 0.85); padding: 10px; border-radius: 16px; margin-top: 5px;">
                     <button class="btn-close-slip" id="closeSlipBtn">Close</button>
                 </div>
@@ -781,7 +723,6 @@
         </div>
     </div>
 
-    <!-- CHATBOT PARA GEMINI -->
     <div class="para-bot-widget">
         <div class="para-bot-launcher" id="paraBotLauncher">
             <div class="launcher-avatar-inner" style="color: var(--accent-cyan); font-size: 1.8rem; font-weight: 900; font-family: 'Space Grotesk', sans-serif;">PG</div>
@@ -810,7 +751,6 @@
         </div>
     </div>
 
-    <!-- PERSISTENT ACADEMIC FOOTER -->
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
@@ -833,33 +773,14 @@
                     <li><a href="#faculty">Biology (Tariq/Basharat Sir)</a></li>
                     <li><a href="#faculty">Chemistry (Owais/Yasir Sir)</a></li>
                     <li><a href="#faculty">Mathematics (Sajad Sir)</a></li>
-                    <li><a href="#faculty">Humanities & Languages</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 Paraworld Educations. Designed & Crafted with Excellence.</p>
         </div>
-        <!-- INVISO CREATOR EMBLEM SIGNATURE FOOTER -->
-        <div class="inviso-developer-footer">
-            <div class="inviso-wrapper">
-                <div class="inviso-emblem-box">
-                    <svg class="inviso-mask-svg" viewBox="0 0 100 100">
-                        <circle class="outer-ring" cx="50" cy="50" r="45"/>
-                        <circle class="inner-ring" cx="50" cy="50" r="38"/>
-                        <path class="mask-base" d="M30,35 Q50,15 70,35 Q80,55 70,75 Q50,90 30,75 Q20,55 30,35 Z"/>
-                        <path class="mask-details" d="M38,45 Q50,35 62,45 M44,60 Q50,68 56,60"/>
-                    </svg>
-                </div>
-                <div class="inviso-text-brand">
-                    <span class="credit-tag">CRAFTED BY</span>
-                    <span class="inviso-logo-text">INVISO</span>
-                </div>
-            </div>
-        </div>
     </footer>
 
-    <!-- --- JAVASCRIPT SYSTEM ENGINE --- -->
     <script>
         // SCHOLARSHIP WING SWITCHER
         function switchScholTab(tabType) {
@@ -988,9 +909,9 @@
                         const category = card.getAttribute('data-category');
                         if (department === 'all' || category === department) {
                             card.classList.remove('hidden');
-                            setTimeout(() => { card.style.transform = 'scale(1)'; card.style.opacity = '1'; }, 50);
+                            setTimeout(() => { card.style.transform = 'scale(1) translateZ(0)'; card.style.opacity = '1'; }, 50);
                         } else {
-                            card.style.transform = 'scale(0.85)'; card.style.opacity = '0';
+                            card.style.transform = 'scale(0.85) translateZ(0)'; card.style.opacity = '0';
                             setTimeout(() => { card.classList.add('hidden'); }, 300);
                         }
                     });
@@ -1039,7 +960,7 @@
 
             if (closeSlipBtn) { closeSlipBtn.addEventListener('click', () => { scholarshipSlipModal.classList.remove('active'); }); }
 
-            // ✨ DOWNLOAD PDF BUTTON ENGINE ✨
+            // ✨ DOWNLOAD PDF BUTTON ENGINE (FIXED BLANK BUG) ✨
             if (downloadPdfSlipBtn) {
                 downloadPdfSlipBtn.addEventListener('click', () => {
                     const originalElement = document.getElementById('printableAdmitSlip');
@@ -1048,7 +969,7 @@
                     // CRITICAL FIX: Clone the element to prevent mobile blank screens
                     const element = originalElement.cloneNode(true);
                     element.style.position = 'absolute';
-                    element.style.top = '-9999px';
+                    element.style.top = '-9999px'; // Hide off screen, but allow rendering
                     document.body.appendChild(element);
 
                     const opt = {
