@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paraworld Admin | Master Control Console</title>
     
+    <!-- Premium Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
+        /* --- MODERN DESIGN TOKENS & PALETTE --- */
         :root {
             --primary-navy: #081C36;
             --secondary-blue: #0A3663;
@@ -46,7 +48,7 @@
         .brand-meta h1 { font-size: 2.2rem; font-weight: 800; color: var(--primary-navy); letter-spacing: -1px; display: flex; align-items: center; gap: 12px; }
         .brand-meta p { font-size: 0.95rem; color: var(--text-secondary); font-weight: 600; margin-top: 4px; }
         .action-logout { background-color: #FEF2F2; color: var(--color-danger); font-weight: 700; text-decoration: none; padding: 12px 24px; border-radius: var(--radius-btn); font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition-smooth); }
-        .action-logout:hover { background-color: var(--color-danger); color: white; transform: translateY(-2px) translateZ(0); }
+        .action-logout:hover { background-color: var(--color-danger); color: white; transform: translateY(-2px); }
 
         /* --- CONTROLLER CARDS GRIDS --- */
         .control-panel-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 35px; }
@@ -135,7 +137,7 @@
         
         .form-field:focus { border-color: var(--secondary-blue); background: white; }
         .btn-primary { background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%); color: white; border: none; padding: 14px 28px; font-size: 0.95rem; font-weight: 700; border-radius: var(--radius-btn); cursor: pointer; transition: var(--transition-smooth); width: fit-content; }
-        .btn-primary:hover { transform: translateY(-2px) translateZ(0); box-shadow: 0 10px 20px rgba(10, 54, 99, 0.2); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(10, 54, 99, 0.2); }
 
         /* --- TOAST SYSTEM --- */
         .toast-box { position: fixed; bottom: 30px; left: 30px; background-color: #0F172A; color: white; padding: 14px 28px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateY(20px); opacity: 0; transition: var(--transition-smooth); z-index: 999; display: flex; align-items: center; gap: 10px; border-left: 4px solid var(--accent-cyan); }
@@ -393,7 +395,7 @@
                     <input type="text" id="topperScore" class="form-field" placeholder="E.g., 98% in JKBOSE 12th">
                 </div>
                 
-                <!-- NEW DEVICE FILE UPLOAD (Replaced URL Link) -->
+                <!-- DEVICE FILE UPLOAD -->
                 <div class="form-group">
                     <label>Student Photo (From Device)</label>
                     <input type="file" id="topperPhoto" class="form-field" accept="image/*">
@@ -432,7 +434,7 @@
         <div class="workspace-panel" id="galleryPanel">
             <h3 style="margin-bottom: 20px; color: var(--primary-navy);">Post Live Photo to Campus Album</h3>
             <div class="form-grid">
-                <!-- NEW DEVICE FILE UPLOAD (Replaced URL Link) -->
+                <!-- DEVICE FILE UPLOAD -->
                 <div class="form-group">
                     <label>Campus Image (From Device)</label>
                     <input type="file" id="photoFile" class="form-field" accept="image/*">
