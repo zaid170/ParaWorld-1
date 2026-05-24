@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paraworld Educations | Premium Coaching Institute in Shopian</title>
     
-    <!-- Premium Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
     
-    <!-- PDF Generator Engine (Crucial for Mobile Downloads) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -277,6 +275,25 @@
         .footer-links a:hover { color: var(--accent-cyan); padding-left: 6px; }
         .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 35px; border-top: 1px solid rgba(148, 163, 184, 0.1); text-align: center; color: #64748B; font-size: 0.95rem; }
 
+        /* --- INVISO CREATOR EMBLEM SIGNATURE FOOTER CSS --- */
+        .inviso-developer-footer { width: 100%; margin-top: 40px; padding-top: 30px; border-top: 1px dashed rgba(255, 255, 255, 0.08); display: flex; justify-content: center; align-items: center; }
+        .inviso-wrapper { display: flex; align-items: center; gap: 15px; cursor: pointer; transition: var(--transition-smooth); }
+        .inviso-emblem-box { width: 60px; height: 60px; background: #000000; border: 2px solid #FFFFFF; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); transition: var(--transition-smooth); position: relative; }
+        .inviso-mask-svg { width: 82%; height: 82%; }
+        .outer-ring { fill: none; stroke: #FFFFFF; stroke-width: 2; stroke-dasharray: 4 2; transform-origin: center; animation: spinCircle 20s linear infinite; }
+        .inner-ring { fill: none; stroke: rgba(255, 255, 255, 0.4); stroke-width: 1.5; }
+        .mask-base { fill: none; stroke: #FFFFFF; stroke-width: 3.5; }
+        .mask-details { fill: none; stroke: #FFFFFF; stroke-width: 3; stroke-linecap: round; }
+        .inviso-wrapper:hover .inviso-emblem-box { border-color: var(--accent-cyan); box-shadow: 0 0 25px rgba(0, 229, 255, 0.45); transform: scale(1.08) rotate(-5deg); }
+        .inviso-wrapper:hover .outer-ring { stroke: var(--accent-cyan); animation-duration: 6s; }
+        .inviso-wrapper:hover .mask-base, .inviso-wrapper:hover .mask-details { stroke: var(--accent-cyan); }
+        .inviso-text-brand { display: flex; flex-direction: column; align-items: flex-start; }
+        .credit-tag { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; transition: var(--transition-smooth); }
+        .inviso-logo-container { margin: 0; padding: 0; }
+        h2.inviso-logo-text { font-size: 1.6rem; font-weight: 900; color: #FFFFFF; letter-spacing: 3px; font-style: italic; transition: var(--transition-smooth); transform: skewX(-8deg); margin: 0; }
+        .inviso-wrapper:hover .credit-tag { color: var(--accent-cyan); }
+        .inviso-wrapper:hover h2.inviso-logo-text { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+
         /* --- KEYFRAME ANIMATIONS --- */
         @keyframes floatLogo { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-16px) rotate(1.5deg); } 100% { transform: translateY(0px) rotate(0deg); } }
         @keyframes spinCircle { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -298,7 +315,6 @@
 </head>
 <body>
 
-    <!-- STYLISH HEADER NAVIGATION -->
     <nav id="navbar">
         <a href="#" class="nav-logo">📘 Paraworld<span>.</span></a>
         <div class="mobile-hamburger" id="hamburger-menu">
@@ -315,7 +331,6 @@
         </div>
     </nav>
 
-    <!-- LIVE NOTICE TICKER RESTORED -->
     {% if notices and notices|length > 0 %}
     <div class="ticker-wrapper">
         <span class="ticker-badge">LATEST</span>
@@ -327,7 +342,6 @@
     </div>
     {% endif %}
 
-    <!-- HERO SECTION -->
     <header id="home" class="hero-section">
         <div class="logo-wrapper">
             <div class="logo-inner-circle">
@@ -339,7 +353,6 @@
         <a href="#contact" class="btn-primary">Reserve Your Batch Seat</a>
     </header>
 
-    <!-- STATS STRIP -->
     <div class="stats-strip">
         <div class="stats-container">
             <div class="stat-box">
@@ -361,7 +374,6 @@
         </div>
     </div>
 
-    <!-- TOPPERS WALL RESTORED -->
     {% if toppers and toppers|length > 0 %}
     <section id="toppers" style="background-color: var(--bg-light);">
         <div class="section-header">
@@ -389,7 +401,6 @@
     </section>
     {% endif %}
 
-    <!-- CLASSROOMS & INFRASTRUCTURE INTERACTIVE SECTION -->
     <section id="classrooms" style="background-color: white;">
         <div class="section-header">
             <h2>Our Classrooms & Environment</h2>
@@ -422,7 +433,6 @@
         </div>
     </section>
 
-    <!-- CAMPUS GALLERY RESTORED -->
     {% if photos and photos|length > 0 %}
     <section id="gallery" style="background-color: var(--bg-light);">
         <div class="section-header">
@@ -441,7 +451,6 @@
     </section>
     {% endif %}
 
-    <!-- EXPERT FACULTY SECTION -->
     <section id="faculty" class="faculty-section" style="background-color: white;">
         <div class="section-header">
             <h2>Our Renowned Mentors & Staff</h2>
@@ -507,7 +516,6 @@
                 <span class="subject-badge badge-math">Mathematics</span>
                 <h3>Sajad Sir</h3>
                 <p>Breaks down complex integration, algebraic calculations, matrices, and tricky trigonometry equations into basic steps.</p>
-                
             </div>
             <div class="teacher-card" data-category="humanities">
                 <div class="avatar-container"><div class="avatar-circle">📜</div></div>
@@ -533,7 +541,6 @@
                 <h3>Abaas Sir</h3>
                 <p>Enhances active communication, comprehensive reading habits, structural writing metrics, and competitive grammar.</p>
             </div>
-            </div>
             <div class="teacher-card" data-category="administration">
                 <div class="avatar-container"><div class="avatar-circle">🗂️</div></div>
                 <span class="subject-badge badge-admin">Administration</span>
@@ -543,7 +550,6 @@
         </div>
     </section>
 
-    <!-- FAQ SECTION -->
     <section id="faq" class="faq-section" style="background-color: var(--bg-light);">
         <div class="section-header">
             <h2>Frequently Asked Questions</h2>
@@ -569,7 +575,6 @@
         </div>
     </section>
 
-    <!-- CONTACT & ENQUIRY FORM SECTION -->
     <section id="contact" class="contact-section" style="background-color: white;">
         <div class="contact-wrapper">
             <div class="contact-info">
@@ -615,7 +620,6 @@
         </div>
     </section>
 
-    <!-- CUSTOM SUBMISSION MODAL -->
     <div class="modal-background" id="modalWindow">
         <div class="modal-card">
             <div class="success-icon">✓</div>
@@ -625,7 +629,6 @@
         </div>
     </div>
 
-    <!-- 🎓 HIGH-CONTRAST SEPARATED SCHOLARSHIP PORTAL -->
     {% if show_scholarship_junior or show_scholarship_senior or show_scholarship %}
     <section id="scholarship" class="scholarship-section">
         <div class="section-header">
@@ -635,13 +638,11 @@
 
         <div class="scholarship-container">
             
-            <!-- SCHOLARSHIP WING SWITCHER -->
             <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
                 <button class="filter-btn active" id="btn-junior-schol" onclick="switchScholTab('junior')">Junior Wing (Class 7th - 10th)</button>
                 <button class="filter-btn" id="btn-senior-schol" onclick="switchScholTab('senior')">Senior Wing (Class 11th - 12th)</button>
             </div>
 
-            <!-- FORM 1: JUNIOR WING (7th, 8th, 9th, 10th) -->
             <div class="scholarship-form-card" id="junior-schol-card">
                 <h3>Submit Junior Candidate File</h3>
                 <form id="scholarshipFormJunior" onsubmit="handleScholSubmit(event, 'junior')">
@@ -704,7 +705,6 @@
                 </form>
             </div>
 
-            <!-- FORM 2: SENIOR WING (11th, 12th) -->
             <div class="scholarship-form-card" id="senior-schol-card" style="display: none;">
                 <h3>Submit Senior Candidate File</h3>
                 <form id="scholarshipFormSenior" onsubmit="handleScholSubmit(event, 'senior')">
@@ -770,7 +770,6 @@
     </section>
     {% endif %}
 
-    <!-- 📄 PREMIUM DUAL-ACTION SCHOLARSHIP SLIP MODAL -->
     <div class="modal-background" id="scholarshipSlipModal" style="z-index: 3000;">
         <div class="modal-card scholarship-slip-card">
             
@@ -821,7 +820,6 @@
         </div>
     </div>
 
-    <!-- CHATBOT PARA GEMINI -->
     <div class="para-bot-widget">
         <div class="para-bot-launcher" id="paraBotLauncher">
             <div class="launcher-avatar-inner" style="color: var(--accent-cyan); font-size: 1.8rem; font-weight: 900; font-family: 'Space Grotesk', sans-serif;">PG</div>
@@ -850,7 +848,6 @@
         </div>
     </div>
 
-    <!-- PERSISTENT ACADEMIC FOOTER -->
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
@@ -876,19 +873,19 @@
                 </ul>
             </div>
         </div>
-          
-       
+        
         <div class="footer-bottom">
             <p>&copy; 2026 Paraworld Educations. Designed & Crafted with Excellence.</p>
         </div>
+
         <div class="inviso-developer-footer">
             <div class="inviso-wrapper">
                 <div class="inviso-emblem-box">
                     <svg class="inviso-mask-svg" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="45" class="outer-ring" />
-                        <circle cx="50" cy="50" r="38" class="inner-ring" />
-                        <path d="M50,25 C38,25 35,38 35,50 C35,65 42,75 50,75 C58,75 65,65 65,50 C65,38 62,25 50,25 Z" class="mask-base" />
-                        <path d="M50,25 L50,75 M50,42 L38,42 C38,48 42,52 50,52 M56,33 L56,67 M61,37 L61,63" class="mask-details" />
+                        <circle cx="50" cy="50" r="45" class="outer-ring" fill="none" />
+                        <circle cx="50" cy="50" r="38" class="inner-ring" fill="none" />
+                        <path d="M50,25 C38,25 35,38 35,50 C35,65 42,75 50,75 C58,75 65,65 65,50 C65,38 62,25 50,25 Z" class="mask-base" fill="none" />
+                        <path d="M50,25 L50,75 M50,42 L38,42 C38,48 42,52 50,52 M56,33 L56,67 M61,37 L61,63" class="mask-details" fill="none" />
                     </svg>
                 </div>
                 <div class="inviso-text-brand">
@@ -899,9 +896,9 @@
                 </div>
             </div>
         </div>
+
     </footer>
 
-    <!-- --- JAVASCRIPT SYSTEM ENGINE --- -->
     <script>
         // SCHOLARSHIP WING SWITCHER
         function switchScholTab(tabType) {
