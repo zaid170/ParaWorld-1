@@ -8,7 +8,7 @@
     <!-- Premium Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
     
     <style>
         /* --- DESIGN TOKENS --- */
@@ -44,10 +44,13 @@
             min-height: 100vh;
             overflow-x: hidden;
             background-image: radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.08) 0%, transparent 50%);
+            display: flex;
+            flex-direction: column;
         }
 
         header {
             max-width: 900px;
+            width: 100%;
             margin: 0 auto;
             padding: 40px 24px;
             display: flex;
@@ -92,11 +95,13 @@
         /* --- COMMUNITY CONSOLE / FEED --- */
         .feed-container {
             max-width: 900px;
+            width: 100%;
             margin: 40px auto;
             padding: 0 24px 80px 24px;
             display: flex;
             flex-direction: column;
             gap: 35px;
+            flex: 1; /* Pushes footer to bottom */
         }
 
         .post-card {
@@ -152,6 +157,8 @@
             color: #CBD5E1;
             line-height: 1.6;
             margin-bottom: 25px;
+            user-select: text; /* Allows reading comfortably */
+            -webkit-user-select: text;
         }
 
         /* --- INTERACTION ROW (LIKES & COMMENTS COUNT) --- */
@@ -218,6 +225,11 @@
             overflow-y: auto;
         }
 
+        /* Custom Scrollbar for Comments */
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 10px; }
+        .comment-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
         .comment-bubble {
             background: rgba(255, 255, 255, 0.03);
             padding: 12px 16px;
@@ -266,6 +278,7 @@
             font-size: 0.9rem;
             outline: none;
             transition: var(--transition-smooth);
+            user-select: auto; /* Allows typing freely */
         }
 
         .comment-input:focus {
@@ -276,7 +289,7 @@
         .btn-comment-submit {
             background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--primary-navy) 100%);
             color: white;
-            border: none;
+            border: 1px solid rgba(255,255,255,0.1);
             padding: 12px 24px;
             border-radius: 8px;
             font-weight: 700;
@@ -288,10 +301,106 @@
 
         .btn-comment-submit:hover {
             transform: translateY(-2px);
+            border-color: var(--accent-cyan);
             box-shadow: 0 5px 15px rgba(0, 229, 255, 0.15);
         }
 
-        /* --- TOAST & NOTIFICATIONS --- */
+        /* --- HIGH-END INVISO CREATOR EMBLEM SIGNATURE FOOTER --- */
+        .inviso-developer-footer {
+            width: 100%;
+            padding: 40px 24px;
+            background: rgba(8, 28, 54, 0.4);
+            border-top: 1px dashed rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .inviso-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .inviso-emblem-box {
+            width: 60px;
+            height: 60px;
+            background: #000000;
+            border: 2px solid #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .inviso-mask-svg { width: 82%; height: 82%; }
+
+        .outer-ring {
+            fill: none;
+            stroke: #FFFFFF;
+            stroke-width: 2;
+            stroke-dasharray: 4 2;
+            transform-origin: center;
+            animation: spinCircle 20s linear infinite;
+        }
+
+        .inner-ring { fill: none; stroke: rgba(255, 255, 255, 0.4); stroke-width: 1.5; }
+        .mask-base { fill: none; stroke: #FFFFFF; stroke-width: 3.5; }
+        .mask-details { fill: none; stroke: #FFFFFF; stroke-width: 3; stroke-linecap: round; }
+
+        .inviso-wrapper:hover .inviso-emblem-box {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.45);
+            transform: scale(1.08) rotate(-5deg);
+        }
+
+        .inviso-wrapper:hover .outer-ring {
+            stroke: var(--accent-cyan);
+            animation-duration: 6s;
+        }
+
+        .inviso-wrapper:hover .mask-base,
+        .inviso-wrapper:hover .mask-details { stroke: var(--accent-cyan); }
+
+        .inviso-text-brand { display: flex; flex-direction: column; align-items: flex-start; }
+
+        .credit-tag {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            transition: var(--transition-smooth);
+        }
+
+        .inviso-logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #FFFFFF;
+            letter-spacing: 3px;
+            font-style: italic;
+            transition: var(--transition-smooth);
+            transform: skewX(-8deg);
+        }
+
+        .inviso-wrapper:hover .credit-tag { color: var(--accent-cyan); }
+        .inviso-wrapper:hover .inviso-logo-text {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+        }
+
+        @keyframes spinCircle {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- TOAST NOTIFICATIONS --- */
         .toast-notification {
             position: fixed;
             bottom: 30px;
@@ -386,7 +495,7 @@
             </div>
             {% endfor %}
         {% else %}
-            <!-- Interactive Placeholder Post -->
+            <!-- Interactive Placeholder Post (Shows if Admin hasn't posted yet) -->
             <div class="post-card">
                 <div class="post-header">
                     <span class="post-badge">Paraworld Broadcast</span>
@@ -415,6 +524,24 @@
 
     </main>
 
+    <!-- INVISO CREATOR EMBLEM SIGNATURE FOOTER -->
+    <div class="inviso-developer-footer">
+        <div class="inviso-wrapper">
+            <div class="inviso-emblem-box">
+                <svg class="inviso-mask-svg" viewBox="0 0 100 100">
+                    <circle class="outer-ring" cx="50" cy="50" r="45"/>
+                    <circle class="inner-ring" cx="50" cy="50" r="38"/>
+                    <path class="mask-base" d="M30,35 Q50,15 70,35 Q80,55 70,75 Q50,90 30,75 Q20,55 30,35 Z"/>
+                    <path class="mask-details" d="M38,45 Q50,35 62,45 M44,60 Q50,68 56,60"/>
+                </svg>
+            </div>
+            <div class="inviso-text-brand">
+                <span class="credit-tag">CRAFTED BY</span>
+                <span class="inviso-logo-text">INVISO</span>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST ALERT PANEL -->
     <div class="toast-notification" id="toastNotification">
         📢 Update Saved!
@@ -438,7 +565,7 @@
         }
 
         // --- LAYER 1: FRONTEND BAN WORDS FILTER ---
-        // Clean list of age-appropriate word protections (preventing basic spam/disrespectful language)
+        // Clean list of age-appropriate word protections
         const blockList = [
             'stupid', 'idiot', 'dumb', 'cheat', 'spam', 'trash', 
             'fool', 'worst', 'bad', 'fake', 'rubbish', 'hate'
@@ -459,10 +586,10 @@
             const containsAbusive = blockList.some(word => textToCheck.includes(word));
 
             if (containsAbusive) {
-                // Instantly block and alert student
+                // Instantly block and alert student safely
                 triggerToast("Let's keep our community friendly! Please rephrase your comment.", true);
                 
-                // Secretly log this blocked attempt to the server
+                // Secretly log this blocked attempt to the server for Admin review
                 await fetch('/api/flag-comment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -529,7 +656,7 @@
             }
         });
 
-        // Placeholder support
+        // Interactive Placeholder support
         const plBtn = document.getElementById('placeholderLike');
         if (plBtn) {
             plBtn.addEventListener('click', () => {
