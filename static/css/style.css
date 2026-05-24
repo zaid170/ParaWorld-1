@@ -920,7 +920,7 @@ section {
     background: linear-gradient(135deg, var(--primary-navy) 0%, #030d1a 100%);
 }
 
-/* --- SUCCESS CONFIRMATION MODALS --- */
+/* --- MODALS --- */
 .modal-background {
     position: fixed;
     top: 0;
@@ -1353,92 +1353,10 @@ footer {
         .inviso-wrapper:hover .mask-base, .inviso-wrapper:hover .mask-details { stroke: var(--accent-cyan); }
         .inviso-text-brand { display: flex; flex-direction: column; align-items: flex-start; }
         .credit-tag { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; transition: var(--transition-smooth); }
-        .inviso-logo-text { font-size: 1.6rem; font-weight: 900; color: #FFFFFF; letter-spacing: 3px; font-style: italic; transition: var(--transition-smooth); transform: skewX(-8deg); }
+        .inviso-logo-container { margin: 0; padding: 0; }
+        h2.inviso-logo-text { font-size: 1.6rem; font-weight: 900; color: #FFFFFF; letter-spacing: 3px; font-style: italic; transition: var(--transition-smooth); transform: skewX(-8deg); margin: 0; }
         .inviso-wrapper:hover .credit-tag { color: var(--accent-cyan); }
-        .inviso-wrapper:hover .inviso-logo-text { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
-
-/* --- KEYFRAME ANIMATIONS --- */
-@keyframes floatLogo {
-    0% { transform: translateY(0px) rotate(0deg); }
-
-/* Inline SVG Mask details styling - matches custom user emblem files! */
-.outer-ring {
-    fill: none;
-    stroke: #FFFFFF;
-    stroke-width: 2;
-    stroke-dasharray: 4 2;
-    transform-origin: center;
-    animation: spinCircle 20s linear infinite;
-}
-
-.inner-ring {
-    fill: none;
-    stroke: rgba(255, 255, 255, 0.4);
-    stroke-width: 1.5;
-}
-
-.mask-base {
-    fill: none;
-    stroke: #FFFFFF;
-    stroke-width: 3.5;
-}
-
-.mask-details {
-    fill: none;
-    stroke: #FFFFFF;
-    stroke-width: 3;
-    stroke-linecap: round;
-}
-
-/* Hover States for Inviso Creative Module */
-.inviso-wrapper:hover .inviso-emblem-box {
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 25px rgba(0, 229, 255, 0.45);
-    transform: scale(1.08) rotate(-5deg);
-}
-
-.inviso-wrapper:hover .outer-ring {
-    stroke: var(--accent-cyan);
-    animation-duration: 6s; /* Spins faster on hover */
-}
-
-.inviso-wrapper:hover .mask-base,
-.inviso-wrapper:hover .mask-details {
-    stroke: var(--accent-cyan);
-}
-
-.inviso-text-brand {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.credit-tag {
-    font-size: 0.72rem;
-    font-weight: 800;
-    color: var(--text-muted);
-    letter-spacing: 1.5px;
-    transition: var(--transition-smooth);
-}
-
-.inviso-logo-text {
-    font-size: 1.6rem;
-    font-weight: 900;
-    color: #FFFFFF;
-    letter-spacing: 3px;
-    font-style: italic;
-    transition: var(--transition-smooth);
-    transform: skewX(-8deg); /* Slants the text for tech-aesthetic */
-}
-
-.inviso-wrapper:hover .credit-tag {
-    color: var(--accent-cyan);
-}
-
-.inviso-wrapper:hover .inviso-logo-text {
-    color: var(--accent-cyan);
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
-}
+        .inviso-wrapper:hover h2.inviso-logo-text { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
 
 /* --- KEYFRAME ANIMATIONS --- */
 @keyframes floatLogo {
