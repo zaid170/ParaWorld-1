@@ -18,7 +18,7 @@
         }
 
         body {
-            /* Deep, rich academic gradient */
+            /* Deep, rich academic gradient background */
             background: radial-gradient(circle at 50% 0%, #1b1736 0%, #0a0b14 80%, #030408 100%);
             min-height: 100vh;
             display: flex;
@@ -31,17 +31,16 @@
         }
 
         /* --- 🚀 GPU ACCELERATION FOR 60FPS SMOOTHNESS --- */
-        /* This stops older phones/laptops from lagging during the heavy liquid animations */
-        .glass-card, .blob-container, .blob-core, .blob-ring, .float-item, .btn-enter, .brand-header {
+        .glass-card, .blob-container, .blob-core, .blob-ring, .float-item, .btn-enter, .brand-header, .diagnostic-card {
             will-change: transform;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             perspective: 1000px;
         }
 
-        /* --- FLOATING BOOKS & PENS ANIMATION --- */
+        /* --- FLOATING BOOKS & PENS BACKGROUND --- */
         .floating-bg {
             position: absolute;
             top: 0;
@@ -66,14 +65,14 @@
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg) translateZ(0); opacity: 0; }
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
             10% { opacity: 0.2; }
             80% { opacity: 0.2; }
-            100% { transform: translateY(-120vh) rotate(360deg) translateZ(0); opacity: 0; }
+            100% { transform: translate3d(0, -120vh, 0) rotate(360deg); opacity: 0; }
         }
 
         body.melting .float-item {
-            opacity: 0 !important; /* Fades out the background items when melting starts */
+            opacity: 0 !important;
         }
 
         /* --- HEADER LOGO --- */
@@ -81,79 +80,81 @@
             position: absolute;
             top: 5vh;
             left: 50%;
-            transform: translateX(-50%) translateZ(0);
+            transform: translate3d(-50%, 0, 0);
             z-index: 100;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: all 1s ease;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .brand-logo {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #ffffff;
-            letter-spacing: 5px;
+            letter-spacing: 6px;
             text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
         }
 
-        /* --- SCENE & GOOEY CONTAINER --- */
+        /* --- GOOEY BLOB CONTAINER (Z-INDEX: 1) --- */
         .scene {
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 10;
+            z-index: 1;
+            /* SAFELY ISOLATED FILTER: Merges ONLY background shapes, leaving card crystal-clear */
             filter: url('#goo'); 
+            pointer-events: none;
         }
 
-        /* --- BACKGROUND 3D BLOB --- */
         .blob-container {
             position: absolute;
             width: 55vw;
             height: 55vw;
-            max-width: 600px;
-            max-height: 600px;
+            max-width: 500px;
+            max-height: 500px;
             z-index: 1;
-            animation: floatBlob 10s infinite ease-in-out alternate;
+            animation: floatBlob 12s infinite ease-in-out alternate;
         }
 
         .blob-core {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 30% 30%, #43a3c9 0%, #29156b 50%, #15093b 100%);
+            background: radial-gradient(circle at 30% 30%, #00e5ff 0%, #0a3663 50%, #081c36 100%);
             border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%;
-            filter: blur(15px);
-            box-shadow: 0 0 100px rgba(67, 163, 201, 0.4);
-            animation: morphBlob 15s infinite linear;
-            transition: all 1.5s cubic-bezier(0.5, 0, 0.1, 1);
+            filter: blur(10px);
+            box-shadow: 0 0 80px rgba(0, 229, 255, 0.35);
+            animation: morphBlob 12s infinite linear;
+            transition: all 1.5s cubic-bezier(0.5, 0, 0.2, 1);
         }
 
         .blob-ring {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) translateZ(0);
+            transform: translate3d(-50%, -50%, 0);
             width: 50%;
             height: 50%;
-            border: 20px solid rgba(255, 255, 255, 0.1);
+            border: 15px solid rgba(255, 255, 255, 0.08);
             border-radius: 50%;
             box-shadow: 
-                inset 0 0 30px rgba(255, 255, 255, 0.3), 
-                0 0 30px rgba(255, 255, 255, 0.3),
-                inset 10px 10px 20px rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+                inset 0 0 25px rgba(255, 255, 255, 0.2), 
+                0 0 25px rgba(0, 229, 255, 0.2);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             animation: pulseRing 4s infinite alternate ease-in-out;
-            transition: all 1.5s cubic-bezier(0.5, 0, 0.1, 1);
+            transition: all 1.5s cubic-bezier(0.5, 0, 0.2, 1);
         }
 
-        /* --- AMORPHOUS LIQUID GLASS CARD --- */
+        /* --- INTERACTIVE CARD WRAPPER (Z-INDEX: 10) --- */
         .glass-wrapper {
             position: relative;
             z-index: 10;
@@ -161,21 +162,21 @@
             flex-direction: column;
             align-items: center;
             transform-origin: bottom center;
+            transition: all 1s ease;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-top: 2px solid rgba(255, 255, 255, 0.6);
-            border-left: 2px solid rgba(255, 255, 255, 0.4);
+            background: rgba(15, 23, 42, 0.45); /* Slightly darker backing to pop the inputs and buttons */
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-top: 2px solid rgba(255, 255, 255, 0.4);
+            border-left: 2px solid rgba(255, 255, 255, 0.3);
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 
-                0 40px 80px rgba(0, 0, 0, 0.8), 
-                inset 0 20px 40px rgba(255, 255, 255, 0.15),
-                inset 0 -20px 40px rgba(255, 255, 255, 0.05);
-            padding: 50px 40px;
+                0 30px 60px rgba(0, 0, 0, 0.6), 
+                inset 0 15px 30px rgba(255, 255, 255, 0.1);
+            padding: 45px 40px;
             width: 380px;
             max-width: 90vw;
             display: flex;
@@ -194,157 +195,246 @@
             left: -50%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.15), transparent);
-            transform: skewX(-25deg) translateZ(0);
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
+            transform: skewX(-25deg);
             animation: shine 6s infinite;
         }
 
         .glass-title {
             font-family: 'Space Grotesk', sans-serif;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.4rem;
+            color: #ffffff;
+            font-size: 1.45rem;
             font-weight: 700;
-            letter-spacing: 5px;
-            margin-bottom: 40px;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
             text-align: center;
-            text-shadow: 
-                1px 1px 2px rgba(0,0,0,0.5),
-                0 0 15px rgba(255,255,255,0.3);
-            background: linear-gradient(to bottom, #ffffff, #a3a3a3);
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- ERROR BANNER --- */
-        .error-banner {
-            width: 100%;
-            color: #ff4b4b;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-align: center;
-            margin-top: -20px;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 75, 75, 0.3);
-            display: none;
-            z-index: 20;
-            position: relative;
-            animation: shake 0.4s ease-in-out;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0) translateZ(0); }
-            25% { transform: translateX(-5px) translateZ(0); }
-            75% { transform: translateX(5px) translateZ(0); }
-        }
-
-        /* --- INPUT FIELDS --- */
+        /* --- HIGH-CONTRAST SECURE INPUT FIELDS --- */
         .input-group {
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             position: relative;
-            z-index: 20;
         }
 
         .glass-input {
             width: 100%;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-top: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(15, 23, 42, 0.6); /* High legibility dark base */
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
             border-radius: 30px;
-            padding: 14px 20px;
-            color: white;
-            font-size: 0.9rem;
+            padding: 15px 22px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 500;
             outline: none;
-            transition: 0.3s ease;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
             -webkit-appearance: none;
         }
 
         .glass-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.55);
             font-weight: 400;
         }
 
         .glass-input:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 1);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3), inset 0 2px 5px rgba(0,0,0,0.2);
+            border-color: #00e5ff;
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 
+                0 0 15px rgba(0, 229, 255, 0.3), 
+                inset 0 2px 4px rgba(0, 0, 0, 0.4);
         }
 
-        /* --- ENTER BUTTON --- */
-        .btn-enter {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-top: 1px solid rgba(255, 255, 255, 0.9);
-            color: white;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.9rem;
+        /* --- DYNAMIC ERROR BANNER --- */
+        .error-banner {
+            width: 100%;
+            color: #ff4d4d;
+            font-size: 0.85rem;
             font-weight: 700;
-            letter-spacing: 2px;
-            padding: 12px 35px;
+            text-align: center;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+            display: none;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            25% { transform: translate3d(-6px, 0, 0); }
+            75% { transform: translate3d(6px, 0, 0); }
+        }
+
+        /* --- PREMIUM SOLID GLOWING ENTER BUTTON --- */
+        .btn-enter {
+            width: 100%;
+            background: linear-gradient(135deg, #00e5ff 0%, #FFB300 100%);
+            border: none;
+            color: #081C36;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            padding: 15px 35px;
             border-radius: 30px;
-            margin-top: 15px;
+            margin-top: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 20;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
         }
 
         .btn-enter:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-            transform: scale(1.05) translateZ(0);
+            transform: translate3d(0, -2px, 0) scale(1.02);
+            box-shadow: 
+                0 6px 20px rgba(0, 229, 255, 0.5), 
+                0 0 10px rgba(255, 179, 0, 0.3);
+        }
+
+        .btn-enter:active:not(:disabled) {
+            transform: translate3d(0, 0, 0) scale(0.98);
         }
 
         .btn-enter:disabled {
             cursor: not-allowed;
             opacity: 0.6;
+            background: #475569;
+            color: #94a3b8;
+            box-shadow: none;
         }
 
-        /* --- THE HEAVY MELTING ANIMATION CLASSES --- */
+        /* --- DIAGNOSTIC CENTER OVERLAY --- */
+        .diagnostic-card {
+            margin-top: 20px;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .diag-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 6px;
+        }
+
+        .diag-header h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .system-badge {
+            background-color: rgba(16, 185, 129, 0.12);
+            color: #10B981;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .diagnostic-grid {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .diag-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .diag-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #94A3B8;
+            font-weight: 700;
+        }
+
+        .diag-value {
+            font-size: 0.85rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .ping-active {
+            color: #00e5ff;
+            font-weight: 700;
+            animation: pulseText 1.5s infinite alternate;
+        }
+
+        @keyframes pulseText {
+            from { opacity: 0.6; }
+            to { opacity: 1; }
+        }
+
+        .safety-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            color: #94A3B8;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- THE HEAVY DRIZZLING / LIQUID MELTING ANIMATION CLASSES --- */
         body.melting .glass-card {
-            animation: liquidMelt 2.5s forwards cubic-bezier(0.5, 0, 0.2, 1);
+            animation: liquidMelt 2.2s forwards cubic-bezier(0.5, 0, 0.2, 1);
         }
 
         body.melting .blob-core {
-            animation: blobMelt 2.5s forwards cubic-bezier(0.5, 0, 0.2, 1);
+            animation: blobMelt 2.2s forwards cubic-bezier(0.5, 0, 0.2, 1);
         }
         
         body.melting .blob-ring {
-            transform: translate(-50%, -150%) scale(0) translateZ(0);
+            transform: translate3d(-50%, -150%, 0) scale(0);
             opacity: 0;
         }
 
         body.melting .brand-header {
             opacity: 0;
-            transform: translate(-50%, -20px) translateZ(0);
+            transform: translate3d(-50%, -20px, 0);
         }
 
-        /* Keyframes for the video-accurate drip */
+        /* Keyframes pushing the card out of bounds as an organic drop */
         @keyframes liquidMelt {
             0% { 
-                transform: translateY(0) scale(1) translateZ(0); 
+                transform: translate3d(0, 0, 0) scale(1); 
                 border-radius: 40px; 
             }
             30% { 
-                transform: translateY(50px) scaleY(1.3) scaleX(0.8) translateZ(0); 
+                transform: translate3d(0, 50px, 0) scaleY(1.35) scaleX(0.75); 
                 border-radius: 50% 50% 100% 100%; 
             }
             100% { 
-                transform: translateY(120vh) scaleY(3) scaleX(0.2) translateZ(0); 
+                transform: translate3d(0, 120vh, 0) scaleY(3.2) scaleX(0.15); 
                 border-radius: 50% 50% 100% 100%; 
                 opacity: 0; 
             }
         }
 
         @keyframes blobMelt {
-            0% { transform: translateY(0) scale(1) translateZ(0); }
-            100% { transform: translateY(100vh) scaleY(2) scaleX(0.5) translateZ(0); opacity: 0; }
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(0, 100vh, 0) scaleY(2.2) scaleX(0.4); opacity: 0; }
         }
 
-        /* Ambient Animations */
+        /* Background Morphing & Motion */
         @keyframes morphBlob {
             0% { border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%; }
             50% { border-radius: 60% 40% 50% 50% / 40% 60% 50% 40%; }
@@ -352,13 +442,13 @@
         }
 
         @keyframes floatBlob {
-            0% { transform: translate(0, 0) rotate(0deg) translateZ(0); }
-            100% { transform: translate(20px, -30px) rotate(15deg) translateZ(0); }
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+            100% { transform: translate3d(20px, -30px, 0) rotate(15deg); }
         }
 
         @keyframes pulseRing {
-            0% { transform: translate(-50%, -50%) scale(1) translateZ(0); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(1.05) translateZ(0); opacity: 1; }
+            0% { transform: translate3d(-50%, -50%, 0) scale(1); opacity: 0.8; }
+            100% { transform: translate3d(-50%, -50%, 0) scale(1.06); opacity: 1; }
         }
 
         @keyframes breatheCard {
@@ -371,12 +461,11 @@
             20% { left: 200%; }
             100% { left: 200%; }
         }
-
     </style>
 </head>
 <body>
 
-    <!-- Floating Education Background -->
+    <!-- Floating Education Objects Background -->
     <div class="floating-bg">
         <div class="float-item" style="--left: 10%; --duration: 15s; --delay: 0s; --size: 3rem;">📚</div>
         <div class="float-item" style="--left: 30%; --duration: 18s; --delay: 2s; --size: 2.5rem;">🖋️</div>
@@ -387,37 +476,54 @@
         <div class="float-item" style="--left: 90%; --duration: 19s; --delay: 3s; --size: 2.2rem;">🖋️</div>
     </div>
 
-    <!-- Header updated to PARA WORLD -->
+    <!-- Header branding -->
     <div class="brand-header">
         <h1 class="brand-logo">PARA WORLD</h1>
     </div>
 
-    <!-- Scene wrapper with the #goo filter to merge objects organically -->
+    <!-- scene wrapper holding the gooey SVG filter ONLY for background shapes -->
     <div class="scene" id="scene">
-        
         <div class="blob-container">
             <div class="blob-core"></div>
             <div class="blob-ring"></div>
         </div>
+    </div>
 
-        <div class="glass-wrapper" id="loginWrapper">
-            <form class="glass-card" id="loginForm">
-                <div class="glass-title">WELCOME TO PARA</div>
-                
-                <!-- ERROR BANNER INJECTED HERE -->
-                <div class="error-banner" id="errorBanner">Invalid Credentials</div>
+    <!-- Active interactive login wrapper kept OUTSIDE the gooey filter -->
+    <div class="glass-wrapper" id="loginWrapper">
+        <form class="glass-card" id="loginForm">
+            <div class="glass-title">WELCOME TO PARA</div>
+            
+            <!-- Secure Validation Alert Banner -->
+            <div class="error-banner" id="errorBanner">Invalid Credentials</div>
 
-                <div class="input-group">
-                    <input type="email" id="emailInput" class="glass-input" placeholder="Administrator Email" autocomplete="email" required>
+            <div class="input-group">
+                <input type="email" id="emailInput" class="glass-input" placeholder="Administrator Email" autocomplete="email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="passwordInput" class="glass-input" placeholder="Secret Key" required>
+            </div>
+
+            <button type="submit" class="btn-enter" id="enterBtn">LOGIN</button>
+
+            <!-- Diagnostic Center (Checks Server Status) -->
+            <div class="diagnostic-card">
+                <div class="diag-header">
+                    <h4>Diagnostic Center</h4>
+                    <span class="system-badge" id="serverState">Analyzing...</span>
                 </div>
-                <div class="input-group">
-                    <input type="password" id="passwordInput" class="glass-input" placeholder="Secret Key" required>
+                <div class="diagnostic-grid">
+                    <div class="diag-item">
+                        <span class="diag-label">Latency Ping</span>
+                        <span class="diag-value ping-active" id="latencyOutput">calculating...</span>
+                    </div>
                 </div>
+            </div>
 
-                <button type="submit" class="btn-enter" id="enterBtn">LOGIN</button>
-            </form>
-        </div>
-
+            <div class="safety-badge">
+                <span style="color: #10B981;">🛡️</span> Protected by Para Gemini SSL Standard
+            </div>
+        </form>
     </div>
 
     <!-- EXTREME LIQUID MELT SVG FILTER -->
@@ -432,53 +538,90 @@
     </svg>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); 
-
-            const email = document.getElementById('emailInput').value;
-            const password = document.getElementById('passwordInput').value;
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('emailInput');
+            const passwordInput = document.getElementById('passwordInput');
             const errorBanner = document.getElementById('errorBanner');
             const btn = document.getElementById('enterBtn');
-
-            // Reset state
-            btn.textContent = "VERIFYING...";
-            btn.disabled = true;
-            errorBanner.style.display = 'none';
             
-            try {
-                // Send login data to Python Backend
-                const response = await fetch('/admin-login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+            const serverState = document.getElementById('serverState');
+            const latencyOutput = document.getElementById('latencyOutput');
 
-                const result = await response.json();
+            // Active Ping Test: Measures response speed of app.py to see if Render is awake
+            const runServerPing = async () => {
+                const startTime = performance.now();
+                try {
+                    const response = await fetch('/', { method: 'HEAD' });
+                    const endTime = performance.now();
+                    const latency = Math.round(endTime - startTime);
 
-                if (response.ok && result.status === 'success') {
-                    // SUCCESS: Trigger the heavy melting animation!
-                    btn.textContent = "GRANTED";
-                    document.body.classList.add('melting');
-                    
-                    // Wait for the drip animation to finish before redirecting securely
-                    setTimeout(() => {
-                        window.location.href = "/admin-dashboard"; 
-                    }, 2200);
+                    if (response.ok) {
+                        serverState.textContent = "ONLINE";
+                        serverState.style.backgroundColor = "rgba(16, 185, 129, 0.15)";
+                        serverState.style.color = "#10B981";
+                        latencyOutput.textContent = `${latency} ms`;
+                    }
+                } catch (err) {
+                    serverState.textContent = "OFFLINE";
+                    serverState.style.backgroundColor = "rgba(239, 68, 68, 0.15)";
+                    serverState.style.color = "#FF4D4D";
+                    latencyOutput.textContent = "unreachable";
+                    latencyOutput.classList.remove('ping-active');
+                    latencyOutput.style.color = "#FF4D4D";
+                }
+            };
 
-                } else {
-                    // FAILED: Show error and stop animation
-                    errorBanner.textContent = result.message || "Invalid administrator email or password.";
+            // Run Diagnostic on load
+            runServerPing();
+
+            // Secure Login authorization post request
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault(); 
+
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                // Reset UI state during auth
+                btn.textContent = "VERIFYING...";
+                btn.disabled = true;
+                errorBanner.style.display = 'none';
+                
+                try {
+                    const response = await fetch('/admin-login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.status === 'success') {
+                        // Success triggers the beautiful liquid melting animation sequence
+                        btn.textContent = "GRANTED";
+                        btn.style.background = "#10B981";
+                        document.body.classList.add('melting');
+                        
+                        // Allow the transition animations to play out fully before secure routing
+                        setTimeout(() => {
+                            window.location.href = "/admin-dashboard"; 
+                        }, 2100);
+
+                    } else {
+                        // Fail triggers error animation sequence
+                        errorBanner.textContent = result.message || "Invalid administrator email or password.";
+                        errorBanner.style.display = 'block';
+                        
+                        btn.textContent = "LOGIN";
+                        btn.disabled = false;
+                    }
+                } catch (err) {
+                    errorBanner.textContent = "Server Connection Timeout. Please wait for the server to wake up!";
                     errorBanner.style.display = 'block';
-                    
                     btn.textContent = "LOGIN";
                     btn.disabled = false;
                 }
-            } catch (err) {
-                errorBanner.textContent = "Server Connection Timeout.";
-                errorBanner.style.display = 'block';
-                btn.textContent = "LOGIN";
-                btn.disabled = false;
-            }
+            });
         });
     </script>
 
