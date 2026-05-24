@@ -11,256 +11,202 @@
     
     <style>
         /* --- GLOBAL RESET & THEME --- */
+        :root {
+            --primary-navy: #081C36;
+            --accent-gold: #FFB300;
+            --accent-cyan: #00E5FF;
+            --bg-dark-core: #030408;
+            --color-danger: #FF4D4D;
+            --color-success: #10B981;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            /* Deep, rich academic gradient background */
-            background: radial-gradient(circle at 50% 0%, #1b1736 0%, #0a0b14 80%, #030408 100%);
+            /* Deep Space Gradient */
+            background: linear-gradient(135deg, #020306 0%, #0a0e17 50%, #050b14 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            font-family: 'Plus Jakarta Sans', sans-serif;
             position: relative;
         }
 
-        /* --- 🚀 GPU ACCELERATION FOR 60FPS SMOOTHNESS --- */
-        .glass-card, .blob-container, .blob-core, .blob-ring, .float-item, .btn-enter, .brand-header, .diagnostic-card {
-            will-change: transform;
+        /* --- 🚀 GPU ACCELERATION FOR FLAWLESS 60FPS --- */
+        .glass-card, .btn-enter, .aurora-orb, .float-item, .brand-header {
+            will-change: transform, opacity;
             transform: translate3d(0, 0, 0);
             -webkit-transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
             perspective: 1000px;
         }
 
-        /* --- FLOATING BOOKS & PENS BACKGROUND --- */
-        .floating-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .float-item {
-            position: absolute;
-            bottom: -150px;
-            left: var(--left);
-            font-size: var(--size);
-            opacity: 0.15;
-            filter: blur(2px) sepia(0.5) hue-rotate(180deg);
-            animation: floatUp var(--duration) ease-in-out infinite;
-            animation-delay: var(--delay);
-            transition: opacity 1s ease;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.2; }
-            80% { opacity: 0.2; }
-            100% { transform: translate3d(0, -120vh, 0) rotate(360deg); opacity: 0; }
-        }
-
-        body.melting .float-item {
-            opacity: 0 !important;
-        }
-
-        /* --- HEADER LOGO --- */
-        .brand-header {
-            position: absolute;
-            top: 5vh;
-            left: 50%;
-            transform: translate3d(-50%, 0, 0);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .brand-logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            text-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
-        }
-
-        /* --- GOOEY BLOB CONTAINER (Z-INDEX: 1) --- */
-        .scene {
+        /* --- LAG-FREE AURORA NEBULA BACKGROUND --- 
+           Uses purely radial gradients instead of SVG blurs to guarantee zero lag! */
+        .aurora-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             z-index: 1;
-            /* SAFELY ISOLATED FILTER: Merges ONLY background shapes, leaving card crystal-clear */
-            filter: url('#goo'); 
+            overflow: hidden;
             pointer-events: none;
         }
 
-        .blob-container {
+        .aurora-orb {
             position: absolute;
-            width: 55vw;
-            height: 55vw;
-            max-width: 500px;
-            max-height: 500px;
-            z-index: 1;
-            animation: floatBlob 12s infinite ease-in-out alternate;
-        }
-
-        .blob-core {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 30%, #00e5ff 0%, #0a3663 50%, #081c36 100%);
-            border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%;
-            filter: blur(10px);
-            box-shadow: 0 0 80px rgba(0, 229, 255, 0.35);
-            animation: morphBlob 12s infinite linear;
-            transition: all 1.5s cubic-bezier(0.5, 0, 0.2, 1);
-        }
-
-        .blob-ring {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate3d(-50%, -50%, 0);
-            width: 50%;
-            height: 50%;
-            border: 15px solid rgba(255, 255, 255, 0.08);
             border-radius: 50%;
-            box-shadow: 
-                inset 0 0 25px rgba(255, 255, 255, 0.2), 
-                0 0 25px rgba(0, 229, 255, 0.2);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            animation: pulseRing 4s infinite alternate ease-in-out;
-            transition: all 1.5s cubic-bezier(0.5, 0, 0.2, 1);
+            /* Pure gradient fading to transparent creates a natural glow with NO processing lag */
+            background: radial-gradient(circle, var(--orb-color) 0%, transparent 65%);
+            opacity: 0.45;
+            mix-blend-mode: screen;
         }
 
-        /* --- INTERACTIVE CARD WRAPPER (Z-INDEX: 10) --- */
+        /* Drifting Orbs */
+        .orb-1 {
+            width: 80vw; height: 80vw;
+            top: -20vh; left: -10vw;
+            --orb-color: rgba(0, 229, 255, 0.25);
+            animation: drift 20s infinite alternate ease-in-out;
+        }
+        .orb-2 {
+            width: 70vw; height: 70vw;
+            bottom: -10vh; right: -10vw;
+            --orb-color: rgba(10, 54, 99, 0.4);
+            animation: drift 25s infinite alternate-reverse ease-in-out;
+        }
+        .orb-3 {
+            width: 50vw; height: 50vw;
+            top: 20vh; right: 20vw;
+            --orb-color: rgba(255, 179, 0, 0.15);
+            animation: drift 18s infinite alternate ease-in-out;
+        }
+
+        @keyframes drift {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(10vw, 8vh, 0) scale(1.1); }
+        }
+
+        /* --- FLOATING EDUCATION ICONS --- */
+        .floating-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2; pointer-events: none; overflow: hidden;
+        }
+
+        .float-item {
+            position: absolute; bottom: -150px; left: var(--left);
+            font-size: var(--size); opacity: 0.12;
+            animation: floatUp var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+            color: white; filter: grayscale(100%) brightness(200%);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.15; }
+            85% { opacity: 0.15; }
+            100% { transform: translate3d(0, -120vh, 0) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- HEADER LOGO --- */
+        .brand-header {
+            position: absolute;
+            top: 5vh; left: 50%;
+            transform: translate3d(-50%, 0, 0);
+            z-index: 100;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .brand-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.65rem; font-weight: 700;
+            color: #ffffff; letter-spacing: 7px;
+            text-transform: uppercase;
+            text-shadow: 0 0 25px rgba(0, 229, 255, 0.45);
+        }
+
+        /* --- SHARP, SLEEK GLASS CARD (Z-INDEX: 10) --- */
         .glass-wrapper {
             position: relative;
             z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transform-origin: bottom center;
-            transition: all 1s ease;
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%;
         }
 
         .glass-card {
-            background: rgba(15, 23, 42, 0.45); /* Slightly darker backing to pop the inputs and buttons */
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-top: 2px solid rgba(255, 255, 255, 0.4);
-            border-left: 2px solid rgba(255, 255, 255, 0.3);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.6), 
-                inset 0 15px 30px rgba(255, 255, 255, 0.1);
+            background: rgba(10, 15, 30, 0.6); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
             padding: 45px 40px;
-            width: 380px;
-            max-width: 90vw;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border-radius: 40px;
-            animation: breatheCard 8s infinite alternate ease-in-out;
+            width: 390px; max-width: 90vw;
+            display: flex; flex-direction: column; align-items: center;
+            border-radius: 30px;
             position: relative;
             overflow: hidden;
+            transition: transform 0.3s ease;
         }
 
-        .glass-card::before {
+        /* Subtle glowing edge */
+        .glass-card::after {
             content: '';
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12), transparent);
-            transform: skewX(-25deg);
-            animation: shine 6s infinite;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 30px;
+            box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.1);
+            pointer-events: none;
         }
 
         .glass-title {
             font-family: 'Space Grotesk', sans-serif;
-            color: #ffffff;
-            font-size: 1.45rem;
-            font-weight: 700;
-            letter-spacing: 4px;
-            margin-bottom: 30px;
+            color: #ffffff; font-size: 1.45rem; font-weight: 700;
+            letter-spacing: 4px; margin-bottom: 30px;
             text-align: center;
             text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
-        /* --- HIGH-CONTRAST SECURE INPUT FIELDS --- */
+        /* --- INPUT FIELDS --- */
         .input-group {
-            width: 100%;
-            margin-bottom: 18px;
-            position: relative;
+            width: 100%; margin-bottom: 20px; position: relative;
         }
 
         .glass-input {
             width: 100%;
-            background: rgba(15, 23, 42, 0.6); /* High legibility dark base */
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            padding: 15px 22px;
-            color: #ffffff;
-            font-size: 0.95rem;
-            font-weight: 500;
-            outline: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
-            -webkit-appearance: none;
+            background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px; padding: 15px 22px;
+            color: #ffffff; font-size: 0.95rem; font-weight: 500;
+            outline: none; transition: all 0.3s ease;
         }
 
-        .glass-input::placeholder {
-            color: rgba(255, 255, 255, 0.55);
-            font-weight: 400;
-        }
+        .glass-input::placeholder { color: rgba(255, 255, 255, 0.4); }
 
         .glass-input:focus {
-            border-color: #00e5ff;
-            background: rgba(15, 23, 42, 0.85);
-            box-shadow: 
-                0 0 15px rgba(0, 229, 255, 0.3), 
-                inset 0 2px 4px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-cyan);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
         }
 
-        /* --- DYNAMIC ERROR BANNER --- */
+        /* --- ERROR BANNER --- */
         .error-banner {
-            width: 100%;
-            color: #ff4d4d;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-align: center;
-            margin-top: -10px;
-            margin-bottom: 15px;
+            width: 100%; color: var(--color-danger);
+            font-size: 0.85rem; font-weight: 700; text-align: center;
+            margin-top: -10px; margin-bottom: 15px;
             text-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
-            display: none;
-            animation: shake 0.4s ease-in-out;
+            display: none; animation: shake 0.4s ease-in-out;
         }
 
         @keyframes shake {
@@ -269,232 +215,101 @@
             75% { transform: translate3d(6px, 0, 0); }
         }
 
-        /* --- PREMIUM SOLID GLOWING ENTER BUTTON --- */
+        /* --- BUTTON & DIAGNOSTICS --- */
         .btn-enter {
             width: 100%;
-            background: linear-gradient(135deg, #00e5ff 0%, #FFB300 100%);
-            border: none;
-            color: #081C36;
+            background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-gold) 100%);
+            border: none; color: var(--primary-navy);
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 800;
-            letter-spacing: 3px;
-            padding: 15px 35px;
-            border-radius: 30px;
-            margin-top: 5px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.95rem; font-weight: 800; letter-spacing: 3px;
+            padding: 15px 35px; border-radius: 20px; margin-top: 10px;
+            cursor: pointer; transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
         }
 
         .btn-enter:hover:not(:disabled) {
-            transform: translate3d(0, -2px, 0) scale(1.02);
-            box-shadow: 
-                0 6px 20px rgba(0, 229, 255, 0.5), 
-                0 0 10px rgba(255, 179, 0, 0.3);
+            transform: translate3d(0, -2px, 0);
+            box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
         }
 
-        .btn-enter:active:not(:disabled) {
-            transform: translate3d(0, 0, 0) scale(0.98);
-        }
+        .btn-enter:disabled { opacity: 0.6; cursor: not-allowed; background: #475569; color: #94a3b8; }
 
-        .btn-enter:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-            background: #475569;
-            color: #94a3b8;
-            box-shadow: none;
-        }
-
-        /* --- DIAGNOSTIC CENTER OVERLAY --- */
         .diagnostic-card {
-            margin-top: 20px;
-            width: 100%;
-            background: rgba(15, 23, 42, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
-            padding: 14px 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            margin-top: 25px; width: 100%;
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px; padding: 14px 18px; display: flex; flex-direction: column; gap: 8px;
         }
 
-        .diag-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 6px;
-        }
+        .diag-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 6px; }
+        .diag-header h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #ffffff; }
+        .system-badge { background-color: rgba(16, 185, 129, 0.15); color: var(--color-success); padding: 3px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; }
+        .diag-item { display: flex; flex-direction: column; gap: 2px; }
+        .diag-label { font-size: 0.65rem; text-transform: uppercase; color: #94A3B8; font-weight: 700; }
+        .diag-value { font-size: 0.85rem; color: #ffffff; font-weight: 600; }
+        .ping-active { color: var(--accent-cyan); animation: pulseText 1.5s infinite alternate; }
 
-        .diag-header h4 {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: #ffffff;
-            font-weight: 700;
-        }
+        @keyframes pulseText { from { opacity: 0.6; } to { opacity: 1; } }
 
-        .system-badge {
-            background-color: rgba(16, 185, 129, 0.12);
-            color: #10B981;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .diagnostic-grid {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .diag-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .diag-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #94A3B8;
-            font-weight: 700;
-        }
-
-        .diag-value {
-            font-size: 0.85rem;
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .ping-active {
-            color: #00e5ff;
-            font-weight: 700;
-            animation: pulseText 1.5s infinite alternate;
-        }
-
-        @keyframes pulseText {
-            from { opacity: 0.6; }
-            to { opacity: 1; }
-        }
-
-        .safety-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 15px;
-            color: #94A3B8;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        /* --- THE HEAVY DRIZZLING / LIQUID MELTING ANIMATION CLASSES --- */
-        body.melting .glass-card {
-            animation: liquidMelt 2.2s forwards cubic-bezier(0.5, 0, 0.2, 1);
-        }
-
-        body.melting .blob-core {
-            animation: blobMelt 2.2s forwards cubic-bezier(0.5, 0, 0.2, 1);
-        }
+        /* ==========================================================================
+           🌟 NEW: HYPER-SPEED WARP ANIMATION (ZERO LAG)
+           ========================================================================== */
         
-        body.melting .blob-ring {
-            transform: translate3d(-50%, -150%, 0) scale(0);
+        body.access-granted .glass-card {
+            /* Shrinks back in anticipation, then blasts toward the user fading out */
+            animation: warpJump 1.2s forwards cubic-bezier(0.5, -0.5, 0.2, 1);
+        }
+
+        body.access-granted .aurora-orb {
+            /* Background orbs stretch out and rush past the screen */
+            animation: warpOrbs 1.2s forwards cubic-bezier(0.5, 0, 0.2, 1);
+        }
+
+        body.access-granted .float-item, 
+        body.access-granted .brand-header {
             opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
-        body.melting .brand-header {
-            opacity: 0;
-            transform: translate3d(-50%, -20px, 0);
+        @keyframes warpJump {
+            0% { transform: scale(1); opacity: 1; }
+            30% { transform: scale(0.9); opacity: 1; filter: blur(0px); }
+            100% { transform: scale(2.5) translate3d(0, -50px, 0); opacity: 0; filter: blur(10px); }
         }
 
-        /* Keyframes pushing the card out of bounds as an organic drop */
-        @keyframes liquidMelt {
-            0% { 
-                transform: translate3d(0, 0, 0) scale(1); 
-                border-radius: 40px; 
-            }
-            30% { 
-                transform: translate3d(0, 50px, 0) scaleY(1.35) scaleX(0.75); 
-                border-radius: 50% 50% 100% 100%; 
-            }
-            100% { 
-                transform: translate3d(0, 120vh, 0) scaleY(3.2) scaleX(0.15); 
-                border-radius: 50% 50% 100% 100%; 
-                opacity: 0; 
-            }
+        @keyframes warpOrbs {
+            0% { transform: scale(1); opacity: 0.45; }
+            100% { transform: scale(4); opacity: 0; }
         }
 
-        @keyframes blobMelt {
-            0% { transform: translate3d(0, 0, 0) scale(1); }
-            100% { transform: translate3d(0, 100vh, 0) scaleY(2.2) scaleX(0.4); opacity: 0; }
-        }
-
-        /* Background Morphing & Motion */
-        @keyframes morphBlob {
-            0% { border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%; }
-            50% { border-radius: 60% 40% 50% 50% / 40% 60% 50% 40%; }
-            100% { border-radius: 45% 55% 60% 40% / 50% 40% 60% 50%; }
-        }
-
-        @keyframes floatBlob {
-            0% { transform: translate3d(0, 0, 0) rotate(0deg); }
-            100% { transform: translate3d(20px, -30px, 0) rotate(15deg); }
-        }
-
-        @keyframes pulseRing {
-            0% { transform: translate3d(-50%, -50%, 0) scale(1); opacity: 0.8; }
-            100% { transform: translate3d(-50%, -50%, 0) scale(1.06); opacity: 1; }
-        }
-
-        @keyframes breatheCard {
-            0% { border-radius: 35px 45px 35px 45px; }
-            100% { border-radius: 45px 35px 45px 35px; }
-        }
-
-        @keyframes shine {
-            0% { left: -100%; }
-            20% { left: 200%; }
-            100% { left: 200%; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Floating Education Objects Background -->
+    <!-- Lightweight Background Aurora -->
+    <div class="aurora-container">
+        <div class="aurora-orb orb-1"></div>
+        <div class="aurora-orb orb-2"></div>
+        <div class="aurora-orb orb-3"></div>
+    </div>
+
+    <!-- Floating Education Objects -->
     <div class="floating-bg">
         <div class="float-item" style="--left: 10%; --duration: 15s; --delay: 0s; --size: 3rem;">📚</div>
         <div class="float-item" style="--left: 30%; --duration: 18s; --delay: 2s; --size: 2.5rem;">🖋️</div>
         <div class="float-item" style="--left: 50%; --duration: 22s; --delay: 5s; --size: 3.5rem;">📖</div>
         <div class="float-item" style="--left: 70%; --duration: 14s; --delay: 1s; --size: 2rem;">✏️</div>
         <div class="float-item" style="--left: 85%; --duration: 20s; --delay: 4s; --size: 3rem;">📘</div>
-        <div class="float-item" style="--left: 20%; --duration: 17s; --delay: 7s; --size: 2.5rem;">📝</div>
-        <div class="float-item" style="--left: 90%; --duration: 19s; --delay: 3s; --size: 2.2rem;">🖋️</div>
     </div>
 
-    <!-- Header branding -->
     <div class="brand-header">
         <h1 class="brand-logo">PARA WORLD</h1>
     </div>
 
-    <!-- scene wrapper holding the gooey SVG filter ONLY for background shapes -->
-    <div class="scene" id="scene">
-        <div class="blob-container">
-            <div class="blob-core"></div>
-            <div class="blob-ring"></div>
-        </div>
-    </div>
-
-    <!-- Active interactive login wrapper kept OUTSIDE the gooey filter -->
+    <!-- Interactive Secure Form -->
     <div class="glass-wrapper" id="loginWrapper">
         <form class="glass-card" id="loginForm">
             <div class="glass-title">WELCOME TO PARA</div>
             
-            <!-- Secure Validation Alert Banner -->
             <div class="error-banner" id="errorBanner">Invalid Credentials</div>
 
             <div class="input-group">
@@ -506,36 +321,25 @@
 
             <button type="submit" class="btn-enter" id="enterBtn">LOGIN</button>
 
-            <!-- Diagnostic Center (Checks Server Status) -->
+            <!-- Diagnostic Center -->
             <div class="diagnostic-card">
                 <div class="diag-header">
                     <h4>Diagnostic Center</h4>
                     <span class="system-badge" id="serverState">Analyzing...</span>
                 </div>
-                <div class="diagnostic-grid">
+                <div style="display: flex; gap: 20px;">
                     <div class="diag-item">
                         <span class="diag-label">Latency Ping</span>
                         <span class="diag-value ping-active" id="latencyOutput">calculating...</span>
                     </div>
                 </div>
             </div>
-
-            <div class="safety-badge">
-                <span style="color: #10B981;">🛡️</span> Protected by Para Gemini SSL Standard
+            
+            <div style="margin-top: 15px; color: #94A3B8; font-size: 0.75rem; font-weight: 600;">
+                <span style="color: #10B981;">🛡️</span> 256-Bit Encrypted Portal
             </div>
         </form>
     </div>
-
-    <!-- EXTREME LIQUID MELT SVG FILTER -->
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display:none;">
-        <defs>
-            <filter id="goo">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur" />
-                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 35 -15" result="goo" />
-                <feBlend in="SourceGraphic" in2="goo" />
-            </filter>
-        </defs>
-    </svg>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -544,11 +348,10 @@
             const passwordInput = document.getElementById('passwordInput');
             const errorBanner = document.getElementById('errorBanner');
             const btn = document.getElementById('enterBtn');
-            
             const serverState = document.getElementById('serverState');
             const latencyOutput = document.getElementById('latencyOutput');
 
-            // Active Ping Test: Measures response speed of app.py to see if Render is awake
+            // Ping Test to check Server Wake State
             const runServerPing = async () => {
                 const startTime = performance.now();
                 try {
@@ -558,31 +361,27 @@
 
                     if (response.ok) {
                         serverState.textContent = "ONLINE";
-                        serverState.style.backgroundColor = "rgba(16, 185, 129, 0.15)";
-                        serverState.style.color = "#10B981";
+                        serverState.style.color = "var(--color-success)";
                         latencyOutput.textContent = `${latency} ms`;
                     }
                 } catch (err) {
                     serverState.textContent = "OFFLINE";
-                    serverState.style.backgroundColor = "rgba(239, 68, 68, 0.15)";
-                    serverState.style.color = "#FF4D4D";
+                    serverState.style.color = "var(--color-danger)";
+                    serverState.style.backgroundColor = "rgba(255,0,0,0.1)";
                     latencyOutput.textContent = "unreachable";
                     latencyOutput.classList.remove('ping-active');
-                    latencyOutput.style.color = "#FF4D4D";
+                    latencyOutput.style.color = "var(--color-danger)";
                 }
             };
-
-            // Run Diagnostic on load
             runServerPing();
 
-            // Secure Login authorization post request
+            // Login Request
             form.addEventListener('submit', async function(e) {
                 e.preventDefault(); 
 
                 const email = emailInput.value;
                 const password = passwordInput.value;
 
-                // Reset UI state during auth
                 btn.textContent = "VERIFYING...";
                 btn.disabled = true;
                 errorBanner.style.display = 'none';
@@ -597,21 +396,22 @@
                     const result = await response.json();
 
                     if (response.ok && result.status === 'success') {
-                        // Success triggers the beautiful liquid melting animation sequence
+                        // SUCCESS: Trigger the lag-free Hyper-Speed Warp animation
                         btn.textContent = "GRANTED";
-                        btn.style.background = "#10B981";
-                        document.body.classList.add('melting');
+                        btn.style.background = "var(--color-success)";
+                        btn.style.color = "white";
                         
-                        // Allow the transition animations to play out fully before secure routing
+                        document.body.classList.add('access-granted');
+                        
+                        // Wait for warp animation to clear the screen, then navigate
                         setTimeout(() => {
                             window.location.href = "/admin-dashboard"; 
-                        }, 2100);
+                        }, 1200);
 
                     } else {
-                        // Fail triggers error animation sequence
+                        // FAILED
                         errorBanner.textContent = result.message || "Invalid administrator email or password.";
                         errorBanner.style.display = 'block';
-                        
                         btn.textContent = "LOGIN";
                         btn.disabled = false;
                     }
@@ -624,6 +424,5 @@
             });
         });
     </script>
-
 </body>
 </html>
