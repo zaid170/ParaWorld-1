@@ -75,7 +75,15 @@ def load_settings():
         "ai_prompt": default_ai,
         "low_power_mode": False
     }
-    return load_data(SETTINGS_FILE, default_settings)
+    
+    data = load_data(SETTINGS_FILE, default_settings)
+    
+    # Safety check: If settings.json is corrupted or a list, reset it to dictionary
+    if isinstance(data, list):
+        save_data(SETTINGS_FILE, default_settings)
+        return default_settings
+        
+    return data
 
 def save_data(filepath, data):
     try:
@@ -90,12 +98,15 @@ def home():
     settings = load_settings()
     notices = load_data(NOTICES_FILE)
     toppers = load_data(TOPPERS_FILE)
+    photos = load_data(GALLERY_FILE)
+    
     return render_template(
         'index.html', 
         show_scholarship_junior=settings.get('show_scholarship_junior', True), 
         show_scholarship_senior=settings.get('show_scholarship_senior', True), 
         notices=notices,
         toppers=toppers,
+        photos=photos,
         low_power=settings.get('low_power_mode', False)
     )
 
@@ -268,21 +279,18 @@ def get_analytics():
         
     return jsonify({"status": "success", "streams": streams, "classes": classes}), 200
 
-# UNIFIED SETTINGS UPDATER
 @app.route('/update-settings', methods=['POST'])
 def update_settings():
     if not session.get('logged_in'): return jsonify({"status": "error"}), 403
     data = request.get_json()
     settings = load_settings()
     
-    # Allows updating any setting switch dynamically from the admin panel
     for key, value in data.items():
         settings[key] = value
         
     save_data(SETTINGS_FILE, settings)
     return jsonify({"status": "success"}), 200
 
-# Notice Board
 @app.route('/add-notice', methods=['POST'])
 def add_notice():
     if not session.get('logged_in'): return jsonify({"status": "error"}), 403
@@ -303,7 +311,6 @@ def delete_notice(notice_id):
     save_data(NOTICES_FILE, notices)
     return jsonify({"status": "success"}), 200
 
-# Community Board management
 @app.route('/add-post', methods=['POST'])
 def add_post():
     if not session.get('logged_in'): return jsonify({"status": "error"}), 403
@@ -345,7 +352,6 @@ def delete_comment(post_id, comment_id):
             return jsonify({"status": "success"}), 200
     return jsonify({"status": "error"}), 404
 
-# Flagged comments alerts clearing
 @app.route('/clear-flagged', methods=['POST'])
 def clear_flagged():
     if not session.get('logged_in'): return jsonify({"status": "error"}), 403
@@ -373,7 +379,7 @@ def add_photo():
     photos = load_data(GALLERY_FILE)
     new_photo = {
         "id": len(photos) + 1,
-        "url": f"/static/uploads/{unique_filename}",  # Formats perfectly for the browser
+        "url": f"/{filepath}",  # This creates the perfect link for the browser to read the image
         "title": title,
         "description": description
     }
@@ -415,7 +421,7 @@ def add_topper():
         "name": name,
         "rank": rank,
         "score": score,
-        "photo": f"/static/uploads/{unique_filename}",
+        "photo": f"/{filepath}",
         "quote": quote,
         "subject": subject
     }
